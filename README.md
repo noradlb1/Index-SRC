@@ -14,6 +14,19 @@ Index-SRC
 - trojanoriginal.blogspot.com
 - up-00
 - Venom RAt
+- Anydesk
+- gameloop
+- getintopc windows-10
+- nordvpn.com
+- privadovpn
+- Secure VPN
+- surfshark
+- teamviewer
+- visualstudio.microsoft
+- skype
+- blizzard
+- Steam
+
 -- --
 
 
@@ -42,3 +55,29 @@ Index-SRC
 ![up-00](https://user-images.githubusercontent.com/74623428/209480438-68836afb-b75e-419f-ac58-308c7cfe6d43.PNG)
 
 ![Venom RAt](https://user-images.githubusercontent.com/74623428/209480440-e7b361fe-b5b8-4062-bb6e-9411992d0675.PNG)
+
+![skype](https://user-images.githubusercontent.com/74623428/209481321-b0d54cd3-9c6b-4196-9dc5-9310b7a118ad.PNG)
+
+![blizzard](https://user-images.githubusercontent.com/74623428/209481327-b824cca9-08fa-49fe-adeb-31be6edd8096.PNG)
+
+![Steam](https://user-images.githubusercontent.com/74623428/209481329-effab7f7-c45d-40e8-bd93-c916d8b906ef.PNG)
+
+![Anydesk](https://user-images.githubusercontent.com/74623428/209481332-bbc5bba2-4e9d-4742-a96a-8e7edc8fd126.PNG)
+
+![gameloop](https://user-images.githubusercontent.com/74623428/209481336-026342c2-cb40-4c2b-bf55-11f409e05765.PNG)
+
+![getintopc windows-10](https://user-images.githubusercontent.com/74623428/209481340-b25a07a5-d774-4932-8a68-a626a1ac9fa1.PNG)
+
+![nordvpn](https://user-images.githubusercontent.com/74623428/209481343-9fd4ba4f-0876-4094-98b0-133d9142a760.PNG)
+
+![privadovpn](https://user-images.githubusercontent.com/74623428/209481349-53bc3579-70a0-4672-a537-7599c1af1048.PNG)
+
+![Secure VPN](https://user-images.githubusercontent.com/74623428/209481353-3d87bb82-f7bd-4b92-8871-c3f415613c32.PNG)
+
+![surfshark](https://user-images.githubusercontent.com/74623428/209481362-148476ae-4735-4a61-b0c8-d878acea7dc6.PNG)
+
+![teamviewer](https://user-images.githubusercontent.com/74623428/209481366-dbe04d89-3a0d-4f6c-96b7-94ceb219d23d.PNG)
+
+![visualstudio microsoft](https://user-images.githubusercontent.com/74623428/209481370-7a7065ea-7c62-4096-8b37-f30b00528689.PNG)
+
+-- --
