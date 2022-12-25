@@ -1,0 +1,1931 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<script>dataLayer = [{"country":"DE"},{"realCountry":"DEU"},{"cusDimIndex": 4,"cusDimValue":"New Design Wordpress"},{"os":"win"}];</script><style>.async-hide{opacity:0!important}</style>
+<script>
+
+  const dataLayerEvent = "^OptanonLoaded$";
+  const dataLayerEventRegexp = new RegExp(dataLayerEvent);
+  const onetrustActiveGroups = "^,1,2,";
+  const onetrustActiveGroupsRegexp = new RegExp(onetrustActiveGroups);
+
+  function writeExpCookie() {
+    var urlParam = document.location.search;
+    var paramSplit = urlParam.split("&");
+    var _gaexp = getParameter("_gaexpadserver", window.location.href);
+    for (var i = 0; i < paramSplit.length; i++) {
+      if (paramSplit[i].indexOf("_gaexpadserver") > -1 && _gaexp !== "noexp") {
+        createCookie("_gaexp", _gaexp, 90);
+      }
+    }
+  }
+
+  function getParameter(name, url) {
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, "$&");
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+      results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return "";
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+  }
+
+  function createCookie(name, value, days) {
+    if (days) {
+      var date = new Date();
+      date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+      var expires = "; expires=" + date.toGMTString();
+    } else var expires = "";
+    document.cookie = name + "=" + value + expires + "; path=/";
+  }
+
+  if (checkConsent() === true) {
+    injectOptimiseSnippet();
+  } else {
+    window.dataLayer = window.dataLayer || [];
+    const originPush = window.dataLayer.push
+    dataLayer.push = function(item) {
+        originPush.apply(window.dataLayer, arguments);
+        const pushEvent = new CustomEvent("dataLayerPush", {
+            detail: item
+        });
+        window.dispatchEvent(pushEvent);
+    }
+    window.addEventListener("dataLayerPush", function (dataLayer) {
+      if (dataLayerEventRegexp.test(dataLayer.detail.event) && onetrustActiveGroupsRegexp.test(dataLayer.detail.OptanonActiveGroups)) {
+          injectOptimiseSnippet();
+      }
+  });
+  }
+
+  function injectOptimiseSnippet() {
+    (function(a, s, y, n, c, h, i, d, e) {
+      s.className += " " + y;
+      h.start = 1 * new Date();
+      h.end = i = function() {
+        s.className = s.className.replace(RegExp(" ?" + y), "");
+      };
+      (a[n] = a[n] || []).hide = h;
+      setTimeout(function() {
+        i();
+        h.end = null;
+      }, c);
+      h.timeout = c;
+    })(window, document.documentElement, "async-hide", "dataLayer", 4000, {
+      "OPT-KJWK84R": true
+    });
+
+    (function(i, s, o, g, r, a, m) {
+      i["GoogleAnalyticsObject"] = r;
+      (i[r] =
+        i[r] ||
+        function() {
+          (i[r].q = i[r].q || []).push(arguments);
+        }),
+        (i[r].l = 1 * new Date());
+      (a = s.createElement(o)), (m = s.getElementsByTagName(o)[0]);
+      a.async = 1;
+      a.src = g;
+      m.parentNode.insertBefore(a, m);
+    })(
+      window,
+      document,
+      "script",
+      "https://www.google-analytics.com/analytics.js",
+      "ga"
+    );
+    ga("create", "UA-32025289-1", "auto", {
+      siteSpeedSampleRate: 100,
+      allowLinker: true,
+      clientId: trakkGetClientIDfromURL().returnClientID() //New
+    });
+    ga("require", "OPT-KJWK84R");
+  }
+
+  trakkGetClientIDfromURL().returnClientID();
+
+  //get customized client id
+  function trakkGetClientIDfromURL() {
+    var gaClientidParameterKey = "gaclientid";
+    var clickTimestampParameterKey = "gaclientidtime";
+    var dataLayerEventName = "gaClientIDreceived";
+    return {
+      returnClientID: returnClientID
+    };
+
+    function returnClientID() {
+      var clientID = getClientIdFromURL();
+      var clickTimestamp = getClientIdTimeStamp() || 0;
+      var currentTimeStamp = Date.now() / 1000;
+
+      if (currentTimeStamp - clickTimestamp > 60) {
+        clientID = undefined;
+      }
+      pushClientIDtoDataLayer(clientID);
+      return clientID;
+    }
+
+    function pushClientIDtoDataLayer(clientID) {
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({
+        event: dataLayerEventName,
+        clientID: clientID
+      });
+    }
+
+    function getClientIdFromURL() {
+      var urlParam = window.location.search.substring(1);
+      var paramSplit = urlParam.split("&");
+
+      for (var i = 0; i < paramSplit.length; i++) {
+        if (paramSplit[i].indexOf("gaclientid") > -1) {
+          var clientId = paramSplit[i].split("=")[1];
+          return clientId;
+        }
+      }
+    }
+
+    function getClientIdTimeStamp() {
+      var urlParam = document.location.search;
+      var paramSplit = urlParam.split("&");
+      for (var i = 0; i < paramSplit.length; i++) {
+        if (paramSplit[i].indexOf("gaclientidtime") > -1) {
+          var clientIdTimestamp = paramSplit[i].split("=")[1];
+          return clientIdTimestamp;
+        }
+      }
+    }
+  }
+
+  (function(w, d, s, l, i) {
+    w[l] = w[l] || [];
+    w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
+    var f = d.getElementsByTagName(s)[0],
+      j = d.createElement(s),
+      dl = l != "dataLayer" ? "&l=" + l : "";
+    j.async = true;
+    j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+    f.parentNode.insertBefore(j, f);
+  })(window, document, "script", "dataLayer", "GTM-T9RD3NN");
+
+  //read cookie
+  function readCookie(name) {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(";");
+    for (var i = 0; i < ca.length; i++) {
+      var c = ca[i];
+      while (c.charAt(0) == " ") c = c.substring(1, c.length);
+      if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+    }
+    return null;
+  }
+
+  //check if tracking consent
+  function checkConsent() {
+    var consentCookie = readCookie("OptanonConsent");
+    var decoded = decodeURIComponent(consentCookie);
+    if (decoded.indexOf(",2:1,") != -1) {
+      return true;
+    }
+  }
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="msapplication-config" content="none">
+<meta name="applicable-device" content="pc,mobile">
+<meta name="baidu-site-verification" content="wNWFRErSiK">
+<meta name="naver-site-verification" content="8763ea8ce003ca44fa69953b349ae070117703b0">
+<meta name="yandex-verification" content="088dd33e5200ce6a">
+<meta name="theme-color" content="#2b76ad">
+<script>
+            LUX=(function(){var a=("undefined"!==typeof(LUX)&&"undefined"!==typeof(LUX.gaMarks)?LUX.gaMarks:[]);var d=("undefined"!==typeof(LUX)&&"undefined"!==typeof(LUX.gaMeasures)?LUX.gaMeasures:[]);var j="LUX_start";var k=window.performance;var l=("undefined"!==typeof(LUX)&&LUX.ns?LUX.ns:(Date.now?Date.now():+(new Date())));if(k&&k.timing&&k.timing.navigationStart){l=k.timing.navigationStart}function f(){if(k&&k.now){return k.now()}var o=Date.now?Date.now():+(new Date());return o-l}function b(n){if(k){if(k.mark){return k.mark(n)}else{if(k.webkitMark){return k.webkitMark(n)}}}a.push({name:n,entryType:"mark",startTime:f(),duration:0});return}function m(p,t,n){if("undefined"===typeof(t)&&h(j)){t=j}if(k){if(k.measure){if(t){if(n){return k.measure(p,t,n)}else{return k.measure(p,t)}}else{return k.measure(p)}}else{if(k.webkitMeasure){return k.webkitMeasure(p,t,n)}}}var r=0,o=f();if(t){var s=h(t);if(s){r=s.startTime}else{if(k&&k.timing&&k.timing[t]){r=k.timing[t]-k.timing.navigationStart}else{return}}}if(n){var q=h(n);if(q){o=q.startTime}else{if(k&&k.timing&&k.timing[n]){o=k.timing[n]-k.timing.navigationStart}else{return}}}d.push({name:p,entryType:"measure",startTime:r,duration:(o-r)});return}function h(n){return c(n,g())}function c(p,o){for(i=o.length-1;i>=0;i--){var n=o[i];if(p===n.name){return n}}return undefined}function g(){if(k){if(k.getEntriesByType){return k.getEntriesByType("mark")}else{if(k.webkitGetEntriesByType){return k.webkitGetEntriesByType("mark")}}}return a}return{mark:b,measure:m,gaMarks:a,gaMeasures:d}})();LUX.ns=(Date.now?Date.now():+(new Date()));LUX.ac=[];LUX.cmd=function(a){LUX.ac.push(a)};LUX.init=function(){LUX.cmd(["init"])};LUX.send=function(){LUX.cmd(["send"])};LUX.addData=function(a,b){LUX.cmd(["addData",a,b])};LUX_ae=[];window.addEventListener("error",function(a){LUX_ae.push(a)});LUX_al=[];if("function"===typeof(PerformanceObserver)&&"function"===typeof(PerformanceLongTaskTiming)){var LongTaskObserver=new PerformanceObserver(function(c){var b=c.getEntries();for(var a=0;a<b.length;a++){var d=b[a];LUX_al.push(d)}});try{LongTaskObserver.observe({type:["longtask"]})}catch(e){}};
+        </script>
+<script src="https://cdn.speedcurve.com/js/lux.js?id=2624851647" async defer crossorigin="anonymous"></script>
+<link rel="apple-touch-icon" href="https://www.teamviewer.com/wp-content/themes/tv-wordpress-theme/dist/media/favicon.png" />
+<link rel="icon" type="image/png" href="https://www.teamviewer.com/wp-content/themes/tv-wordpress-theme/dist/media/favicon.png" />
+<link rel="preconnect" href="https://static.teamviewer.com" crossorigin><link rel="preconnect" href="https://cdn.cookielaw.org" crossorigin><link rel="preconnect" href="https://www.googletagmanager.com" crossorigin><link rel="preconnect" href="https://www.google-analytics.com" crossorigin><style type="text/css" id="wpml-ls-inline-styles-additional-css">.wpml-ls-display{display:inline!important;}</style>
+<meta name='robots' content='index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1' />
+<link rel="alternate" hreflang="cs" href="https://www.teamviewer.com/cs/stahnout/windows/" />
+<link rel="alternate" hreflang="da" href="https://www.teamviewer.com/da/download/windows/" />
+<link rel="alternate" hreflang="en" href="https://www.teamviewer.com/en/download/windows/" />
+<link rel="alternate" hreflang="es" href="https://www.teamviewer.com/es/descarga/windows/" />
+<link rel="alternate" hreflang="es-mx" href="https://www.teamviewer.com/es-mx/descarga/windows/" />
+<link rel="alternate" hreflang="en-us" href="https://www.teamviewer.com/en-us/download/windows/" />
+<link rel="alternate" hreflang="fi" href="https://www.teamviewer.com/fi/lataa/windows/" />
+<link rel="alternate" hreflang="fr" href="https://www.teamviewer.com/fr/telecharger/windows/" />
+<link rel="alternate" hreflang="fr-ca" href="https://www.teamviewer.com/fr-ca/telecharger/windows/" />
+<link rel="alternate" hreflang="de" href="https://www.teamviewer.com/de/download/windows/" />
+<link rel="alternate" hreflang="hu" href="https://www.teamviewer.com/hu/letoltes/windows/" />
+<link rel="alternate" hreflang="it" href="https://www.teamviewer.com/it/download/windows/" />
+<link rel="alternate" hreflang="ja" href="https://www.teamviewer.com/ja/download/windows/" />
+<link rel="alternate" hreflang="ko" href="https://www.teamviewer.com/ko/download/windows/" />
+<link rel="alternate" hreflang="nl" href="https://www.teamviewer.com/nl/download/windows/" />
+<link rel="alternate" hreflang="no" href="https://www.teamviewer.com/no/nedlasting/windows/" />
+<link rel="alternate" hreflang="pl" href="https://www.teamviewer.com/pl/do-pobrania/windows/" />
+<link rel="alternate" hreflang="pt-br" href="https://www.teamviewer.com/pt-br/download/windows/" />
+<link rel="alternate" hreflang="ru" href="https://www.teamviewer.com/ru/%d1%81%d0%ba%d0%b0%d1%87%d0%b0%d1%82%d1%8c/windows/" />
+<link rel="alternate" hreflang="sv" href="https://www.teamviewer.com/sv/ladda-ner/windows/" />
+<link rel="alternate" hreflang="th" href="https://www.teamviewer.com/th/%e0%b8%94%e0%b8%b2%e0%b8%a7%e0%b8%99%e0%b9%8c%e0%b9%82%e0%b8%ab%e0%b8%a5%e0%b8%94/windows/" />
+<link rel="alternate" hreflang="tr" href="https://www.teamviewer.com/tr/yukleme/windows/" />
+<link rel="alternate" hreflang="vi" href="https://www.teamviewer.com/vi/ta%cc%89i-ve/windows/" />
+<link rel="alternate" hreflang="zh-cn" href="https://www.teamviewer.cn/cn/download/windows/" />
+<link rel="alternate" hreflang="zh-tw" href="https://www.teamviewer.com/tw/download/windows/" />
+<link rel="alternate" hreflang="x-default" href="https://www.teamviewer.com/en/download/windows/" />
+<title>TeamViewer Windows Download for Remote Desktop access and collaboration</title>
+<meta name="description" content="Download TeamViewer now to connect to remote desktops, provide remote support and collaborate with online meetings and video conferencing." />
+<link rel="canonical" href="https://www.teamviewer.com/en/download/windows/" />
+<meta property="og:locale" content="en_GB" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Windows" />
+<meta property="og:description" content="Download TeamViewer now to connect to remote desktops, provide remote support and collaborate with online meetings and video conferencing." />
+<meta property="og:url" content="https://www.teamviewer.com/en/download/windows/" />
+<meta property="og:site_name" content="TeamViewer" />
+<meta property="article:modified_time" content="2022-12-13T14:05:41+00:00" />
+<meta property="og:image" content="https://static.teamviewer.com/resources/2018/12/Facebook_v1.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="628" />
+<meta property="og:image:type" content="image/png" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:label1" content="Est. reading time" />
+<meta name="twitter:data1" content="3 minutes" />
+<script type="application/ld+json" class="yoast-schema-graph">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://www.teamviewer.com/en/download/windows/","url":"https://www.teamviewer.com/en/download/windows/","name":"TeamViewer Windows Download for Remote Desktop access and collaboration","isPartOf":{"@id":"https://www.teamviewer.com/en/#website"},"datePublished":"2018-04-23T08:13:04+00:00","dateModified":"2022-12-13T14:05:41+00:00","description":"Download TeamViewer now to connect to remote desktops, provide remote support and collaborate with online meetings and video conferencing.","breadcrumb":{"@id":"https://www.teamviewer.com/en/download/windows/#breadcrumb"},"inLanguage":"en-GB","potentialAction":[{"@type":"ReadAction","target":["https://www.teamviewer.com/en/download/windows/"]}]},{"@type":"BreadcrumbList","@id":"https://www.teamviewer.com/en/download/windows/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://www.teamviewer.com/en/"},{"@type":"ListItem","position":2,"name":"Download","item":"https://www.teamviewer.com/en/download/"},{"@type":"ListItem","position":3,"name":"Windows"}]},{"@type":"WebSite","@id":"https://www.teamviewer.com/en/#website","url":"https://www.teamviewer.com/en/","name":"TeamViewer","description":"The World&#039;s #1 Remote Desktop App","publisher":{"@id":"https://www.teamviewer.com/en/#organization"},"potentialAction":[{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"https://www.teamviewer.com/en/?s={search_term_string}"},"query-input":"required name=search_term_string"}],"inLanguage":"en-GB"},{"@type":"Organization","@id":"https://www.teamviewer.com/en/#organization","name":"TeamViewer","url":"https://www.teamviewer.com/en/","logo":{"@type":"ImageObject","inLanguage":"en-GB","@id":"https://www.teamviewer.com/en/#/schema/logo/image/","url":"https://static.teamviewer.com/resources/2019/07/TeamViewer_Logo_512x512.png","contentUrl":"https://static.teamviewer.com/resources/2019/07/TeamViewer_Logo_512x512.png","width":512,"height":512,"caption":"TeamViewer"},"image":{"@id":"https://www.teamviewer.com/en/#/schema/logo/image/"}}]}</script>
+<link rel='dns-prefetch' href='//fonts.googleapis.com' />
+<link rel='stylesheet' id='msgbox.css-css' href='https://www.teamviewer.com/wp-content/plugins/wp-hazard-messages/css/msgbox.css' type='text/css' media='all' />
+<link rel='stylesheet' id='wp-components-css' href='https://www.teamviewer.com/wp-includes/css/dist/components/style.min.css' type='text/css' media='all' />
+<link rel='stylesheet' id='wp-block-editor-css' href='https://www.teamviewer.com/wp-includes/css/dist/block-editor/style.min.css' type='text/css' media='all' />
+<link rel='stylesheet' id='wp-nux-css' href='https://www.teamviewer.com/wp-includes/css/dist/nux/style.min.css' type='text/css' media='all' />
+<link rel='stylesheet' id='wp-reusable-blocks-css' href='https://www.teamviewer.com/wp-includes/css/dist/reusable-blocks/style.min.css' type='text/css' media='all' />
+<link rel='stylesheet' id='wp-editor-css' href='https://www.teamviewer.com/wp-includes/css/dist/editor/style.min.css' type='text/css' media='all' />
+<link rel='stylesheet' id='wpsvg_inline-cgb-style-css-css' href='https://www.teamviewer.com/wp-content/plugins/wpsvg/gutenberg/dist/blocks.style.build.css' type='text/css' media='all' />
+<link rel='stylesheet' id='tv-theme-global-css' href='https://www.teamviewer.com/wp-content/themes/tv-wordpress-theme/dist/css/global.min.css?ver=4.0.31' type='text/css' media='all' />
+<link rel='stylesheet' id='tv-aem-menu-css' href='https://www.teamviewer.com/wp-content/themes/tv-wordpress-theme/dist/css/aem_menu.min.css?ver=4.0.31' type='text/css' media='all' />
+<link rel='stylesheet' id='js_composer_front-css' href='https://www.teamviewer.com/wp-content/plugins/js_composer/assets/css/js_composer.min.css' type='text/css' media='all' />
+<link rel='stylesheet' id='bsf-Defaults-css' href='https://www.teamviewer.com/wp-content/uploads/smile_fonts/Defaults/Defaults.css' type='text/css' media='all' />
+<link rel='stylesheet' id='bsf-Arrows-css' href='https://www.teamviewer.com/wp-content/uploads/smile_fonts/Arrows/Arrows.css' type='text/css' media='all' />
+<link rel='stylesheet' id='ultimate-vc-addons-google-fonts-css' href='https://fonts.googleapis.com/css?family=Roboto%3Aregular%2C300' type='text/css' media='all' />
+<link rel='stylesheet' id='ultimate-vc-addons-style-css' href='https://www.teamviewer.com/wp-content/plugins/Ultimate_VC_Addons/assets/min-css/style.min.css' type='text/css' media='all' />
+<link rel='stylesheet' id='ultimate-vc-addons-slick-css' href='https://www.teamviewer.com/wp-content/plugins/Ultimate_VC_Addons/assets/min-css/slick.min.css' type='text/css' media='all' />
+<link rel='stylesheet' id='ultimate-vc-addons-icons-css' href='https://www.teamviewer.com/wp-content/plugins/Ultimate_VC_Addons/assets/css/icons.css' type='text/css' media='all' />
+<link rel='stylesheet' id='ultimate-vc-addons-animate-css' href='https://www.teamviewer.com/wp-content/plugins/Ultimate_VC_Addons/assets/min-css/animate.min.css' type='text/css' media='all' />
+<link rel='stylesheet' id='ultimate-vc-addons-headings-style-css' href='https://www.teamviewer.com/wp-content/plugins/Ultimate_VC_Addons/assets/min-css/headings.min.css' type='text/css' media='all' />
+<link rel='stylesheet' id='ultimate-vc-addons_content_box_css-css' href='https://www.teamviewer.com/wp-content/plugins/Ultimate_VC_Addons/assets/min-css/content-box.min.css' type='text/css' media='all' />
+<link rel='stylesheet' id='ultimate-vc-addons-info-box-style-css' href='https://www.teamviewer.com/wp-content/plugins/Ultimate_VC_Addons/assets/min-css/info-box.min.css' type='text/css' media='all' />
+<script type='text/javascript' src='https://www.teamviewer.com/wp-includes/js/jquery/jquery.min.js' id='jquery-core-js'></script>
+<script type='text/javascript' src='https://www.teamviewer.com/wp-includes/js/jquery/jquery-migrate.min.js' id='jquery-migrate-js'></script>
+<script type='text/javascript' async="" src='https://www.teamviewer.com/wp-content/themes/tv-wordpress-theme/dist/js/lazy_load.min.js?ver=4.0.31' id='lazysizes-js'></script>
+<script type='text/javascript' src='https://www.teamviewer.com/wp-content/plugins/Ultimate_VC_Addons/assets/min-js/ultimate-params.min.js' id='ultimate-vc-addons-params-js'></script>
+<script type='text/javascript' src='https://www.teamviewer.com/wp-content/plugins/Ultimate_VC_Addons/assets/min-js/jquery-appear.min.js' id='ultimate-vc-addons-appear-js'></script>
+<script type='text/javascript' src='https://www.teamviewer.com/wp-content/plugins/Ultimate_VC_Addons/assets/min-js/custom.min.js' id='ultimate-vc-addons-custom-js'></script>
+<script type='text/javascript' src='https://www.teamviewer.com/wp-content/plugins/Ultimate_VC_Addons/assets/min-js/headings.min.js' id='ultimate-vc-addons-headings-script-js'></script>
+<script type='text/javascript' src='https://www.teamviewer.com/wp-content/plugins/Ultimate_VC_Addons/assets/min-js/slick.min.js' id='ultimate-vc-addons-slick-js'></script>
+<script type='text/javascript' src='https://www.teamviewer.com/wp-content/plugins/Ultimate_VC_Addons/assets/min-js/slick-custom.min.js' id='ultimate-vc-addons-slick-custom-js'></script>
+<style>
+::-webkit-input-placeholder { 
+color: #777 !important;
+opacity: 1 !important;
+}
+::-moz-placeholder { 
+color: #777 !important;
+opacity: 1 !important;
+}
+:-ms-input-placeholder {
+color: #777 !important;
+opacity: 1;
+}
+ul.phone_number_list { list-style-type: none; padding-left: 0px !important; } 
+ul.phone_number_list li { margin-bottom: 0px !important; }
+.wd-row.wd-row--highlight ul li { color: #fff; }
+.lh_feature_icon img { width:100% !important;  }
+.wd-grid__row { flex-wrap: nowrap; }
+[class*=tv_page_category-legal] .vc_row[data-vc-full-width].wd-header,
+[class*=tv_page_category-engage] .vc_row[data-vc-full-width].wd-header {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+[class*=tv_page_category-legal] .vc_row[data-vc-full-width].wd-header .upb_row_bg,
+[class*=tv_page_category-engage] .vc_row[data-vc-full-width].wd-header .upb_row_bg {
+	width: 100% !important;
+}
+
+.integrations .vc_row.vc_column-gap-25 .upb_row_bg {
+    max-width: 100%!important;
+    width: 100% !important;
+    min-width: 100% !important;
+}
+
+.integrations .vc_row.vc_column-gap-25 {
+    max-width: 1320px !important;
+    margin: 0 auto !important;
+}
+
+.integrations .vc_row[data-vc-full-width],
+.integrations .vc_row.vc_row-flex {
+    max-width: 1320px !important;
+    margin: 0 auto !important;
+	left: 0 !important;
+}
+@media only screen and (min-width: 992px) {
+.gb-content-columns .wd-grid__column.wd-grid__cols--md-6 {
+	flex-basis: calc(49% - 2em);
+}
+}
+</style>
+<script type="text/javascript" src="//widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js" async></script>
+<style>
+li#menu-item-183231 {
+    display: none;
+}
+</style>
+<style type="text/css" data-type="vc_shortcodes-custom-css">.vc_custom_1615212910893{background-color: #ffffff !important;}.vc_custom_1615212989998{background-color: #ffffff !important;}.vc_custom_1615209049147{background-color: #ffffff !important;}.vc_custom_1615212653664{background-color: #ffffff !important;}.vc_custom_1615212910893{background-color: #ffffff !important;}.vc_custom_1615212989998{background-color: #ffffff !important;}.vc_custom_1615212989998{background-color: #ffffff !important;}</style><noscript><style> .wpb_animate_when_almost_visible { opacity: 1; }</style></noscript><script id="wpacu-preload-async-css-fallback">
+/*! LoadCSS. [c]2020 Filament Group, Inc. MIT License */
+/* This file is meant as a standalone workflow for
+- testing support for link[rel=preload]
+- enabling async CSS loading in browsers that do not support rel=preload
+- applying rel preload css once loaded, whether supported or not.
+*/
+(function(w){"use strict";var wpacuLoadCSS=function(href,before,media,attributes){var doc=w.document;var ss=doc.createElement('link');var ref;if(before){ref=before}else{var refs=(doc.body||doc.getElementsByTagName('head')[0]).childNodes;ref=refs[refs.length-1]}
+var sheets=doc.styleSheets;if(attributes){for(var attributeName in attributes){if(attributes.hasOwnProperty(attributeName)){ss.setAttribute(attributeName,attributes[attributeName])}}}
+ss.rel="stylesheet";ss.href=href;ss.media="only x";function ready(cb){if(doc.body){return cb()}
+setTimeout(function(){ready(cb)})}
+ready(function(){ref.parentNode.insertBefore(ss,(before?ref:ref.nextSibling))});var onwpaculoadcssdefined=function(cb){var resolvedHref=ss.href;var i=sheets.length;while(i--){if(sheets[i].href===resolvedHref){return cb()}}
+setTimeout(function(){onwpaculoadcssdefined(cb)})};function wpacuLoadCB(){if(ss.addEventListener){ss.removeEventListener("load",wpacuLoadCB)}
+ss.media=media||"all"}
+if(ss.addEventListener){ss.addEventListener("load",wpacuLoadCB)}
+ss.onwpaculoadcssdefined=onwpaculoadcssdefined;onwpaculoadcssdefined(wpacuLoadCB);return ss};if(typeof exports!=="undefined"){exports.wpacuLoadCSS=wpacuLoadCSS}else{w.wpacuLoadCSS=wpacuLoadCSS}}(typeof global!=="undefined"?global:this))
+</script>
+</head>
+<body class="page-template-default page page-id-7206 page-child parent-pageid-8543 wpb-js-composer js-comp-ver-6.10.0 vc_responsive">
+<noscript>
+		
+		<iframe src="https://www.googletagmanager.com/ns.html?id=GTM-T9RD3NN" height="0" width="0" style="display:none;visibility:hidden"></iframe>
+		<img height="1" width="1" style="display:none;" alt="" src="https://px.ads.linkedin.com/collect/?pid=57080&fmt=gif" />
+	</noscript>
+<div id="page" class="site">
+<link rel="stylesheet" href="https://www.teamviewer.com/etc.clientlibs/teamviewer/clientlibs/tenants/website/clientlib-standalone/externalheader.min.css?ver=1671441693.6596" type="text/css">
+<div id="container-51b794f7c4" class="cmp-container cmp-container--fullwidth ">
+<div class="aem-Grid aem-Grid--12 aem-Grid--default--12 ">
+<div data-component-module="pagenavigation" class="pagenavigation aem-GridColumn aem-GridColumn--default--12">
+<div class="cmp-page-navigation ">
+<div class="cmp-navigation__icon cmp-page-navigation__mobile-bar js-shadow-on-scroll-mobile">
+<div class="logo image cmp-page-navigation__logo cmp-page-navigation__logo--mobile">
+<div data-cmp-is="image" data-cmp-lazythreshold="0" data-cmp-src="https://s7g10.scene7.com/is/content/teamviewergmbh/logo-teamviewer-1?dpr=off" data-cmp-dmimage data-asset="https://www.teamviewer.com/content/dam/teamviewer/central-image-hub/logos/teamviewer/logo-teamviewer.svg" data-title="TeamViewer" id="image-add7ad40af" data-cmp-data-layer="{&#34;image-add7ad40af&#34;:{&#34;@type&#34;:&#34;core/wcm/components/image/v2/image&#34;,&#34;repo:modifyDate&#34;:&#34;2022-11-28T08:57:05Z&#34;,&#34;xdm:linkURL&#34;:&#34;https://www.teamviewer.com/&#34;,&#34;image&#34;:{&#34;repo:id&#34;:&#34;81381504-0482-46ba-bcc8-a414e02493ca&#34;,&#34;repo:modifyDate&#34;:&#34;2022-07-12T11:39:05Z&#34;,&#34;@type&#34;:&#34;image/svg+xml&#34;,&#34;repo:path&#34;:&#34;https://www.teamviewer.com/content/dam/teamviewer/central-image-hub/logos/teamviewer/logo-teamviewer.svg&#34;}}}" class="cmp-image" itemscope itemtype="https://schema.org/ImageObject">
+<a class="cmp-image__link" href="https://www.teamviewer.com/" data-cmp-clickable data-cmp-hook-image="link">
+<img src="https://s7g10.scene7.com/is/content/teamviewergmbh/logo-teamviewer-1?dpr=off" class="cmp-image__image" itemprop="contentUrl" data-cmp-hook-image="image" alt="TeamViewer" />
+</a>
+</div>
+</div>
+<div class="telephone cmp-page-navigation__telephone--mobile cmp-page-navigation__telephone">
+<div class="cmp-telephone">
+<a href="tel:+49 7161 60692 50" class="cmp-telephone__number-wrapper">
+<svg class="cmp-telephone__icon" viewBox="0 0 20 20" fill="none" xmlns="https://www.w3.org/2000/svg">
+<path d="M6.67187 9.69979C7.44364 11.2935 8.73239 12.579 10.3281 13.3467C10.4458 13.4024 10.576 13.4265 10.7059 13.4167C10.8358 13.4068 10.9608 13.3633 11.0687 13.2904L13.4125 11.7248C13.516 11.6546 13.6357 11.6117 13.7603 11.6002C13.8849 11.5887 14.0104 11.609 14.125 11.6592L18.5125 13.5435C18.6625 13.6059 18.7877 13.7159 18.869 13.8565C18.9504 13.9971 18.9832 14.1606 18.9625 14.3217C18.8234 15.407 18.2937 16.4046 17.4723 17.1276C16.6509 17.8506 15.5943 18.2495 14.5 18.2498C11.1185 18.2498 7.87548 16.9065 5.48439 14.5154C3.0933 12.1243 1.75 8.8813 1.75 5.49979C1.75025 4.40553 2.1492 3.34886 2.87221 2.5275C3.59522 1.70613 4.59274 1.17635 5.67812 1.03729C5.83922 1.01659 6.00266 1.04943 6.14326 1.13074C6.28386 1.21206 6.39384 1.33733 6.45625 1.48729L8.34062 5.88416C8.38963 5.99699 8.41013 6.12013 8.40032 6.24275C8.39051 6.36537 8.35069 6.48369 8.28437 6.58729L6.71875 8.96854C6.64905 9.07624 6.60814 9.20002 6.59993 9.32805C6.59172 9.45607 6.61649 9.58407 6.67187 9.69979V9.69979Z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
+<span class="cmp-telephone__number">+49 7161 60692 50</span>
+</a>
+</div>
+</div>
+<button class="cmp-page-navigation__menu-toggle js-mobile-nav-toggle" data-toggle="global-foldout">
+<svg class="cmp-page-navigation__menu-icon cmp-page-navigation__menu-icon--burger" viewBox="0 0 24 24" fill="none" xmlns="https://www.w3.org/2000/svg">
+<path d="M3.75 12H20.25" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M3.75 5.25H20.25" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M3.75 18.75H20.25" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
+<svg class="cmp-page-navigation__menu-icon cmp-page-navigation__menu-icon--close" width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="https://www.w3.org/2000/svg">
+<path d="M18.75 5.25L5.25 18.75" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M18.75 18.75L5.25 5.25" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
+</button>
+</div>
+<div id="global-foldout" class="cmp-page-navigation__foldout js-mobile-nav-close">
+<div class="cmp-page-navigation__menu-list">
+<div class="cmp-page-navigation__global-menu-wrapper js-global-navigation">
+<div class="cmp-container cmp-container--in-grid cmp-page-navigation__global-menu-container">
+<div class="utils-gridGutter cmp-page-navigation__global-menu js-navigation-container">
+<div class="globalnavigation navigation cmp-page-navigation__global-nav">
+<nav class="cmp-navigation">
+<ul class="cmp-navigation__group">
+<li class="cmp-navigation__item cmp-navigation__item--level1 cmp-navigation__item--nested js-navitem">
+<span class="cmp-navigation__item-label cmp-navigation__item-label--has-subpages js-navfoldout-trigger">Support</span>
+<ul class="cmp-navigation__item-list js-navfoldout">
+<li class="cmp-navigation__item cmp-navigation__item--level2">
+<a href="https://www.teamviewer.com/en/global/support/customer-support/" class="cmp-navigation__item-label cmp-navigation__item-link">Contact Support
+<svg class="cmp-navigation__item-icon" viewBox="0 0 24 24" fill="none" xmlns="https://www.w3.org/2000/svg">
+<path d="M3.75 12H20.25" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M13.5 5.25L20.25 12L13.5 18.75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
+</a>
+</li>
+<li class="cmp-navigation__item cmp-navigation__item--level2">
+<a href="https://www.teamviewer.com/en/global/support/documents/" class="cmp-navigation__item-label cmp-navigation__item-link">Guides &amp; Manuals
+<svg class="cmp-navigation__item-icon" viewBox="0 0 24 24" fill="none" xmlns="https://www.w3.org/2000/svg">
+<path d="M3.75 12H20.25" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M13.5 5.25L20.25 12L13.5 18.75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
+</a>
+</li>
+<li class="cmp-navigation__item cmp-navigation__item--level2">
+<a href="https://www.teamviewer.com/en/global/support/knowledge-base/" class="cmp-navigation__item-label cmp-navigation__item-link">Knowledge Base
+<svg class="cmp-navigation__item-icon" viewBox="0 0 24 24" fill="none" xmlns="https://www.w3.org/2000/svg">
+<path d="M3.75 12H20.25" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M13.5 5.25L20.25 12L13.5 18.75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
+</a>
+</li>
+<li class="cmp-navigation__item cmp-navigation__item--level2">
+<a href="https://www.teamviewer.com/en/global/support/system-status/" class="cmp-navigation__item-label cmp-navigation__item-link">System Status
+<svg class="cmp-navigation__item-icon" viewBox="0 0 24 24" fill="none" xmlns="https://www.w3.org/2000/svg">
+<path d="M3.75 12H20.25" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M13.5 5.25L20.25 12L13.5 18.75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
+</a>
+</li>
+<li class="cmp-navigation__item cmp-navigation__item--level2">
+<a href="https://www.teamviewer.com/en/global/support/custom-modules/" class="cmp-navigation__item-label cmp-navigation__item-link">Custom Modules
+<svg class="cmp-navigation__item-icon" viewBox="0 0 24 24" fill="none" xmlns="https://www.w3.org/2000/svg">
+<path d="M3.75 12H20.25" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M13.5 5.25L20.25 12L13.5 18.75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
+</a>
+</li>
+<li class="cmp-navigation__item cmp-navigation__item--level2">
+<a href="https://www.teamviewer.com/en/global/support/for-developers/" class="cmp-navigation__item-label cmp-navigation__item-link">For Developers
+<svg class="cmp-navigation__item-icon" viewBox="0 0 24 24" fill="none" xmlns="https://www.w3.org/2000/svg">
+<path d="M3.75 12H20.25" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M13.5 5.25L20.25 12L13.5 18.75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
+</a>
+</li>
+<li class="cmp-navigation__item cmp-navigation__item--level2">
+<a href="https://www.teamviewer.com/en/global/support/community/" class="cmp-navigation__item-label cmp-navigation__item-link">Community
+<svg class="cmp-navigation__item-icon" viewBox="0 0 24 24" fill="none" xmlns="https://www.w3.org/2000/svg">
+<path d="M3.75 12H20.25" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M13.5 5.25L20.25 12L13.5 18.75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
+</a>
+</li>
+</ul>
+</li>
+<li class="cmp-navigation__item cmp-navigation__item--level1 cmp-navigation__item--nested js-navitem">
+<span class="cmp-navigation__item-label cmp-navigation__item-label--has-subpages js-navfoldout-trigger">Company</span>
+<ul class="cmp-navigation__item-list js-navfoldout">
+<li class="cmp-navigation__item cmp-navigation__item--level2">
+<a href="https://www.teamviewer.com/en/global/company/investors/" class="cmp-navigation__item-label cmp-navigation__item-link">Investors
+<svg class="cmp-navigation__item-icon" viewBox="0 0 24 24" fill="none" xmlns="https://www.w3.org/2000/svg">
+<path d="M3.75 12H20.25" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M13.5 5.25L20.25 12L13.5 18.75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
+</a>
+</li>
+<li class="cmp-navigation__item cmp-navigation__item--level2">
+<a href="https://www.teamviewer.com/en/global/company/press/" class="cmp-navigation__item-label cmp-navigation__item-link">Press
+<svg class="cmp-navigation__item-icon" viewBox="0 0 24 24" fill="none" xmlns="https://www.w3.org/2000/svg">
+<path d="M3.75 12H20.25" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M13.5 5.25L20.25 12L13.5 18.75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
+</a>
+</li>
+<li class="cmp-navigation__item cmp-navigation__item--level2">
+<a href="https://www.teamviewer.com/en/global/company/careers/" class="cmp-navigation__item-label cmp-navigation__item-link">Careers
+<svg class="cmp-navigation__item-icon" viewBox="0 0 24 24" fill="none" xmlns="https://www.w3.org/2000/svg">
+<path d="M3.75 12H20.25" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M13.5 5.25L20.25 12L13.5 18.75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
+</a>
+</li>
+<li class="cmp-navigation__item cmp-navigation__item--level2">
+<a href="https://www.teamviewer.com/en/global/company/leadership/" class="cmp-navigation__item-label cmp-navigation__item-link">Leadership
+<svg class="cmp-navigation__item-icon" viewBox="0 0 24 24" fill="none" xmlns="https://www.w3.org/2000/svg">
+<path d="M3.75 12H20.25" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M13.5 5.25L20.25 12L13.5 18.75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
+</a>
+</li>
+<li class="cmp-navigation__item cmp-navigation__item--level2">
+<a href="https://www.teamviewer.com/en/global/company/about-teamviewer/" class="cmp-navigation__item-label cmp-navigation__item-link">About TeamViewer
+<svg class="cmp-navigation__item-icon" viewBox="0 0 24 24" fill="none" xmlns="https://www.w3.org/2000/svg">
+<path d="M3.75 12H20.25" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M13.5 5.25L20.25 12L13.5 18.75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
+</a>
+</li>
+<li class="cmp-navigation__item cmp-navigation__item--level2">
+<a href="https://www.teamviewer.com/en/global/company/sponsorship/" class="cmp-navigation__item-label cmp-navigation__item-link">Sport Sponsorship
+<svg class="cmp-navigation__item-icon" viewBox="0 0 24 24" fill="none" xmlns="https://www.w3.org/2000/svg">
+<path d="M3.75 12H20.25" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M13.5 5.25L20.25 12L13.5 18.75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
+</a>
+</li>
+<li class="cmp-navigation__item cmp-navigation__item--level2">
+<a href="https://www.teamviewer.com/en/global/company/sustainability-and-csr/" class="cmp-navigation__item-label cmp-navigation__item-link">Sustainability and CSR
+<svg class="cmp-navigation__item-icon" viewBox="0 0 24 24" fill="none" xmlns="https://www.w3.org/2000/svg">
+<path d="M3.75 12H20.25" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M13.5 5.25L20.25 12L13.5 18.75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
+</a>
+</li>
+<li class="cmp-navigation__item cmp-navigation__item--level2">
+<a href="https://www.teamviewer.com/en/global/company/research-projects/" class="cmp-navigation__item-label cmp-navigation__item-link">Research Projects
+<svg class="cmp-navigation__item-icon" viewBox="0 0 24 24" fill="none" xmlns="https://www.w3.org/2000/svg">
+<path d="M3.75 12H20.25" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M13.5 5.25L20.25 12L13.5 18.75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
+</a>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</div>
+<div data-component-module="signin" class="signin cmp-page-navigation__global-signin cmp-page-navigation__global-nav">
+<nav class="cmp-navigation">
+<ul class="cmp-navigation__group cmp-signin">
+<li class=" cmp-navigation__item cmp-navigation__item--level1 cmp-navigation__item--nested js-navitem">
+<span class="cmp-navigation__item-label cmp-navigation__item-label--has-subpages js-navfoldout-trigger">Sign in</span>
+<ul class="cmp-navigation__item-list js-navfoldout">
+<li class="cmp-navigation__item cmp-navigation__item--level2">
+<a href="https://login.teamviewer.com/LogOn" class="cmp-navigation__item-label cmp-navigation__item-link cmp-signin__item-link" target="_blank">Management Console
+<svg class="cmp-navigation__item-icon" viewBox="0 0 24 24" fill="none" xmlns="https://www.w3.org/2000/svg">
+<path d="M3.75 12H20.25" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M13.5 5.25L20.25 12L13.5 18.75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
+</a>
+</li>
+<li class="cmp-navigation__item cmp-navigation__item--level2">
+<a href="https://login.teamviewer.com/oauth2/authorize/TvWebsite?client_id=468123-M4e8KETDG5OXotATbPTW&response_type=code&display=popup&redirect_uri=https%3A%2F%2Fwww.teamviewer.com%2Fmco%2Fsupport%3Flang%3Den&_ga=2.221696984.1550724971.1667327584-678284122.1666766909" class="cmp-navigation__item-label cmp-navigation__item-link cmp-signin__item-link" target="_self">Chat
+<svg class="cmp-navigation__item-icon" viewBox="0 0 24 24" fill="none" xmlns="https://www.w3.org/2000/svg">
+<path d="M3.75 12H20.25" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M13.5 5.25L20.25 12L13.5 18.75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
+</a>
+</li>
+<li class="cmp-navigation__item cmp-navigation__item--level2">
+<a href="https://freshworks-help175.freshworks.com/login/auth/contactsso?client_id=78368727158800390&redirect_uri=https%3A%2F%2Fsupport.teamviewer.com%2Ffreshid%2Fcustomer_authorize_callback" class="cmp-navigation__item-label cmp-navigation__item-link cmp-signin__item-link" target="_blank">Ticket
+<svg class="cmp-navigation__item-icon" viewBox="0 0 24 24" fill="none" xmlns="https://www.w3.org/2000/svg">
+<path d="M3.75 12H20.25" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M13.5 5.25L20.25 12L13.5 18.75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
+</a>
+</li>
+<li class="cmp-navigation__item cmp-navigation__item--level2">
+<a href="https://service.teamviewer.com/" class="cmp-navigation__item-label cmp-navigation__item-link cmp-signin__item-link" target="_blank">Customer Portal
+<svg class="cmp-navigation__item-icon" viewBox="0 0 24 24" fill="none" xmlns="https://www.w3.org/2000/svg">
+<path d="M3.75 12H20.25" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M13.5 5.25L20.25 12L13.5 18.75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
+</a>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</div>
+<div class="telephone cmp-page-navigation__telephone cmp-page-navigation__telephone--desktop">
+<div class="cmp-telephone">
+<a href="tel:+49 7161 60692 50" class="cmp-telephone__number-wrapper">
+<svg class="cmp-telephone__icon" viewBox="0 0 20 20" fill="none" xmlns="https://www.w3.org/2000/svg">
+<path d="M6.67187 9.69979C7.44364 11.2935 8.73239 12.579 10.3281 13.3467C10.4458 13.4024 10.576 13.4265 10.7059 13.4167C10.8358 13.4068 10.9608 13.3633 11.0687 13.2904L13.4125 11.7248C13.516 11.6546 13.6357 11.6117 13.7603 11.6002C13.8849 11.5887 14.0104 11.609 14.125 11.6592L18.5125 13.5435C18.6625 13.6059 18.7877 13.7159 18.869 13.8565C18.9504 13.9971 18.9832 14.1606 18.9625 14.3217C18.8234 15.407 18.2937 16.4046 17.4723 17.1276C16.6509 17.8506 15.5943 18.2495 14.5 18.2498C11.1185 18.2498 7.87548 16.9065 5.48439 14.5154C3.0933 12.1243 1.75 8.8813 1.75 5.49979C1.75025 4.40553 2.1492 3.34886 2.87221 2.5275C3.59522 1.70613 4.59274 1.17635 5.67812 1.03729C5.83922 1.01659 6.00266 1.04943 6.14326 1.13074C6.28386 1.21206 6.39384 1.33733 6.45625 1.48729L8.34062 5.88416C8.38963 5.99699 8.41013 6.12013 8.40032 6.24275C8.39051 6.36537 8.35069 6.48369 8.28437 6.58729L6.71875 8.96854C6.64905 9.07624 6.60814 9.20002 6.59993 9.32805C6.59172 9.45607 6.61649 9.58407 6.67187 9.69979V9.69979Z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
+<span class="cmp-telephone__number">+49 7161 60692 50</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cmp-page-navigation__main-menu-wrapper js-main-navigation js-shadow-on-scroll">
+<div class="cmp-container cmp-container--in-grid cmp-page-navigation__main-menu-container">
+<div class="utils-gridGutter cmp-page-navigation__main-menu js-navigation-container">
+<div class="logo image cmp-page-navigation__logo--main cmp-page-navigation__logo">
+<div data-cmp-is="image" data-cmp-lazythreshold="0" data-cmp-src="https://s7g10.scene7.com/is/content/teamviewergmbh/logo-teamviewer-1?dpr=off" data-cmp-dmimage data-asset="https://www.teamviewer.com/content/dam/teamviewer/central-image-hub/logos/teamviewer/logo-teamviewer.svg" data-title="TeamViewer" id="image-add7ad40af" data-cmp-data-layer="{&#34;image-add7ad40af&#34;:{&#34;@type&#34;:&#34;core/wcm/components/image/v2/image&#34;,&#34;repo:modifyDate&#34;:&#34;2022-11-28T08:57:05Z&#34;,&#34;xdm:linkURL&#34;:&#34;https://www.teamviewer.com/&#34;,&#34;image&#34;:{&#34;repo:id&#34;:&#34;81381504-0482-46ba-bcc8-a414e02493ca&#34;,&#34;repo:modifyDate&#34;:&#34;2022-07-12T11:39:05Z&#34;,&#34;@type&#34;:&#34;image/svg+xml&#34;,&#34;repo:path&#34;:&#34;https://www.teamviewer.com/content/dam/teamviewer/central-image-hub/logos/teamviewer/logo-teamviewer.svg&#34;}}}" class="cmp-image" itemscope itemtype="https://schema.org/ImageObject">
+<a class="cmp-image__link" href="https://www.teamviewer.com/" data-cmp-clickable data-cmp-hook-image="link">
+<img src="https://s7g10.scene7.com/is/content/teamviewergmbh/logo-teamviewer-1?dpr=off" class="cmp-image__image" itemprop="contentUrl" data-cmp-hook-image="image" alt="TeamViewer" />
+</a>
+</div>
+</div>
+<div class="mainnavigation navigation cmp-page-navigation__main-nav">
+<nav class="cmp-navigation">
+<ul class="cmp-navigation__group">
+<li class="cmp-navigation__item cmp-navigation__item--level1 cmp-navigation__item--nested js-navitem">
+<span class="cmp-navigation__item-label cmp-navigation__item-label--has-subpages js-navfoldout-trigger">Products &amp; Solutions</span>
+<div class="cmp-navigation__item-list cmp-navigation__mega-wrapper js-navfoldout">
+<ul class="cmp-navigation__mega-items">
+<li class="cmp-navigation__item">
+<a href="https://www.teamviewer.com/en/products-solutions/teamviewer/" class="cmp-navigation__item-link cmp-navigation__item-link--has-description">
+<span class="cmp-navigation__item-label">TeamViewer
+<svg class="cmp-navigation__item-icon" viewBox="0 0 24 24" fill="none" xmlns="https://www.w3.org/2000/svg">
+<path d="M3.75 12H20.25" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M13.5 5.25L20.25 12L13.5 18.75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
+</span>
+<div class="cmp-navigation__item-description">Remote Access &amp; Support</div>
+</a>
+</li>
+<li class="cmp-navigation__item">
+<a href="https://www.teamviewer.com/en/products-solutions/frontline/" class="cmp-navigation__item-link cmp-navigation__item-link--has-description">
+<span class="cmp-navigation__item-label">TeamViewer Frontline
+<svg class="cmp-navigation__item-icon" viewBox="0 0 24 24" fill="none" xmlns="https://www.w3.org/2000/svg">
+<path d="M3.75 12H20.25" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M13.5 5.25L20.25 12L13.5 18.75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
+</span>
+<div class="cmp-navigation__item-description">Transform your frontline workflows with AR solutions.</div>
+</a>
+</li>
+<li class="cmp-navigation__item">
+<a href="https://www.teamviewer.com/en/products-solutions/tensor/" class="cmp-navigation__item-link cmp-navigation__item-link--has-description">
+<span class="cmp-navigation__item-label">TeamViewer Tensor
+<svg class="cmp-navigation__item-icon" viewBox="0 0 24 24" fill="none" xmlns="https://www.w3.org/2000/svg">
+<path d="M3.75 12H20.25" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M13.5 5.25L20.25 12L13.5 18.75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
+</span>
+<div class="cmp-navigation__item-description">Remote Access and Support for customers with enterprise requirements.</div>
+</a>
+</li>
+<li class="cmp-navigation__item">
+<a href="https://www.teamviewer.com/en/products-solutions/augmented-reality/" class="cmp-navigation__item-link cmp-navigation__item-link--has-description">
+<span class="cmp-navigation__item-label">TeamViewer Assist AR
+<svg class="cmp-navigation__item-icon" viewBox="0 0 24 24" fill="none" xmlns="https://www.w3.org/2000/svg">
+<path d="M3.75 12H20.25" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M13.5 5.25L20.25 12L13.5 18.75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
+</span>
+<div class="cmp-navigation__item-description">Easy, fast, and secure augmented reality-powered visual assistance to identify and solve problems.</div>
+</a>
+</li>
+<li class="cmp-navigation__item">
+<a href="https://www.teamviewer.com/en/products-solutions/engage/" class="cmp-navigation__item-link cmp-navigation__item-link--has-description">
+<span class="cmp-navigation__item-label">TeamViewer Engage
+<svg class="cmp-navigation__item-icon" viewBox="0 0 24 24" fill="none" xmlns="https://www.w3.org/2000/svg">
+<path d="M3.75 12H20.25" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M13.5 5.25L20.25 12L13.5 18.75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
+</span>
+<div class="cmp-navigation__item-description">Customer engagement platform for online sales, customer service, and video consultations.</div>
+</a>
+</li>
+<li class="cmp-navigation__item">
+ <a href="https://www.teamviewer.com/en/products-solutions/iot/" class="cmp-navigation__item-link cmp-navigation__item-link--has-description">
+<span class="cmp-navigation__item-label">TeamViewer IoT
+<svg class="cmp-navigation__item-icon" viewBox="0 0 24 24" fill="none" xmlns="https://www.w3.org/2000/svg">
+<path d="M3.75 12H20.25" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M13.5 5.25L20.25 12L13.5 18.75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
+</span>
+<div class="cmp-navigation__item-description">Connect, monitor, and operate assets in manufacturing and production.</div>
+</a>
+</li>
+<li class="cmp-navigation__item">
+<a href="https://www.teamviewer.com/en/products-solutions/remote-management/" class="cmp-navigation__item-link cmp-navigation__item-link--has-description">
+<span class="cmp-navigation__item-label">TeamViewer Remote Management
+<svg class="cmp-navigation__item-icon" viewBox="0 0 24 24" fill="none" xmlns="https://www.w3.org/2000/svg">
+<path d="M3.75 12H20.25" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M13.5 5.25L20.25 12L13.5 18.75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
+</span>
+<div class="cmp-navigation__item-description">Manage, monitor, track, patch and protect your devices, and software.</div>
+</a>
+</li>
+</ul>
+<div class="cmp-navigation__mega-sidebar">
+<span class="cmp-navigation__mega-title">Industries</span>
+<ul class="cmp-navigation__mega-additional-items">
+<li class="cmp-navigation__item">
+<a href="https://www.teamviewer.com/en/products-solutions/frontline/industries/automotive/" class="cmp-navigation__item-label cmp-navigation__item-link">Automotive
+<svg class="cmp-navigation__item-icon" viewBox="0 0 24 24" fill="none" xmlns="https://www.w3.org/2000/svg">
+<path d="M3.75 12H20.25" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M13.5 5.25L20.25 12L13.5 18.75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
+</a>
+</li>
+<li class="cmp-navigation__item">
+<a href="https://www.teamviewer.com/en/products-solutions/frontline/industries/field-service/" class="cmp-navigation__item-label cmp-navigation__item-link">Field Service
+<svg class="cmp-navigation__item-icon" viewBox="0 0 24 24" fill="none" xmlns="https://www.w3.org/2000/svg">
+<path d="M3.75 12H20.25" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M13.5 5.25L20.25 12L13.5 18.75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
+</a>
+</li>
+<li class="cmp-navigation__item">
+<a href="https://www.teamviewer.com/en/products-solutions/frontline/industries/food-and-beverage/" class="cmp-navigation__item-label cmp-navigation__item-link">Food &amp; Beverage
+<svg class="cmp-navigation__item-icon" viewBox="0 0 24 24" fill="none" xmlns="https://www.w3.org/2000/svg">
+<path d="M3.75 12H20.25" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M13.5 5.25L20.25 12L13.5 18.75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
+</a>
+</li>
+<li class="cmp-navigation__item">
+<a href="https://www.teamviewer.com/en/products-solutions/frontline/industries/retail/" class="cmp-navigation__item-label cmp-navigation__item-link">Retail
+<svg class="cmp-navigation__item-icon" viewBox="0 0 24 24" fill="none" xmlns="https://www.w3.org/2000/svg">
+<path d="M3.75 12H20.25" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M13.5 5.25L20.25 12L13.5 18.75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
+</a>
+</li>
+<li class="cmp-navigation__item">
+<a href="https://www.teamviewer.com/en/products-solutions/frontline/industries/third-party-logistics/" class="cmp-navigation__item-label cmp-navigation__item-link">Third Party Logistics
+<svg class="cmp-navigation__item-icon" viewBox="0 0 24 24" fill="none" xmlns="https://www.w3.org/2000/svg">
+<path d="M3.75 12H20.25" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M13.5 5.25L20.25 12L13.5 18.75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
+</a>
+</li>
+</ul>
+</div>
+</div>
+</li>
+<li class="cmp-navigation__item cmp-navigation__item--level1 cmp-navigation__item--nested js-navitem">
+<span class="cmp-navigation__item-label cmp-navigation__item-label--has-subpages js-navfoldout-trigger">Resources</span>
+<ul class="cmp-navigation__item-list js-navfoldout">
+<li class="cmp-navigation__item cmp-navigation__item--level2">
+<a href="https://www.teamviewer.com/en/resources/success-stories/" class="cmp-navigation__item-label cmp-navigation__item-link">Success Stories
+<svg class="cmp-navigation__item-icon" viewBox="0 0 24 24" fill="none" xmlns="https://www.w3.org/2000/svg">
+<path d="M3.75 12H20.25" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M13.5 5.25L20.25 12L13.5 18.75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
+</a>
+</li>
+<li class="cmp-navigation__item cmp-navigation__item--level2">
+<a href="https://www.teamviewer.com/en/resources/events/" class="cmp-navigation__item-label cmp-navigation__item-link">Events &amp; Webinars
+<svg class="cmp-navigation__item-icon" viewBox="0 0 24 24" fill="none" xmlns="https://www.w3.org/2000/svg">
+<path d="M3.75 12H20.25" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M13.5 5.25L20.25 12L13.5 18.75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
+</a>
+</li>
+<li class="cmp-navigation__item cmp-navigation__item--level2">
+<a href="https://www.teamviewer.com/en/resources/blog/" class="cmp-navigation__item-label cmp-navigation__item-link">News &amp; Insights
+<svg class="cmp-navigation__item-icon" viewBox="0 0 24 24" fill="none" xmlns="https://www.w3.org/2000/svg">
+<path d="M3.75 12H20.25" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M13.5 5.25L20.25 12L13.5 18.75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
+</a>
+</li>
+<li class="cmp-navigation__item cmp-navigation__item--level2">
+<a href="https://www.teamviewer.com/en/resources/trust-center/" class="cmp-navigation__item-label cmp-navigation__item-link">Trust Center
+<svg class="cmp-navigation__item-icon" viewBox="0 0 24 24" fill="none" xmlns="https://www.w3.org/2000/svg">
+<path d="M3.75 12H20.25" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M13.5 5.25L20.25 12L13.5 18.75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
+</a>
+</li>
+<li class="cmp-navigation__item cmp-navigation__item--level2">
+<a href="https://www.teamviewer.com/en/resources/glossary/" class="cmp-navigation__item-label cmp-navigation__item-link">Glossary
+<svg class="cmp-navigation__item-icon" viewBox="0 0 24 24" fill="none" xmlns="https://www.w3.org/2000/svg">
+<path d="M3.75 12H20.25" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M13.5 5.25L20.25 12L13.5 18.75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
+</a>
+</li>
+</ul>
+</li>
+<li class="cmp-navigation__item cmp-navigation__item--level1 cmp-navigation__item--nested js-navitem">
+<span class="cmp-navigation__item-label cmp-navigation__item-label--has-subpages js-navfoldout-trigger">Partner</span>
+<ul class="cmp-navigation__item-list js-navfoldout">
+<li class="cmp-navigation__item cmp-navigation__item--level2">
+<a href="https://www.teamviewer.com/en/partner/become-a-partner/" class="cmp-navigation__item-label cmp-navigation__item-link">Become a Partner
+<svg class="cmp-navigation__item-icon" viewBox="0 0 24 24" fill="none" xmlns="https://www.w3.org/2000/svg">
+<path d="M3.75 12H20.25" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M13.5 5.25L20.25 12L13.5 18.75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
+</a>
+</li>
+<li class="cmp-navigation__item cmp-navigation__item--level2">
+<a href="https://www.teamviewer.com/en/partner/partner-locations/" class="cmp-navigation__item-label cmp-navigation__item-link">Find a Partner
+<svg class="cmp-navigation__item-icon" viewBox="0 0 24 24" fill="none" xmlns="https://www.w3.org/2000/svg">
+<path d="M3.75 12H20.25" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M13.5 5.25L20.25 12L13.5 18.75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
+</a>
+</li>
+<li class="cmp-navigation__item cmp-navigation__item--level2">
+<a href="https://www.teamviewer.com/en/partner/existing-partner-login/" class="cmp-navigation__item-label cmp-navigation__item-link">Existing Partner Login
+<svg class="cmp-navigation__item-icon" viewBox="0 0 24 24" fill="none" xmlns="https://www.w3.org/2000/svg">
+<path d="M3.75 12H20.25" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M13.5 5.25L20.25 12L13.5 18.75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
+</a>
+</li>
+<li class="cmp-navigation__item cmp-navigation__item--level2">
+<a href="https://www.teamviewer.com/en/partner/integrations/" class="cmp-navigation__item-label cmp-navigation__item-link">Integration Partners
+<svg class="cmp-navigation__item-icon" viewBox="0 0 24 24" fill="none" xmlns="https://www.w3.org/2000/svg">
+<path d="M3.75 12H20.25" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M13.5 5.25L20.25 12L13.5 18.75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
+</a>
+</li>
+</ul>
+</li>
+<li class="cmp-navigation__item cmp-navigation__item--level1 ">
+<a class="cmp-navigation__item-label cmp-navigation__item-link" href="https://www.teamviewer.com/en/pricing/">Pricing</a>
+
+</li>
+</ul>
+</nav>
+</div>
+<div data-component-module="button-atom" class="buttonMain button cmp-page-navigation__main-action">
+<a id="button-74fd41d0e3" class="cmp-button  cmp-button--has-icon " href="https://www.teamviewer.com/en/global/company/contact-sales/" data-cmp-clickable data-cmp-data-layer="{&#34;button-74fd41d0e3&#34;:{&#34;@type&#34;:&#34;teamviewer/components/tenants/website/_atoms/button&#34;,&#34;dc:title&#34;:&#34;Talk to Sales &#34;,&#34;xdm:linkURL&#34;:&#34;https://www.teamviewer.com/en/global/company/contact-sales/&#34;}}">
+<span class="cmp-button__text">Talk to Sales </span>
+<svg class="cmp-button__icon cmp-button__icon--arrow-right" viewBox="0 0 24 24" fill="none" xmlns="https://www.w3.org/2000/svg">
+<path d="M3.75 12H20.25" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M13.5 5.25L20.25 12L13.5 18.75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
+</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script src="https://www.teamviewer.com/etc.clientlibs/teamviewer/clientlibs/tenants/website/clientlib-standalone/externalheader.min.js?ver=1671441693.6596"></script>
+<div id="content" class="wd-site-content">
+<div id="primary" class="content-area">
+<main id="main" class="site-main">
+<article id="post-7206" class="post-7206 page type-page status-publish hentry tv_page_category-downloads wd-main-content-container">
+<div class="entry-content">
+<section class="wpb-content-wrapper"><div class="vc_row wpb_row vc_row-fluid wd-row wd-row--highlight"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper"><div id="ult-carousel-422376761163a8acf7864db" class="ult-carousel-wrapper  wd-nav-slider wd-margin-bottom-zero ult_horizontal" data-gutter="15" data-rtl="false"><div class="ult-carousel-198413266363a8acf7864ba "><div class="ult-item-wrap" data-animation="animated no-animation"><div class="aio-icon-component   wd-nav-slider--icon style_1"><a class="aio-icon-box-link" href="https://www.teamviewer.com/en/download/windows/" title="Download Windows"><div id="Info-box-wrap-9534" class="aio-icon-box top-icon" style=""><div class="aio-icon-top"><div class="ult-item-wrap" data-animation="animated no-animation"><div class="ult-just-icon-wrapper  "><div class="align-icon" style="text-align:center;">
+<div class="aio-icon-img " style="font-size:62px;display:inline-block;" data-animation="swing" data-animation-delay="03">
+<img class="img-icon" alt="null" src="https://static.teamviewer.com/resources/2021/02/monitor-icon-windows.png" />
+</div></div></div></div></div><div class="aio-icon-header"><div class="aio-icon-title ult-responsive" data-ultimate-target='#Info-box-wrap-9534 .aio-icon-title' data-responsive-json-new='{"font-size":"","line-height":""}' style="font-weight:bold;color:#ffffff;">Windows</div></div> </div> </a></div> </div><div class="ult-item-wrap" data-animation="animated no-animation"><div class="aio-icon-component   wd-nav-slider--icon style_3"><a class="aio-icon-box-link" href="https://www.teamviewer.com/en/download/mac-os/" title="Download Mac OS"><div id="Info-box-wrap-9312" class="aio-icon-box top-icon" style=""><div class="aio-icon-top"><div class="ult-item-wrap" data-animation="animated no-animation"><div class="ult-just-icon-wrapper  "><div class="align-icon" style="text-align:center;">
+<div class="aio-icon-img " style="font-size:62px;display:inline-block;">
+<img class="img-icon" alt="null" src="https://static.teamviewer.com/resources/2021/02/monitor-icon-mac.png" />
+</div></div></div></div></div><div class="aio-icon-header"><span class="aio-icon-title ult-responsive" data-ultimate-target='#Info-box-wrap-9312 .aio-icon-title' data-responsive-json-new='{"font-size":"","line-height":""}' style="color:#ffffff;">Mac</span></div> </div> </a></div> </div><div class="ult-item-wrap" data-animation="animated no-animation"><div class="aio-icon-component   wd-nav-slider--icon style_3"><a class="aio-icon-box-link" href="https://www.teamviewer.com/en/download/linux/" title="Download Linux"><div id="Info-box-wrap-3069" class="aio-icon-box top-icon" style=""><div class="aio-icon-top"><div class="ult-item-wrap" data-animation="animated no-animation"><div class="ult-just-icon-wrapper  "><div class="align-icon" style="text-align:center;">
+<div class="aio-icon-img " style="font-size:62px;display:inline-block;">
+<img class="img-icon" alt="null" src="https://static.teamviewer.com/resources/2021/02/monitor-icon-linux.png" />
+</div></div></div></div></div><div class="aio-icon-header"><span class="aio-icon-title ult-responsive" data-ultimate-target='#Info-box-wrap-3069 .aio-icon-title' data-responsive-json-new='{"font-size":"","line-height":""}' style="color:#ffffff;">Linux</span></div> </div> </a></div> </div><div class="ult-item-wrap" data-animation="animated no-animation"><div class="aio-icon-component   wd-nav-slider--icon style_3"><a class="aio-icon-box-link" href="https://www.teamviewer.com/en/download/chrome-os/" title="Download Chrome OS"><div id="Info-box-wrap-7480" class="aio-icon-box top-icon" style=""><div class="aio-icon-top"><div class="ult-item-wrap" data-animation="animated no-animation"><div class="ult-just-icon-wrapper  "><div class="align-icon" style="text-align:center;">
+<div class="aio-icon-img " style="font-size:62px;display:inline-block;">
+<img class="img-icon" alt="null" src="https://static.teamviewer.com/resources/2021/02/monitor-icon-chrome-os.png" />
+</div></div></div></div></div><div class="aio-icon-header"><span class="aio-icon-title ult-responsive" data-ultimate-target='#Info-box-wrap-7480 .aio-icon-title' data-responsive-json-new='{"font-size":"","line-height":""}' style="color:#ffffff;">Chrome OS</span></div> </div> </a></div> </div><div class="ult-item-wrap" data-animation="animated no-animation"><div class="aio-icon-component   wd-nav-slider--icon style_3"><a class="aio-icon-box-link" href="https://www.teamviewer.com/en/download/raspberry-pi/" title="Download Raspberry Pi"><div id="Info-box-wrap-7618" class="aio-icon-box top-icon" style=""><div class="aio-icon-top"><div class="ult-item-wrap" data-animation="animated no-animation"><div class="ult-just-icon-wrapper  "><div class="align-icon" style="text-align:center;">
+<div class="aio-icon-img " style="font-size:62px;display:inline-block;">
+<img class="img-icon" alt="null" src="https://static.teamviewer.com/resources/2021/02/monitor-icon-raspberry-pi.png" />
+</div></div></div></div></div><div class="aio-icon-header"><span class="aio-icon-title ult-responsive" data-ultimate-target='#Info-box-wrap-7618 .aio-icon-title' data-responsive-json-new='{"font-size":"","line-height":""}' style="color:#ffffff;">Raspberry Pi</span></div> </div> </a></div> </div><div class="ult-item-wrap" data-animation="animated no-animation"><div class="aio-icon-component   wd-nav-slider--icon style_3"><a class="aio-icon-box-link" href="https://www.teamviewer.com/en/download/android/" title="Download Android"><div id="Info-box-wrap-5012" class="aio-icon-box top-icon" style=""><div class="aio-icon-top"><div class="ult-item-wrap" data-animation="animated no-animation"><div class="ult-just-icon-wrapper  "><div class="align-icon" style="text-align:center;">
+<div class="aio-icon-img " style="font-size:60px;display:inline-block;">
+<img class="img-icon" alt="null" src="https://static.teamviewer.com/resources/2021/02/monitor-icon-android.png" />
+</div></div></div></div></div><div class="aio-icon-header"><span class="aio-icon-title ult-responsive" data-ultimate-target='#Info-box-wrap-5012 .aio-icon-title' data-responsive-json-new='{"font-size":"","line-height":""}' style="color:#ffffff;">Android</span></div> </div> </a></div> </div><div class="ult-item-wrap" data-animation="animated no-animation"><div class="aio-icon-component   wd-nav-slider--icon style_3"><a class="aio-icon-box-link" href="https://www.teamviewer.com/en/download/ios/" title="Download iOS"><div id="Info-box-wrap-1739" class="aio-icon-box top-icon" style=""><div class="aio-icon-top"><div class="ult-item-wrap" data-animation="animated no-animation"><div class="ult-just-icon-wrapper  "><div class="align-icon" style="text-align:center;">
+<div class="aio-icon-img " style="font-size:60px;display:inline-block;">
+<img class="img-icon" alt="null" src="https://static.teamviewer.com/resources/2021/02/monitor-icon-ios.png" />
+</div></div></div></div></div><div class="aio-icon-header"><span class="aio-icon-title ult-responsive" data-ultimate-target='#Info-box-wrap-1739 .aio-icon-title' data-responsive-json-new='{"font-size":"","line-height":""}' style="color:#ffffff;">iOS</span></div> </div> </a></div> </div></div></div> <script type="text/javascript">
+				jQuery(document).ready(function ($) {
+					if( typeof jQuery('.ult-carousel-198413266363a8acf7864ba').slick == "function"){
+						$('.ult-carousel-198413266363a8acf7864ba').slick({dots: false,autoplaySpeed: 5000,speed: 300,infinite: false,arrows: true,nextArrow: '<button type="button" role="button" aria-label="Next" style="color:#333333; font-size:20px;" class="slick-next default"><i class="ultsl-arrow-right6"></i></button>',prevArrow: '<button type="button" role="button" aria-label="Previous" style="color:#333333; font-size:20px;" class="slick-prev default"><i class="ultsl-arrow-left6"></i></button>',slidesToScroll:7,slidesToShow:7,swipe: true,draggable: true,touchMove: true,pauseOnHover: true,pauseOnFocus: false,responsive: [
+							{
+							  breakpoint: 1026,
+							  settings: {
+								slidesToShow: 7,
+								slidesToScroll: 7,  
+							  }
+							},
+							{
+							  breakpoint: 1025,
+							  settings: {
+								slidesToShow: 5,
+								slidesToScroll: 5
+							  }
+							},
+							{
+							  breakpoint: 760,
+							  settings: {
+								slidesToShow: 3,
+								slidesToScroll: 3
+							  }
+							}
+						],pauseOnDotsHover: true,customPaging: function(slider, i) {
+                   return '<i type="button" style= "color:#333333;" class="ultsl-record" data-role="none"></i>';
+                },});
+					}
+				});
+			</script>
+</div></div></div></div><div class="upb_color" data-bg-override="0" data-bg-color="" data-fadeout="" data-fadeout-percentage="30" data-parallax-content="" data-parallax-content-sense="30" data-row-effect-mobile-disable="true" data-img-parallax-mobile-disable="true" data-rtl="false" data-custom-vc-row="" data-vc="6.10.0" data-is_old_vc="" data-theme-support="disable" data-overlay="false" data-overlay-color="" data-overlay-pattern="" data-overlay-pattern-opacity="" data-overlay-pattern-size=""></div><div data-vc-full-width="true" data-vc-full-width-init="false" class="vc_row wpb_row vc_row-fluid wd-row wd-row--flip-columns-mobile wd-row--trimmed-bottom"><div class="wpb_column vc_column_container vc_col-sm-6"><div class="vc_column-inner"><div class="wpb_wrapper"><div id="ultimate-heading-767763a8acf78d835" class="uvc-heading ult-adjust-bottom-margin ultimate-heading-767763a8acf78d835 uvc-875 " data-hspacer="no_spacer" data-halign="left" style="text-align:left"><div class="uvc-heading-spacer no_spacer" style="top"></div><div class="uvc-main-heading ult-responsive" data-ultimate-target='.uvc-heading.ultimate-heading-767763a8acf78d835 h1' data-responsive-json-new='{"font-size":"","line-height":""}'><h1 style="font-family:&#039;Roboto&#039;;font-weight:300;color:#2e2e2e;margin-top:30px;">TeamViewer for Windows</h1></div></div>
+<div class="wpb_text_column wpb_content_element ">
+<div class="wpb_wrapper">
+<ul class="wd-list">
+<li>Establish incoming and outgoing connections between devices</li>
+<li>Real-time remote access and support</li>
+<li>Collaborate online, participate in meetings, and chat with others</li>
+</ul>
+</div>
+</div>
+<div id="wd-row-download-win" class="vc_row wpb_row vc_inner vc_row-fluid wd-row-download-win wd-margin-bottom-zero"><div class="wpb_column vc_column_container vc_col-sm-6"><div class="vc_column-inner"><div class="wpb_wrapper"><div class="vc_btn3-container  wd-button wd-button--mobile-fullwidth vc_btn3-left" id="wd-download-win-64-bit"><a class="vc_general vc_btn3 vc_btn3-size-md vc_btn3-shape-square vc_btn3-style-flat vc_btn3-color-grey" href="https://download.teamviewer.com/download/TeamViewer_Setup_x64.exe" title="Download TeamViewer 64-bit Version for Windows">Download 64-bit Version</a></div></div></div></div><div class="wpb_column vc_column_container vc_col-sm-6"><div class="vc_column-inner"><div class="wpb_wrapper"><div class="vc_btn3-container  wd-button wd-button--mobile-fullwidth vc_btn3-left" id="wd-download-win-32-bit"><a class="vc_general vc_btn3 vc_btn3-size-md vc_btn3-shape-square vc_btn3-style-flat vc_btn3-color-grey" href="https://download.teamviewer.com/download/TeamViewer_Setup.exe" title="Download TeamViewer 32-bit Version for Windows">Download 32-bit Version</a></div></div></div></div></div>
+<div class="wpb_text_column wpb_content_element ">
+<div class="wpb_wrapper">
+<p>Or skip the download and connect <a href="https://login.teamviewer.com/LogOn?returnUrl=%2Fconnect%2F&amp;utm_content&amp;utm_campaign=webclient&amp;utm_source=windowsdowloadpage&amp;utm_medium=webpage" target="_blank" rel="noopener noreferrer">directly from your browser</a>.<br />
+Available for Remote Access, Premium, Corporate, and Tensor license holders.</p>
+</div>
+</div>
+<div class="wpb_text_column wpb_content_element ">
+<div class="wpb_wrapper">
+<p style="text-align: left;"><a href="https://www.teamviewer.com/en/privacy-policy/" target="_blank" rel="noopener noreferrer">Privacy Policy</a></p>
+</div>
+</div>
+<div class="wpb_text_column wpb_content_element ">
+<div class="wpb_wrapper">
+<p>Current version: 15.37.3</p>
+</div>
+</div>
+</div></div></div><div class="wd-margin-bottom-zero wpb_column vc_column_container vc_col-sm-6"><div class="vc_column-inner"><div class="wpb_wrapper"><div class="ult-content-box-container wd-margin-bottom-zero"> <div class="ult-content-box" style="box-shadow: px px px px none;-webkit-transition: all 700ms ease;-moz-transition: all 700ms ease;-ms-transition: all 700ms ease;-o-transition: all 700ms ease;transition: all 700ms ease;" data-hover_box_shadow="none">
+<div class="wpb_single_image wpb_content_element vc_align_left   wd-margin-bottom-zero">
+<figure class="wpb_wrapper vc_figure">
+<div class="vc_single_image-wrapper   vc_box_border_grey"><img width="630" height="380" src="https://static.teamviewer.com/resources/2018/05/windows-main.png" class="vc_single_image-img attachment-full" alt="Use TeamViewer for incoming and outgoing remote desktop support or to connect to a PC." loading="lazy" title="TeamViewer for Windows" /></div>
+</figure>
+</div>
+</div></div>
+<div class="wpb_text_column wpb_content_element ">
+<div class="wpb_wrapper">
+<div class="trustpilot-widget" data-locale="en-GB" data-template-id="5419b6ffb0d04a076446a9af" data-businessunit-id="46f3c71c000064000501949b" data-style-height="20px" data-style-width="100%" data-theme="light" data-stars="1,2,3,4,5" data-no-reviews="hide" data-scroll-to-list="true" data-allow-robots="true"><a href="https://uk.trustpilot.com/review/www.teamviewer.com" target="_blank" rel="noopener">Trustpilot</a></div>
+</div>
+</div>
+</div></div></div></div><div class="vc_row-full-width vc_clearfix"></div><div data-vc-full-width="true" data-vc-full-width-init="false" class="vc_row wpb_row vc_row-fluid wd-row wd-row--highlight wd-row--trimmed-bottom vc_row-o-equal-height vc_row-flex"><div class="wpb_column vc_column_container vc_col-sm-6"><div class="vc_column-inner"><div class="wpb_wrapper"><div class="ult-content-box-container "> <div class="ult-content-box" style="box-shadow: px px px px none;padding-top:0px;-webkit-transition: all 700ms ease;-moz-transition: all 700ms ease;-ms-transition: all 700ms ease;-o-transition: all 700ms ease;transition: all 700ms ease;" data-hover_box_shadow="none">
+<div class="wpb_text_column wpb_content_element ">
+<div class="wpb_wrapper">
+<h4><strong>Buy a license in order to use even more TeamViewer features</strong></h4>
+</div>
+</div>
+</div></div></div></div></div><div class="wpb_column vc_column_container vc_col-sm-3"><div class="vc_column-inner"><div class="wpb_wrapper"><div class="ult-content-box-container "> <div class="ult-content-box" style="box-shadow: px px px px none;-webkit-transition: all 700ms ease;-moz-transition: all 700ms ease;-ms-transition: all 700ms ease;-o-transition: all 700ms ease;transition: all 700ms ease;" data-hover_box_shadow="none"><div class="vc_btn3-container  wd-button wd-button--default wd-margin-bottom-zero wd-button--mobile-fullwidth vc_btn3-right"><a class="vc_general vc_btn3 vc_btn3-size-md vc_btn3-shape-square vc_btn3-style-flat vc_btn3-color-grey" href="https://www.teamviewer.com/en/buy-now/" title="Compare TeamViewer Licenses">Compare Licenses</a></div> </div></div></div></div></div><div class="wpb_column vc_column_container vc_col-sm-3"><div class="vc_column-inner"><div class="wpb_wrapper"><div class="ult-content-box-container "> <div class="ult-content-box" style="box-shadow: px px px px none;-webkit-transition: all 700ms ease;-moz-transition: all 700ms ease;-ms-transition: all 700ms ease;-o-transition: all 700ms ease;transition: all 700ms ease;" data-hover_box_shadow="none"><div class="vc_btn3-container  wd-button wd-button--default-inverted wd-margin-bottom-zero wd-button--mobile-fullwidth vc_btn3-center"><a class="vc_general vc_btn3 vc_btn3-size-md vc_btn3-shape-square vc_btn3-style-flat vc_btn3-color-grey" href="https://www.teamviewer.com/en/products/teamviewer/" title="Learn More About TeamViewer">Learn More About TeamViewer</a></div> </div></div></div></div></div></div><div class="vc_row-full-width vc_clearfix"></div><div data-vc-full-width="true" data-vc-full-width-init="false" class="vc_row wpb_row vc_row-fluid wd-row wd-row--trimmed-bottom"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper"><div class="ult-content-box-container "> <div class="ult-content-box" style="box-shadow: px px px px none;padding-top:30px;-webkit-transition: all 700ms ease;-moz-transition: all 700ms ease;-ms-transition: all 700ms ease;-o-transition: all 700ms ease;transition: all 700ms ease;" data-hover_box_shadow="none"><div id="ultimate-heading-705563a8acf79156a" class="uvc-heading ult-adjust-bottom-margin ultimate-heading-705563a8acf79156a uvc-4124 " data-hspacer="no_spacer" data-halign="center" style="text-align:center"><div class="uvc-heading-spacer no_spacer" style="top"></div><div class="uvc-main-heading ult-responsive" data-ultimate-target='.uvc-heading.ultimate-heading-705563a8acf79156a h2' data-responsive-json-new='{"font-size":"","line-height":""}'><h2 style="font-family:&#039;Roboto&#039;;font-weight:300;">Check out additional TeamViewer remote desktop support and collaboration downloads</h2></div></div> </div></div></div></div></div></div><div class="vc_row-full-width vc_clearfix"></div><div class="vc_row wpb_row vc_row-fluid wd-row wd-row--trimmed-bottom wd-row--trimmed-top vc_column-gap-35 vc_row-o-equal-height vc_row-flex"><div class="wpb_column vc_column_container vc_col-sm-6 vc_col-has-fill"><div class="vc_column-inner vc_custom_1615212910893"><div class="wpb_wrapper"><div class="ult-content-box-container "> <div class="ult-content-box" style="box-shadow: px px px px none;-webkit-transition: all 700ms ease;-moz-transition: all 700ms ease;-ms-transition: all 700ms ease;-o-transition: all 700ms ease;transition: all 700ms ease;" data-hover_box_shadow="none">
+<div class="wpb_text_column wpb_content_element ">
+<div class="wpb_wrapper">
+<p>Immediate assistance:</p>
+<h2>TeamViewer QuickSupport</h2>
+<p>Optimized for instant remote desktop support, this small customer module does not require installation or administrator rights — simply download, double click, and give the provided ID and password to your supporter.</p>
+</div>
+</div>
+<div class="vc_btn3-container  wd-button wd-button--highlight wd-margin-bottom-zero wd-button--mobile-fullwidth vc_btn3-left"><a class="vc_general vc_btn3 vc_btn3-size-md vc_btn3-shape-square vc_btn3-style-flat vc_btn3-color-grey" href="https://download.teamviewer.com/download/TeamViewerQS.exe" title="Download QuickSupport">Download QuickSupport</a></div>
+<div class="wpb_text_column wpb_content_element ">
+<div class="wpb_wrapper">
+<p style="text-align: left; padding-left: 1.3em;"><a href="https://www.teamviewer.com/en/privacy-policy/" target="_blank" rel="noopener noreferrer">Privacy Policy</a></p>
+</div>
+</div>
+<div class="wpb_text_column wpb_content_element ">
+<div class="wpb_wrapper">
+<p><a href="https://www.teamviewer.com/en/custom-modules/"><u>Customize QuickSupport</u></a></p>
+</div>
+</div>
+</div></div></div></div></div><div class="wpb_column vc_column_container vc_col-sm-6 vc_col-has-fill"><div class="vc_column-inner vc_custom_1615212989998"><div class="wpb_wrapper"><div class="ult-content-box-container "> <div class="ult-content-box" style="box-shadow: px px px px none;-webkit-transition: all 700ms ease;-moz-transition: all 700ms ease;-ms-transition: all 700ms ease;-o-transition: all 700ms ease;transition: all 700ms ease;" data-hover_box_shadow="none">
+<div class="wpb_text_column wpb_content_element ">
+<div class="wpb_wrapper">
+<p>Unattended access:</p>
+<h2>TeamViewer Host</h2>
+<p>TeamViewer Host is used for 24/7 access to remote computers, which makes it an ideal solution for uses such as remote monitoring, server maintenance, or connecting to a PC or Mac in the office or at home. Install TeamViewer Host on an unlimited number of computers and devices. As a licensed user, you have access to them all!</p>
+</div>
+</div>
+<div class="vc_btn3-container  wd-button wd-button--highlight wd-margin-bottom-zero wd-button--mobile-fullwidth vc_btn3-left"><a class="vc_general vc_btn3 vc_btn3-size-md vc_btn3-shape-square vc_btn3-style-flat vc_btn3-color-grey" href="https://download.teamviewer.com/download/TeamViewer_Host_Setup.exe" title="Download Host">Download Host</a></div>
+<div class="wpb_text_column wpb_content_element ">
+<div class="wpb_wrapper">
+<p style="text-align: left; padding-left: 1.3em;"><a href="https://www.teamviewer.com/en/privacy-policy/" target="_blank" rel="noopener noreferrer">Privacy Policy</a></p>
+</div>
+</div>
+<div class="wpb_text_column wpb_content_element ">
+<div class="wpb_wrapper">
+<p><a href="https://www.teamviewer.com/en/custom-modules/"><u>Customize Host</u></a></p>
+</div>
+</div>
+</div></div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid wd-row wd-row--flip-columns-mobile wd-row--trimmed-bottom vc_row-o-equal-height vc_row-flex"><div class="wpb_column vc_column_container vc_col-sm-8 vc_col-has-fill"><div class="vc_column-inner vc_custom_1615209049147"><div class="wpb_wrapper"><div class="ult-content-box-container "> <div class="ult-content-box" style="box-shadow: px px px px none;-webkit-transition: all 700ms ease;-moz-transition: all 700ms ease;-ms-transition: all 700ms ease;-o-transition: all 700ms ease;transition: all 700ms ease;" data-hover_box_shadow="none">
+<div class="wpb_text_column wpb_content_element ">
+<div class="wpb_wrapper">
+<p>Join or Start a Meeting:</p>
+<h2>TeamViewer Meeting</h2>
+<p>TeamViewer Meeting installs on your desktop all the essential meeting tools you need to communicate better with your teams and clients, from anywhere, any time.</p>
+</div>
+</div>
+<div class="vc_row wpb_row vc_inner vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner"><div class="wpb_wrapper"><div class="vc_btn3-container  wd-button wd-button--highlight wd-button--mobile-fullwidth wd-margin-bottom-zero vc_btn3-left"><a class="vc_general vc_btn3 vc_btn3-size-md vc_btn3-shape-square vc_btn3-style-flat vc_btn3-color-grey" href="https://download.teamviewer.com/teamviewermeeting" title="Download TeamViewer Meeting" target="_blank">Download Meeting</a></div></div></div></div></div>
+<div class="wpb_text_column wpb_content_element  wd-margin-bottom-zero">
+<div class="wpb_wrapper">
+<p style="text-align: left; padding-left: 1.3em;"><a href="https://www.teamviewer.com/en/privacy-policy/" target="_blank" rel="noopener noreferrer">Privacy Policy</a></p>
+</div>
+</div>
+</div></div></div></div></div><div class="wpb_column vc_column_container vc_col-sm-4 vc_col-has-fill"><div class="vc_column-inner vc_custom_1615212653664"><div class="wpb_wrapper"><div class="ult-content-box-container wd-margin-bottom-zero"> <div class="ult-content-box" style="box-shadow: px px px px none;-webkit-transition: all 700ms ease;-moz-transition: all 700ms ease;-ms-transition: all 700ms ease;-o-transition: all 700ms ease;transition: all 700ms ease;" data-hover_box_shadow="none">
+<div class="wpb_single_image wpb_content_element vc_align_left   wd-margin-bottom-zero">
+<figure class="wpb_wrapper vc_figure">
+<div class="vc_single_image-wrapper   vc_box_border_grey"><img width="1338" height="938" src="https://static.teamviewer.com/resources/2021/01/online-meeting-with-teamviewer-meeting.png" class="vc_single_image-img attachment-full" alt="" loading="lazy" title="online-meeting-with-teamviewer-meeting" /></div>
+</figure>
+</div>
+</div></div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid wd-row wd-row--trimmed-bottom vc_column-gap-35 vc_row-o-equal-height vc_row-flex"><div class="wpb_column vc_column_container vc_col-sm-6 vc_col-has-fill"><div class="vc_column-inner vc_custom_1615212910893"><div class="wpb_wrapper"><div class="ult-content-box-container "> <div class="ult-content-box" style="box-shadow: px px px px none;-webkit-transition: all 700ms ease;-moz-transition: all 700ms ease;-ms-transition: all 700ms ease;-o-transition: all 700ms ease;transition: all 700ms ease;" data-hover_box_shadow="none">
+<div class="wpb_text_column wpb_content_element ">
+<div class="wpb_wrapper">
+<h2>TeamViewer MSI Package</h2>
+<p>TeamViewer MSI is an alternative installation package for the full version of TeamViewer or for TeamViewer Host. TeamViewer MSI is used to deploy TeamViewer via Group Policy (GPO) in an Active Directory domain.</p>
+<p>Please note: TeamViewer MSI is only available with a Corporate license.</p>
+</div>
+</div>
+<div class="vc_btn3-container  wd-button wd-button--highlight wd-margin-bottom-zero wd-button--mobile-fullwidth vc_btn3-left"><a class="vc_general vc_btn3 vc_btn3-size-md vc_btn3-shape-square vc_btn3-style-flat vc_btn3-color-grey" href="https://login.teamviewer.com/nav/deploy/" title="Log In to Download MSI" target="_blank">Log In to Download MSI</a></div>
+<div class="wpb_text_column wpb_content_element ">
+<div class="wpb_wrapper">
+<p style="text-align: left; padding-left: 1.3em;"><a href="https://www.teamviewer.com/en/privacy-policy/" target="_blank" rel="noopener noreferrer">Privacy Policy</a></p>
+</div>
+</div>
+</div></div></div></div></div><div class="wpb_column vc_column_container vc_col-sm-6 vc_col-has-fill"><div class="vc_column-inner vc_custom_1615212989998"><div class="wpb_wrapper"><div class="ult-content-box-container "> <div class="ult-content-box" style="box-shadow: px px px px none;-webkit-transition: all 700ms ease;-moz-transition: all 700ms ease;-ms-transition: all 700ms ease;-o-transition: all 700ms ease;transition: all 700ms ease;" data-hover_box_shadow="none">
+<div class="wpb_text_column wpb_content_element ">
+<div class="wpb_wrapper">
+<h2>TeamViewer Portable</h2>
+<p>TeamViewer Portable generally comprises all the features of the full version of TeamViewer without the need to install anything. Instead, TeamViewer Portable runs directly from a USB stick or the Cloud — TeamViewer Portable is the perfect solution when you are on the road and using different computers.</p>
+</div>
+</div>
+<div class="vc_btn3-container  wd-button wd-button--highlight wd-margin-bottom-zero wd-button--mobile-fullwidth vc_btn3-left"><a class="vc_general vc_btn3 vc_btn3-size-md vc_btn3-shape-square vc_btn3-style-flat vc_btn3-color-grey" href="https://download.teamviewer.com/download/TeamViewerPortable.zip" title="Download Portable">Download Portable</a></div>
+<div class="wpb_text_column wpb_content_element ">
+<div class="wpb_wrapper">
+<p style="text-align: left; padding-left: 1.3em;"><a href="https://www.teamviewer.com/en/privacy-policy/" target="_blank" rel="noopener noreferrer">Privacy Policy</a></p>
+</div>
+</div>
+</div></div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid wd-row vc_row-o-equal-height vc_row-flex"><div class="wpb_column vc_column_container vc_col-sm-12 vc_col-has-fill"><div class="vc_column-inner vc_custom_1615212989998"><div class="wpb_wrapper"><div class="ult-content-box-container "> <div class="ult-content-box" style="box-shadow: px px px px none;-webkit-transition: all 700ms ease;-moz-transition: all 700ms ease;-ms-transition: all 700ms ease;-o-transition: all 700ms ease;transition: all 700ms ease;" data-hover_box_shadow="none">
+<div class="wpb_text_column wpb_content_element ">
+<div class="wpb_wrapper">
+<h2>Other Resources</h2>
+<p>Looking for an older TeamViewer version or want to learn more about our supported operating systems?</p>
+<p><a href="https://www.teamviewer.com/en/download/previous-versions/"><u>See previous versions</u></a><br />
+<a href="https://community.teamviewer.com/English/kb/articles/24141-which-operating-systems-are-supported" target="_blank" rel="noopener noreferrer"><u>Supported operating systems</u></a><br />
+<a href="https://community.teamviewer.com/English/categories/change-logs" target="_blank" rel="noopener noreferrer"><u>Changelog</u></a></p>
+</div>
+</div>
+</div></div></div></div></div></div>
+</section> </div>
+</article>
+</main>
+</div>
+<div class="wd-row wd-row--info-dark-one-color wd-narrow-bar wd-newsletter-bar--hidden">
+<div class="wd-narrow-bar__wrapper">
+<span class="wd-narrow-bar__text"><b>Want more?</b></span>
+<span class="wd-narrow-bar__text">Exclusive deals, the latest news: Our Newsletter!</span>
+<div class="wd-button-newsletter__wrapper">
+<span class="wd-button wd-button--highlight wd-button--highlight__larger">
+<a href="/en/newsletter/" title="Subscribe to Newsletter">Sign up </a>
+</span>
+</div>
+</div>
+</div>
+</div>
+<a class="back_to_top_button" title="Go to top"></a>
+<div class='wp-footer--distance'></div>
+<link rel="stylesheet" href="https://www.teamviewer.com/etc.clientlibs/teamviewer/clientlibs/tenants/website/clientlib-standalone/externalfooter.min.css?ver=1671441694.9078" type="text/css">
+<div id="container-1036a9c541" class="cmp-container cmp-container--fullwidth ">
+<div class="aem-Grid aem-Grid--12 aem-Grid--default--12 ">
+<div class="utils-unset-gridGutter xf-footer-general__background aem-GridColumn aem-GridColumn--default--12">
+<div id="container-fe3fdd8bd9" class="cmp-container cmp-container--fullwidth">
+</div>
+</div>
+<div class="utils-unset-gridGutter xf-footer-general__content aem-GridColumn aem-GridColumn--default--12">
+<div id="container-729ce9228a" class="cmp-container cmp-container--in-grid">
+<div class="utils-unset-gridGutter xf-footer-general__primary-content">
+<div id="container-f31ef13983" class="cmp-container cmp-container--fullwidth">
+<div class="basic-image cmp-basic-image utils-gridGutter xf-footer-general__logo">
+<div data-cmp-is="image" data-cmp-lazythreshold="0" data-cmp-src="https://s7g10.scene7.com/is/content/teamviewergmbh/TeamViewer-Logo-light-1?dpr=off" data-cmp-dmimage data-asset="https://www.teamviewer.com/content/dam/teamviewer/en/tv-logos/TeamViewer-Logo-light.svg" data-title="TeamViewer Logo" id="image-70ef96b2e2" data-cmp-data-layer="{&#34;image-70ef96b2e2&#34;:{&#34;@type&#34;:&#34;core/wcm/components/image/v2/image&#34;,&#34;xdm:linkURL&#34;:&#34;https://www.teamviewer.com/&#34;,&#34;image&#34;:{&#34;repo:id&#34;:&#34;048b504b-4b70-40cd-8d61-4bb1deac6cbe&#34;,&#34;repo:modifyDate&#34;:&#34;2022-07-12T11:38:54Z&#34;,&#34;@type&#34;:&#34;image/svg+xml&#34;,&#34;repo:path&#34;:&#34;https://www.teamviewer.com/content/dam/teamviewer/en/tv-logos/TeamViewer-Logo-light.svg&#34;}}}" class="cmp-image" itemscope itemtype="https://schema.org/ImageObject">
+<a class="cmp-image__link" href="https://www.teamviewer.com/" data-cmp-clickable data-cmp-hook-image="link">
+<img src="https://s7g10.scene7.com/is/content/teamviewergmbh/TeamViewer-Logo-light-1?dpr=off" class="cmp-image__image" itemprop="contentUrl" data-cmp-hook-image="image" alt="TeamViewer Logo" />
+</a>
+</div>
+</div>
+<div data-component-module="regionselector" class="regionselector xf-footer-general__regionselector">
+<div class="utils-overlay cmp-regionselector" data-overlay="regionselector">
+<div class="utils-overlay__backdrop">
+<div class="utils-overlay__modal cmp-regionselector__content">
+<button class="utils-overlay__close js-close-overlay" aria-label="Close"></button>
+<h2 class="cmp-regionselector__headline">Please choose your region</h2>
+<p class="cmp-regionselector__abstract">Selecting a region changes the language and/or content on teamviewer.com</p>
+<hr class="cmp-regionselector__divider" />
+<div class="cmp-regionselector__suggestion cmp-region is-hidden js-suggested-region">
+<h3 class="cmp-region__name">SUGGESTED REGION</h3>
+<div class="cmp-region__country">
+<a class="cmp-region__link" href="{{link}}">
+<div class="cmp-region__flag">
+<img class="cmp-region__flag-icon" alt="" data-src="{{flag}}" />
+</div>
+<span class="cmp-region__link-label">{{label}}</span>
+</a>
+</div>
+</div>
+<span class="cmp-region__link-label">Americas - English</span>
+</a>
+</li>
+<li class="cmp-region__country" data-liid="6efdd57f80520c94a0e9e147ed5f1d3ce0aa757bca7969b3da15c2db7b9b8658" data-lc="es" data-cc="LATAM">
+<a class="cmp-region__link" href="https://www.teamviewer.com/latam/?language-switched=true">
+<div class="cmp-region__flag">
+<img class="cmp-region__flag-icon" alt="" src="https://www.teamviewer.com/content/dam/teamviewer/en/flags/TeamViewer%20Globe.svg" />
+</div>
+<span class="cmp-region__link-label">América Latina - Español</span>
+</a>
+</li>
+</ul>
+<ul>
+<li class="cmp-region__country" data-liid="9d077001d3c1bbe7737e11136bf9827b1df0877042c15a6a37176caeb3f348b9" data-lc="pt" data-cc="BR">
+<a class="cmp-region__link" href="https://www.teamviewer.com/pt-br/?language-switched=true">
+<div class="cmp-region__flag">
+<img class="cmp-region__flag-icon" alt="" src="https://www.teamviewer.com/content/dam/teamviewer/en/flags/Flag_of_Brazil.svg" />
+</div>
+<span class="cmp-region__link-label">Brasil - Português</span>
+</a>
+</li>
+<li class="cmp-region__country" data-liid="8be1d9100cde1426c4777a21e09b7445733f1b38c463fac8e7006bd263090273" data-lc="en" data-cc="CA">
+<a class="cmp-region__link" href="https://www.teamviewer.com/en-ca/?language-switched=true">
+<div class="cmp-region__flag">
+<img class="cmp-region__flag-icon" alt="" src="https://www.teamviewer.com/content/dam/teamviewer/en/flags/Flag_of_Canada.svg" />
+</div>
+<span class="cmp-region__link-label">Canada - English</span>
+</a>
+</li>
+<li class="cmp-region__country" data-liid="605376c0e471b97f827c14f75e4d52716e4e057d389ac25dd49ac46040157d7e" data-lc="fr" data-cc="CA">
+<a class="cmp-region__link" href="https://www.teamviewer.com/fr-ca/?language-switched=true">
+<div class="cmp-region__flag">
+<img class="cmp-region__flag-icon" alt="" src="https://www.teamviewer.com/content/dam/teamviewer/en/flags/Flag_of_Canada.svg" />
+</div>
+<span class="cmp-region__link-label">Canada - Français</span>
+</a>
+</li>
+<li class="cmp-region__country" data-liid="2f2b70d03461bdfa2dc51e46e9eedb9b95da1369a9622feacbf42e65a008273d" data-lc="en" data-cc="US">
+<a class="cmp-region__link" href="https://www.teamviewer.com/en-us/?language-switched=true">
+<div class="cmp-region__flag">
+<img class="cmp-region__flag-icon" alt="" src="https://www.teamviewer.com/content/dam/teamviewer/en/flags/Flag_of_the_United_States.svg" />
+</div>
+<span class="cmp-region__link-label">United States - English</span>
+</a>
+</li>
+</ul>
+</li>
+<li class="cmp-region">
+<h3 class="cmp-region__name">Asia Pacific</h3>
+<ul>
+<li class="cmp-region__country" data-liid="fcc614baeff97ceee50d4284c21e527912b1d84c0363eadc769baa64b24405d9" data-lc="en" data-cc="APAC">
+<a class="cmp-region__link" href="https://www.teamviewer.com/apac/?language-switched=true">
+<div class="cmp-region__flag">
+<img class="cmp-region__flag-icon" alt="" src="https://www.teamviewer.com/content/dam/teamviewer/en/flags/TeamViewer%20Globe.svg" />
+</div>
+<span class="cmp-region__link-label">Asia Pacific - English</span>
+</a>
+</li>
+</ul>
+<ul>
+<li class="cmp-region__country" data-liid="024a4e2640da327aeda6c87cb639bbed074ec3384efb8eb5d6edce44f7e8e1d3" data-lc="en" data-cc="AU">
+<a class="cmp-region__link" href="https://www.teamviewer.com/en-au/?language-switched=true">
+<div class="cmp-region__flag">
+<img class="cmp-region__flag-icon" alt="" src="https://www.teamviewer.com/content/dam/teamviewer/en/flags/Flag_of_Australia.svg" />
+</div>
+<span class="cmp-region__link-label">Australia - English</span>
+</a>
+</li>
+
+<li class="cmp-region__country" data-liid="5eccaf959cac192819a8809e1df35b3f5efa109fc2bbd7d039275f8877615c92" data-lc="zh-cn" data-cc="CN">
+<a class="cmp-region__link" href="https://www.teamviewer.cn/cn/?language-switched=true">
+<div class="cmp-region__flag">
+<img class="cmp-region__flag-icon" alt="" src="https://www.teamviewer.com/content/dam/teamviewer/en/flags/Flag_of_the_People%27s_Republic_of_China.svg" />
+</div>
+<span class="cmp-region__link-label">中国 - 中⽂（简体）</span>
+</a>
+</li>
+<li class="cmp-region__country" data-liid="ff6308a9fc3eb8491f966a174be25df9d75472846abd7bfeba06baca5383c697" data-lc="zh-hk" data-cc="HK">
+<a class="cmp-region__link" href="https://www.teamviewer.com/hk/?language-switched=true">
+<div class="cmp-region__flag">
+<img class="cmp-region__flag-icon" alt="" src="https://www.teamviewer.com/content/dam/teamviewer/en/flags/Flag_of_Hong_Kong.svg" />
+</div>
+<span class="cmp-region__link-label">香港 - 繁體中文</span>
+</a>
+</li>
+<li class="cmp-region__country" data-liid="ebebdbd62a46dd8399437c22614d876cb841171938baa64cfdaa48fc22d82bf2" data-lc="en" data-cc="IN">
+<a class="cmp-region__link" href="https://www.teamviewer.com/en-in/?language-switched=true">
+<div class="cmp-region__flag">
+<img class="cmp-region__flag-icon" alt="" src="https://www.teamviewer.com/content/dam/teamviewer/en/flags/Flag_of_India.svg" />
+</div>
+<span class="cmp-region__link-label">India - English</span>
+</a>
+</li>
+<li class="cmp-region__country" data-liid="12c42c24501f46e99e572bd08657dd4c497f7e759cc1d8d1bd86d6e9be5a89e4" data-lc="ja" data-cc="JP">
+<a class="cmp-region__link" href="https://www.teamviewer.com/ja/?language-switched=true">
+<div class="cmp-region__flag">
+<img class="cmp-region__flag-icon" alt="" src="https://www.teamviewer.com/content/dam/teamviewer/en/flags/Flag_of_Japan.svg" />
+</div>
+<span class="cmp-region__link-label">日本 - ⽇本語</span>
+</a>
+</li>
+<li class="cmp-region__country" data-liid="a1906b5fdb76ec4832fdbfb78c1b11050d1df3319ebf00aada081ae7556e8920" data-lc="en" data-cc="NZ">
+<a class="cmp-region__link" href="https://www.teamviewer.com/en-nz/?language-switched=true">
+<div class="cmp-region__flag">
+<img class="cmp-region__flag-icon" alt="" src="https://www.teamviewer.com/content/dam/teamviewer/en/flags/Flag_of_New_Zealand.svg" />
+</div>
+<span class="cmp-region__link-label">New Zealand - English</span>
+</a>
+</li>
+
+<li class="cmp-region__country" data-liid="5a49ccce0555fdaf2da673e0261a5163082e455dc80b4ba467768632f88f9d57" data-lc="ko" data-cc="KR">
+<a class="cmp-region__link" href="https://www.teamviewer.com/ko/?language-switched=true">
+<div class="cmp-region__flag">
+<img class="cmp-region__flag-icon" alt="" src="https://www.teamviewer.com/content/dam/teamviewer/en/flags/Flag_of_South_Korea.svg" />
+</div>
+<span class="cmp-region__link-label">대한민국 - 한국어</span>
+</a>
+</li>
+<li class="cmp-region__country" data-liid="3f1ff0531b2c6a4818bd86837408f993d3d975fadfb76ab0874fabd1199b2ce6" data-lc="th" data-cc="TH">
+<a class="cmp-region__link" href="https://www.teamviewer.com/th/?language-switched=true">
+<div class="cmp-region__flag">
+<img class="cmp-region__flag-icon" alt="" src="https://www.teamviewer.com/content/dam/teamviewer/en/flags/Flag_of_Thailand.svg" />
+</div>
+<span class="cmp-region__link-label">ประเทศไทย - ภาษาไทย</span>
+</a>
+</li>
+<li class="cmp-region__country" data-liid="6892ac514341192820f7b95a4523553f89ff28d499d2b3c46e547a7073ae5d7a" data-lc="vi" data-cc="VN">
+<a class="cmp-region__link" href="https://www.teamviewer.com/vi/?language-switched=true">
+<div class="cmp-region__flag">
+<img class="cmp-region__flag-icon" alt="" src="https://www.teamviewer.com/content/dam/teamviewer/en/flags/Flag_of_Vietnam.svg" />
+</div>
+<span class="cmp-region__link-label">Việt Nam - Tiếng Việt</span>
+</a>
+</li>
+</ul>
+</li>
+<li class="cmp-region">
+<h3 class="cmp-region__name">Commonwealth of Independent States</h3>
+<ul>
+<li class="cmp-region__country" data-liid="db105814109fd35f84416af7d711e4d5d44d7978fd7494648569e4b16a57563a" data-lc="en" data-cc="CIS">
+<a class="cmp-region__link" href="https://www.teamviewer.com/en-cis/?language-switched=true">
+<div class="cmp-region__flag">
+<img class="cmp-region__flag-icon" alt="" src="https://www.teamviewer.com/content/dam/teamviewer/en/flags/TeamViewer%20Globe.svg" />
+</div>
+<span class="cmp-region__link-label">CIS - English</span>
+</a>
+</li>
+<li class="cmp-region__country" data-liid="22f01eadb8de618b31f2bbe99b4d924e61ab24fdf11d0a9918b663feb0c0a2fa" data-lc="ru" data-cc="CIS">
+<a class="cmp-region__link" href="https://www.teamviewer.com/ru-cis/?language-switched=true">
+<div class="cmp-region__flag">
+<img class="cmp-region__flag-icon" alt="" src="https://www.teamviewer.com/content/dam/teamviewer/en/flags/TeamViewer%20Globe.svg" />
+</div>
+<span class="cmp-region__link-label">СНГ - Русский</span>
+</a>
+</li>
+</ul>
+</li>
+<li class="cmp-region">
+<h3 class="cmp-region__name">Europe</h3>
+<ul>
+<li class="cmp-region__country" data-liid="05d0cbe0e3737cef831f9aef4a6f030ab07339647ee6fc077499a29238a8c005" data-lc="en" data-cc="EU">
+<a class="cmp-region__link" href="https://www.teamviewer.com/en/?language-switched=true">
+<div class="cmp-region__flag">
+<img class="cmp-region__flag-icon" alt="" src="https://www.teamviewer.com/content/dam/teamviewer/en/flags/TeamViewer%20Globe.svg" />
+</div>
+<span class="cmp-region__link-label">Europe - English</span>
+</a>
+</li>
+</ul>
+<ul>
+<li class="cmp-region__country" data-liid="87b9021864a603e89134f55912ed5dc95cf88296d287c50d5735bf9322a6aa07" data-lc="fr" data-cc="BE">
+<a class="cmp-region__link" href="https://www.teamviewer.com/fr/?language-switched=true">
+<div class="cmp-region__flag">
+<img class="cmp-region__flag-icon" alt="" src="https://www.teamviewer.com/content/dam/teamviewer/en/flags/Flag_of_Belgium.svg" />
+</div>
+<span class="cmp-region__link-label">Belgique - Français</span>
+</a>
+</li>
+<li class="cmp-region__country" data-liid="c07d611801a3f4c17ed297376191b86c1ac183008fd1628bd28b929935404a49" data-lc="nl" data-cc="BE">
+<a class="cmp-region__link" href="https://www.teamviewer.com/nl/?language-switched=true">
+<div class="cmp-region__flag">
+<img class="cmp-region__flag-icon" alt="" src="https://www.teamviewer.com/content/dam/teamviewer/en/flags/Flag_of_Belgium.svg" />
+</div>
+<span class="cmp-region__link-label">België - Nederlands</span>
+</a>
+</li>
+<li class="cmp-region__country" data-liid="0208843ba6a8eeade261d70865aa45d21a157622b32a3e30b55958ad388b86b9" data-lc="en" data-cc="BG">
+<a class="cmp-region__link" href="https://www.teamviewer.com/en/?language-switched=true">
+<div class="cmp-region__flag">
+<img class="cmp-region__flag-icon" alt="" src="https://www.teamviewer.com/content/dam/teamviewer/en/flags/Flag_of_Bulgaria.svg" />
+</div>
+<span class="cmp-region__link-label">Bulgaria - English</span>
+</a>
+</li>
+<li class="cmp-region__country" data-liid="1bbbf59277e1f38863faae542766280b2aa38e0622ba83172e59851492712daf" data-lc="cs" data-cc="CZ">
+<a class="cmp-region__link" href="https://www.teamviewer.com/cs/?language-switched=true">
+<div class="cmp-region__flag">
+<img class="cmp-region__flag-icon" alt="" src="https://www.teamviewer.com/content/dam/teamviewer/en/flags/Flag_of_the_Czech_Republic.svg" />
+</div>
+<span class="cmp-region__link-label">Česká republika - Čeština</span>
+</a>
+</li>
+<li class="cmp-region__country" data-liid="323da3ccac47322fd1d9a5e592c0ba76f9ff17efd7ec7b63477373c0a1d656c8" data-lc="en" data-cc="HR">
+<a class="cmp-region__link" href="https://www.teamviewer.com/en/?language-switched=true">
+<div class="cmp-region__flag">
+<img class="cmp-region__flag-icon" alt="" src="https://www.teamviewer.com/content/dam/teamviewer/en/flags/Flag_of_Croatia.svg" />
+</div>
+<span class="cmp-region__link-label">Croatia - English</span>
+</a>
+</li>
+<li class="cmp-region__country" data-liid="11b02d1a2f5272fa81d97037d8e96d33cec98b15f60abbd382dbe7b90f46c78f" data-lc="en" data-cc="CY">
+<a class="cmp-region__link" href="https://www.teamviewer.com/en/?language-switched=true">
+<div class="cmp-region__flag">
+<img class="cmp-region__flag-icon" alt="" src="https://www.teamviewer.com/content/dam/teamviewer/en/flags/Flag_of_Cyprus.svg" />
+</div>
+<span class="cmp-region__link-label">Cyprus - English</span>
+</a>
+</li>
+<li class="cmp-region__country" data-liid="6deb690ba36de4a22b4f72c3a6326dd9100ea6c84ecf8865417a5621988afd04" data-lc="en" data-cc="DK">
+<a class="cmp-region__link" href="https://www.teamviewer.com/en/?language-switched=true">
+<div class="cmp-region__flag">
+<img class="cmp-region__flag-icon" alt="" src="https://www.teamviewer.com/content/dam/teamviewer/en/flags/Flag_of_Denmark.svg" />
+</div>
+<span class="cmp-region__link-label">Denmark - English</span>
+</a>
+</li>
+<li class="cmp-region__country" data-liid="986b008f9bd4c7239bc8de0951ac4c223b4e4327a593504eb85219e13df47ed8" data-lc="de" data-cc="DE">
+<a class="cmp-region__link" href="https://www.teamviewer.com/de/?language-switched=true">
+<div class="cmp-region__flag">
+<img class="cmp-region__flag-icon" alt="" src="https://www.teamviewer.com/content/dam/teamviewer/en/flags/Flag_of_Germany.svg" />
+</div>
+<span class="cmp-region__link-label">Deutschland - Deutsch</span>
+</a>
+</li>
+<li class="cmp-region__country" data-liid="f6eb1cf371e012aa2fbda359b20fafcc4dde7991488d4d4918b0c95a3056db12" data-lc="es" data-cc="ES">
+<a class="cmp-region__link" href="https://www.teamviewer.com/es/?language-switched=true">
+<div class="cmp-region__flag">
+<img class="cmp-region__flag-icon" alt="" src="https://www.teamviewer.com/content/dam/teamviewer/en/flags/Flag_of_Spain.svg" />
+ </div>
+<span class="cmp-region__link-label">España - Español</span>
+</a>
+</li>
+<li class="cmp-region__country" data-liid="aee9e4abb7a5aa90c70f8ebc1d408e919da658cdbd7629079612a6d8820a717d" data-lc="en" data-cc="EE">
+<a class="cmp-region__link" href="https://www.teamviewer.com/en/?language-switched=true">
+<div class="cmp-region__flag">
+<img class="cmp-region__flag-icon" alt="" src="https://www.teamviewer.com/content/dam/teamviewer/en/flags/Flag_of_Estonia.svg" />
+</div>
+<span class="cmp-region__link-label">Estonia - English</span>
+</a>
+</li>
+<li class="cmp-region__country" data-liid="0cdd32dd468900e7140ede04a9bb9d8acaa9aeae78036e96b734bd9724416773" data-lc="en" data-cc="FI">
+<a class="cmp-region__link" href="https://www.teamviewer.com/en/?language-switched=true">
+<div class="cmp-region__flag">
+<img class="cmp-region__flag-icon" alt="" src="https://www.teamviewer.com/content/dam/teamviewer/en/flags/Flag_of_Finland.svg" />
+</div>
+<span class="cmp-region__link-label">Finland - English</span>
+</a>
+</li>
+<li class="cmp-region__country" data-liid="5b70ec0fc00204fd15298af4d34e80803fdf93f14453fa1d52d9d8265d9322da" data-lc="fr" data-cc="FR">
+<a class="cmp-region__link" href="https://www.teamviewer.com/fr/?language-switched=true">
+<div class="cmp-region__flag">
+<img class="cmp-region__flag-icon" alt="" src="https://www.teamviewer.com/content/dam/teamviewer/en/flags/Flag_of_France.svg" />
+</div>
+<span class="cmp-region__link-label">France - Français</span>
+</a>
+</li>
+<li class="cmp-region__country" data-liid="1df75c9172c1f6d033f1257bddc5007781e4166f104c6f2016ad8021a5b6a9f4" data-lc="en" data-cc="GR">
+<a class="cmp-region__link" href="https://www.teamviewer.com/en/?language-switched=true">
+<div class="cmp-region__flag">
+<img class="cmp-region__flag-icon" alt="" src="https://www.teamviewer.com/content/dam/teamviewer/en/flags/Flag_of_Greece.svg" />
+</div>
+<span class="cmp-region__link-label">Greece - English</span>
+</a>
+</li>
+<li class="cmp-region__country" data-liid="3b71a86b81325f2c8cbcce1dd9a5ff6bc18866a197860658fe1e434666c335c9" data-lc="en" data-cc="IE">
+<a class="cmp-region__link" href="https://www.teamviewer.com/en/?language-switched=true">
+<div class="cmp-region__flag">
+<img class="cmp-region__flag-icon" alt="" src="https://www.teamviewer.com/content/dam/teamviewer/en/flags/Flag_of_Ireland.svg" />
+</div>
+<span class="cmp-region__link-label">Ireland - English</span>
+</a>
+</li>
+<li class="cmp-region__country" data-liid="5169083f7c48cdbd39da2869f899ce9287957125073852f9fb5843ae5622e6a7" data-lc="it" data-cc="IT">
+<a class="cmp-region__link" href="https://www.teamviewer.com/it/?language-switched=true">
+<div class="cmp-region__flag">
+<img class="cmp-region__flag-icon" alt="" src="https://www.teamviewer.com/content/dam/teamviewer/en/flags/Flag_of_Italy.svg" />
+</div>
+<span class="cmp-region__link-label">Italia - Italiano</span>
+</a>
+</li>
+<li class="cmp-region__country" data-liid="b49163aa5c3540172b05264e504c41fcf3bada49e3804f24748fa5c1b8d69d38" data-lc="en" data-cc="LV">
+<a class="cmp-region__link" href="https://www.teamviewer.com/en/?language-switched=true">
+<div class="cmp-region__flag">
+<img class="cmp-region__flag-icon" alt="" src="https://www.teamviewer.com/content/dam/teamviewer/en/flags/Flag_of_Latvia.svg" />
+</div>
+<span class="cmp-region__link-label">Latvia - English</span>
+</a>
+</li>
+<li class="cmp-region__country" data-liid="b2dcd4184633cf7b1f00a94a998b85646e5b9142fdb9eac211d58972f0d2f589" data-lc="de" data-cc="LI">
+<a class="cmp-region__link" href="https://www.teamviewer.com/de/?language-switched=true">
+<div class="cmp-region__flag">
+<img class="cmp-region__flag-icon" alt="" src="https://www.teamviewer.com/content/dam/teamviewer/en/flags/Flag_of_Liechtenstein.svg" />
+</div>
+<span class="cmp-region__link-label">Liechtenstein - Deutsch</span>
+</a>
+</li>
+<li class="cmp-region__country" data-liid="d5f3a66491c250031560ac8a19cab4bc59b54b7d8d35091915fff3322b5226e4" data-lc="fr" data-cc="LI">
+<a class="cmp-region__link" href="https://www.teamviewer.com/fr/?language-switched=true">
+<div class="cmp-region__flag">
+<img class="cmp-region__flag-icon" alt="" src="https://www.teamviewer.com/content/dam/teamviewer/en/flags/Flag_of_Liechtenstein.svg" />
+</div>
+<span class="cmp-region__link-label">Liechtenstein - Français</span>
+</a>
+</li>
+<li class="cmp-region__country" data-liid="4b465fd2781bb5a519ade5c6cbac44331adf5977a67dc39efcdbe7af7967ba90" data-lc="it" data-cc="LI">
+<a class="cmp-region__link" href="https://www.teamviewer.com/it/?language-switched=true">
+<div class="cmp-region__flag">
+<img class="cmp-region__flag-icon" alt="" src="https://www.teamviewer.com/content/dam/teamviewer/en/flags/Flag_of_Liechtenstein.svg" />
+</div>
+<span class="cmp-region__link-label">Liechtenstein - Italiano</span>
+</a>
+</li>
+
+<li class="cmp-region__country" data-liid="069516453f8b6add397cac11bb5e5bf9a1ab2b0a9e24957a154c8bcd648638de" data-lc="en" data-cc="LT">
+<a class="cmp-region__link" href="https://www.teamviewer.com/en/?language-switched=true">
+<div class="cmp-region__flag">
+<img class="cmp-region__flag-icon" alt="" src="https://www.teamviewer.com/content/dam/teamviewer/en/flags/Flag_of_Lithuania.svg" />
+</div>
+<span class="cmp-region__link-label">Lithuania - English</span>
+</a>
+</li>
+<li class="cmp-region__country" data-liid="857088074e78d930fad856a6e3def9486d997c95d1d3538011065922611ce631" data-lc="fr" data-cc="LU">
+<a class="cmp-region__link" href="https://www.teamviewer.com/fr/?language-switched=true">
+<div class="cmp-region__flag">
+<img class="cmp-region__flag-icon" alt="" src="https://www.teamviewer.com/content/dam/teamviewer/en/flags/Flag_of_Luxembourg.svg" />
+</div>
+<span class="cmp-region__link-label">Luxembourg - Français</span>
+</a>
+</li>
+<li class="cmp-region__country" data-liid="3d644bdc38e896829c75b2cda847a7c9a3e507775f8ff5c15afb484ce6abd719" data-lc="hu" data-cc="HU">
+<a class="cmp-region__link" href="https://www.teamviewer.com/hu/?language-switched=true">
+<div class="cmp-region__flag">
+<img class="cmp-region__flag-icon" alt="" src="https://www.teamviewer.com/content/dam/teamviewer/en/flags/Flag_of_Hungary.svg" />
+</div>
+<span class="cmp-region__link-label">Magyarország - Magyar</span>
+</a>
+</li>
+<li class="cmp-region__country" data-liid="7e77a3564c7a05b74975ef15714e93c432bfdf706d703fcb18a18ef83899aced" data-lc="en" data-cc="MT">
+<a class="cmp-region__link" href="https://www.teamviewer.com/en/?language-switched=true">
+<div class="cmp-region__flag">
+<img class="cmp-region__flag-icon" alt="" src="https://www.teamviewer.com/content/dam/teamviewer/en/flags/Flag_of_Malta.svg" />
+</div>
+<span class="cmp-region__link-label">Malta - English</span>
+</a>
+</li>
+<li class="cmp-region__country" data-liid="12a0b5a3ba090ef44801f545200cdfdd58a9b9030490281bf7d84d8d0f3119d7" data-lc="nl" data-cc="NL">
+<a class="cmp-region__link" href="https://www.teamviewer.com/nl/?language-switched=true">
+<div class="cmp-region__flag">
+<img class="cmp-region__flag-icon" alt="" src="https://www.teamviewer.com/content/dam/teamviewer/en/flags/Flag_of_the_Netherlands.svg" />
+</div>
+<span class="cmp-region__link-label">Nederland - Nederlands</span>
+</a>
+</li>
+
+<li class="cmp-region__country" data-liid="80a3e0ac292fd4ae2b5fe77a46d39227b7ba41a54eaf8f052b6e69425d4c7a65" data-lc="en" data-cc="NO">
+<a class="cmp-region__link" href="https://www.teamviewer.com/en/?language-switched=true">
+<div class="cmp-region__flag">
+<img class="cmp-region__flag-icon" alt="" src="https://www.teamviewer.com/content/dam/teamviewer/en/flags/norway.svg" />
+</div>
+<span class="cmp-region__link-label">Norway - English</span>
+</a>
+</li>
+<li class="cmp-region__country" data-liid="5e84725ad8df17c682dc6fe871c1c56f588eb2e25ffe427e1d643f4250088eec" data-lc="de" data-cc="AT">
+<a class="cmp-region__link" href="https://www.teamviewer.com/de/?language-switched=true">
+<div class="cmp-region__flag">
+<img class="cmp-region__flag-icon" alt="" src="https://www.teamviewer.com/content/dam/teamviewer/en/flags/Flag_of_Austria.svg" />
+</div>
+<span class="cmp-region__link-label">Österreich - Deutsch</span>
+</a>
+</li>
+<li class="cmp-region__country" data-liid="b0d4daf3541cd05358974bfeceb9e6b7c864c95b4c6950b57579b45857215072" data-lc="pl" data-cc="PL">
+<a class="cmp-region__link" href="https://www.teamviewer.com/pl/?language-switched=true">
+<div class="cmp-region__flag">
+<img class="cmp-region__flag-icon" alt="" src="https://www.teamviewer.com/content/dam/teamviewer/en/flags/Flag_of_Poland.svg" />
+</div>
+<span class="cmp-region__link-label">Polska - Polski</span>
+</a>
+</li>
+<li class="cmp-region__country" data-liid="2542c0f88a82f0f5df3f0bb934113db658d4c8dad77e9d2c9fd516cbda2dea4f" data-lc="pt" data-cc="PT">
+<a class="cmp-region__link" href="https://www.teamviewer.com/pt/?language-switched=true">
+<div class="cmp-region__flag">
+<img class="cmp-region__flag-icon" alt="" src="https://www.teamviewer.com/content/dam/teamviewer/en/flags/Flag_of_Portugal.svg" />
+</div>
+<span class="cmp-region__link-label">Portugal - Português</span>
+</a>
+</li>
+<li class="cmp-region__country" data-liid="6fb07fb7372920b1942cdf477eb4e48731d038da50c8eeb73a9d15f118b30527" data-lc="en" data-cc="RO">
+<a class="cmp-region__link" href="https://www.teamviewer.com/en/?language-switched=true">
+<div class="cmp-region__flag">
+<img class="cmp-region__flag-icon" alt="" src="https://www.teamviewer.com/content/dam/teamviewer/en/flags/Flag_of_Romania.svg" />
+</div>
+<span class="cmp-region__link-label">Romania - English</span>
+</a>
+</li>
+<li class="cmp-region__country" data-liid="44700be1c6e750376631fb199f447cdff5c09f9e3f6ece96fb70ae749fc27c87" data-lc="de" data-cc="CH">
+<a class="cmp-region__link" href="https://www.teamviewer.com/de/?language-switched=true">
+<div class="cmp-region__flag">
+<img class="cmp-region__flag-icon" alt="" src="https://www.teamviewer.com/content/dam/teamviewer/en/flags/Flag_of_Switzerland.svg" />
+</div>
+<span class="cmp-region__link-label">Schweiz - Deutsch</span>
+</a>
+</li>
+<li class="cmp-region__country" data-liid="7deb2aec9696725367a91af96834fb2db1c7090337f9efd6e986faaa935ef7c6" data-lc="fr" data-cc="CH">
+<a class="cmp-region__link" href="https://www.teamviewer.com/fr/?language-switched=true">
+<div class="cmp-region__flag">
+<img class="cmp-region__flag-icon" alt="" src="https://www.teamviewer.com/content/dam/teamviewer/en/flags/Flag_of_Switzerland.svg" />
+</div>
+<span class="cmp-region__link-label">Suisse - Français</span>
+</a>
+</li>
+<li class="cmp-region__country" data-liid="e012f6d673daf366b29d9695e191a7f00de2e32203f5343f4da61a9bc38de525" data-lc="it" data-cc="CH">
+<a class="cmp-region__link" href="https://www.teamviewer.com/it/?language-switched=true">
+<div class="cmp-region__flag">
+<img class="cmp-region__flag-icon" alt="" src="https://www.teamviewer.com/content/dam/teamviewer/en/flags/Flag_of_Switzerland.svg" />
+</div>
+<span class="cmp-region__link-label">Svizzera - Italiano</span>
+</a>
+</li>
+<li class="cmp-region__country" data-liid="c0d05437e4de7959759fb84e529e9b32b31bb34538fbd5d90c72ce268b84a98b" data-lc="en" data-cc="SK">
+<a class="cmp-region__link" href="https://www.teamviewer.com/en/?language-switched=true">
+<div class="cmp-region__flag">
+<img class="cmp-region__flag-icon" alt="" src="https://www.teamviewer.com/content/dam/teamviewer/en/flags/Flag_of_Slovakia.svg" />
+</div>
+<span class="cmp-region__link-label">Slovakia - English</span>
+</a>
+</li>
+<li class="cmp-region__country" data-liid="df7f7552531171b31dc06f747a023f011a1320915d6a0a5a955a04a81f2b811a" data-lc="en" data-cc="SI">
+<a class="cmp-region__link" href="https://www.teamviewer.com/en/?language-switched=true">
+<div class="cmp-region__flag">
+<img class="cmp-region__flag-icon" alt="" src="https://www.teamviewer.com/content/dam/teamviewer/en/flags/Flag_of_Slovenia.svg" />
+</div>
+<span class="cmp-region__link-label">Slovenia - English</span>
+</a>
+</li>
+<li class="cmp-region__country" data-liid="56a11944c3d0e4dd84945bb944f4fb0f60d36c210bc922847d58381f838bf979" data-lc="en" data-cc="SE">
+<a class="cmp-region__link" href="https://www.teamviewer.com/en/?language-switched=true">
+<div class="cmp-region__flag">
+<img class="cmp-region__flag-icon" alt="" src="https://www.teamviewer.com/content/dam/teamviewer/en/flags/Flag_of_Sweden.svg" />
+</div>
+<span class="cmp-region__link-label">Sweden - English</span>
+</a>
+</li>
+<li class="cmp-region__country" data-liid="dd5f4b9b2027776f31f1cdd5a5c6f7f0b0015af4797894eb4a878ac19bae28fc" data-lc="tr" data-cc="TR">
+<a class="cmp-region__link" href="https://www.teamviewer.com/tr/?language-switched=true">
+<div class="cmp-region__flag">
+<img class="cmp-region__flag-icon" alt="" src="https://www.teamviewer.com/content/dam/teamviewer/en/flags/Flag_of_Turkey.svg" />
+</div>
+<span class="cmp-region__link-label">Türkiye - Türkçe</span>
+</a>
+</li>
+<li class="cmp-region__country" data-liid="f4058e1ea909454af58b87570182f4579d666e992142e473ab982995a83b1016" data-lc="en" data-cc="GB">
+<a class="cmp-region__link" href="https://www.teamviewer.com/en/?language-switched=true">
+<div class="cmp-region__flag">
+<img class="cmp-region__flag-icon" alt="" src="https://www.teamviewer.com/content/dam/teamviewer/en/flags/Flag_of_the_United_Kingdom.svg" />
+</div>
+<span class="cmp-region__link-label">United Kingdom - English</span>
+</a>
+</li>
+</ul>
+</li>
+<li class="cmp-region">
+<h3 class="cmp-region__name">Middle East Africa</h3>
+<ul>
+<li class="cmp-region__country" data-liid="870af9ece6cd643ae8f29b72f46e55401fc90444d6c0cf6d0d7e6a7952acd7fc" data-lc="en" data-cc="MEA">
+<a class="cmp-region__link" href="https://www.teamviewer.com/mea/?language-switched=true">
+<div class="cmp-region__flag">
+<img class="cmp-region__flag-icon" alt="" src="https://www.teamviewer.com/content/dam/teamviewer/en/flags/TeamViewer%20Globe.svg" />
+</div>
+<span class="cmp-region__link-label">Middle East Africa - English</span>
+</a>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<a id='language-selector-link' href='/en/language-selector/?previous_page=7206' class='wd-footer-menu__link wd-footer-menu__link--language'>
+<img id='en' class='wd-footer-menu__language' src='https://www.teamviewer.com/wp-content/themes/tv-wordpress-theme/src/img/flags/en.png' ; alt='en '><span class='wd-footer-menu__language-text'>Change Region</span></a>
+</div>
+<div class="sitemap xf-campaign-footer__sitemap">
+<nav class="cmp-sitemap" role="navigation">
+<ul class="items parsys cmp-sitemap__group">
+<li class="cmp-sitemap__item">
+<span class="cmp-sitemap__item-label">Products &amp; Solutions</span>
+<ul class="cmp-sitemap__item-list">
+<li class="cmp-sitemap__listitem">
+<a href="https://www.teamviewer.com/en/products-solutions/teamviewer/" class="cmp-sitemap__listitem-link">TeamViewer
+<svg class="cmp-sitemap__linkicon" viewBox="0 0 24 24" fill="none" xmlns="https://www.w3.org/2000/svg">
+<path d="M3.75 12H20.25" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M13.5 5.25L20.25 12L13.5 18.75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
+</a>
+</li>
+<li class="cmp-sitemap__listitem">
+<a href="https://www.teamviewer.com/en/products-solutions/frontline/" class="cmp-sitemap__listitem-link">TeamViewer Frontline
+<svg class="cmp-sitemap__linkicon" viewBox="0 0 24 24" fill="none" xmlns="https://www.w3.org/2000/svg">
+<path d="M3.75 12H20.25" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M13.5 5.25L20.25 12L13.5 18.75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
+</a>
+</li>
+<li class="cmp-sitemap__listitem">
+<a href="https://www.teamviewer.com/en/products-solutions/tensor/" class="cmp-sitemap__listitem-link">TeamViewer Tensor
+<svg class="cmp-sitemap__linkicon" viewBox="0 0 24 24" fill="none" xmlns="https://www.w3.org/2000/svg">
+<path d="M3.75 12H20.25" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M13.5 5.25L20.25 12L13.5 18.75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
+</a>
+</li>
+<li class="cmp-sitemap__listitem">
+<a href="https://www.teamviewer.com/en/products-solutions/augmented-reality/" class="cmp-sitemap__listitem-link">TeamViewer Assist AR
+<svg class="cmp-sitemap__linkicon" viewBox="0 0 24 24" fill="none" xmlns="https://www.w3.org/2000/svg">
+<path d="M3.75 12H20.25" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M13.5 5.25L20.25 12L13.5 18.75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
+</a>
+</li>
+<li class="cmp-sitemap__listitem">
+<a href="https://www.teamviewer.com/en/products-solutions/engage/" class="cmp-sitemap__listitem-link">TeamViewer Engage
+<svg class="cmp-sitemap__linkicon" viewBox="0 0 24 24" fill="none" xmlns="https://www.w3.org/2000/svg">
+<path d="M3.75 12H20.25" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M13.5 5.25L20.25 12L13.5 18.75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
+</a>
+</li>
+<li class="cmp-sitemap__listitem">
+<a href="https://www.teamviewer.com/en/products-solutions/iot/" class="cmp-sitemap__listitem-link">TeamViewer IoT
+<svg class="cmp-sitemap__linkicon" viewBox="0 0 24 24" fill="none" xmlns="https://www.w3.org/2000/svg">
+<path d="M3.75 12H20.25" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M13.5 5.25L20.25 12L13.5 18.75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
+</a>
+</li>
+<li class="cmp-sitemap__listitem">
+<a href="https://www.teamviewer.com/en/products-solutions/remote-management/" class="cmp-sitemap__listitem-link">TeamViewer Remote Management
+<svg class="cmp-sitemap__linkicon" viewBox="0 0 24 24" fill="none" xmlns="https://www.w3.org/2000/svg">
+<path d="M3.75 12H20.25" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M13.5 5.25L20.25 12L13.5 18.75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
+</a>
+</li>
+<li class="cmp-sitemap__listitem">
+<a href="https://www.teamviewer.com/en/pricing/" class="cmp-sitemap__listitem-link">Pricing
+<svg class="cmp-sitemap__linkicon" viewBox="0 0 24 24" fill="none" xmlns="https://www.w3.org/2000/svg">
+<path d="M3.75 12H20.25" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M13.5 5.25L20.25 12L13.5 18.75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
+</a>
+</li>
+</ul>
+</li>
+<li class="cmp-sitemap__item">
+<span class="cmp-sitemap__item-label">Resources</span>
+<ul class="cmp-sitemap__item-list">
+<li class="cmp-sitemap__listitem">
+<a href="https://www.teamviewer.com/en/resources/success-stories/" class="cmp-sitemap__listitem-link">Success Stories
+<svg class="cmp-sitemap__linkicon" viewBox="0 0 24 24" fill="none" xmlns="https://www.w3.org/2000/svg">
+<path d="M3.75 12H20.25" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M13.5 5.25L20.25 12L13.5 18.75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
+</a>
+</li>
+<li class="cmp-sitemap__listitem">
+<a href="https://www.teamviewer.com/en/resources/events/" class="cmp-sitemap__listitem-link">Events &amp; Webinars
+<svg class="cmp-sitemap__linkicon" viewBox="0 0 24 24" fill="none" xmlns="https://www.w3.org/2000/svg">
+<path d="M3.75 12H20.25" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M13.5 5.25L20.25 12L13.5 18.75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
+</a>
+</li>
+<li class="cmp-sitemap__listitem">
+<a href="https://www.teamviewer.com/en/resources/blog/" class="cmp-sitemap__listitem-link">News &amp; Insights
+<svg class="cmp-sitemap__linkicon" viewBox="0 0 24 24" fill="none" xmlns="https://www.w3.org/2000/svg">
+<path d="M3.75 12H20.25" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M13.5 5.25L20.25 12L13.5 18.75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
+</a>
+</li>
+<li class="cmp-sitemap__listitem">
+<a href="https://www.teamviewer.com/en/resources/trust-center/" class="cmp-sitemap__listitem-link">Trust Center
+<svg class="cmp-sitemap__linkicon" viewBox="0 0 24 24" fill="none" xmlns="https://www.w3.org/2000/svg">
+<path d="M3.75 12H20.25" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M13.5 5.25L20.25 12L13.5 18.75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
+</a>
+</li>
+<li class="cmp-sitemap__listitem">
+<a href="https://www.teamviewer.com/en/resources/glossary/" class="cmp-sitemap__listitem-link">Glossary
+<svg class="cmp-sitemap__linkicon" viewBox="0 0 24 24" fill="none" xmlns="https://www.w3.org/2000/svg">
+<path d="M3.75 12H20.25" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M13.5 5.25L20.25 12L13.5 18.75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
+</a>
+</li>
+</ul>
+</li>
+<li class="cmp-sitemap__item">
+<span class="cmp-sitemap__item-label">Support</span>
+<ul class="cmp-sitemap__item-list">
+<li class="cmp-sitemap__listitem">
+<a href="https://www.teamviewer.com/en/global/support/customer-support/" class="cmp-sitemap__listitem-link">Contact Support
+<svg class="cmp-sitemap__linkicon" viewBox="0 0 24 24" fill="none" xmlns="https://www.w3.org/2000/svg">
+<path d="M3.75 12H20.25" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M13.5 5.25L20.25 12L13.5 18.75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
+</a>
+</li>
+<li class="cmp-sitemap__listitem">
+<a href="https://www.teamviewer.com/en/global/support/documents/" class="cmp-sitemap__listitem-link">Guides &amp; Manuals
+<svg class="cmp-sitemap__linkicon" viewBox="0 0 24 24" fill="none" xmlns="https://www.w3.org/2000/svg">
+<path d="M3.75 12H20.25" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M13.5 5.25L20.25 12L13.5 18.75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
+</a>
+</li>
+<li class="cmp-sitemap__listitem">
+<a href="https://www.teamviewer.com/en/global/support/knowledge-base/" class="cmp-sitemap__listitem-link">Knowledge Base
+<svg class="cmp-sitemap__linkicon" viewBox="0 0 24 24" fill="none" xmlns="https://www.w3.org/2000/svg">
+<path d="M3.75 12H20.25" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M13.5 5.25L20.25 12L13.5 18.75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
+</a>
+</li>
+<li class="cmp-sitemap__listitem">
+<a href="https://www.teamviewer.com/en/global/support/system-status/" class="cmp-sitemap__listitem-link">System Status
+<svg class="cmp-sitemap__linkicon" viewBox="0 0 24 24" fill="none" xmlns="https://www.w3.org/2000/svg">
+<path d="M3.75 12H20.25" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M13.5 5.25L20.25 12L13.5 18.75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
+</a>
+</li>
+<li class="cmp-sitemap__listitem">
+<a href="https://www.teamviewer.com/en/global/support/custom-modules/" class="cmp-sitemap__listitem-link">Custom Modules
+<svg class="cmp-sitemap__linkicon" viewBox="0 0 24 24" fill="none" xmlns="https://www.w3.org/2000/svg">
+<path d="M3.75 12H20.25" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M13.5 5.25L20.25 12L13.5 18.75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
+</a>
+</li>
+<li class="cmp-sitemap__listitem">
+<a href="https://www.teamviewer.com/en/global/support/for-developers/" class="cmp-sitemap__listitem-link">For Developers
+<svg class="cmp-sitemap__linkicon" viewBox="0 0 24 24" fill="none" xmlns="https://www.w3.org/2000/svg">
+<path d="M3.75 12H20.25" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M13.5 5.25L20.25 12L13.5 18.75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
+</a>
+</li>
+<li class="cmp-sitemap__listitem">
+<a href="https://www.teamviewer.com/en/global/support/community/" class="cmp-sitemap__listitem-link">Community
+<svg class="cmp-sitemap__linkicon" viewBox="0 0 24 24" fill="none" xmlns="https://www.w3.org/2000/svg">
+<path d="M3.75 12H20.25" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M13.5 5.25L20.25 12L13.5 18.75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
+</a>
+</li>
+</ul>
+</li>
+<li class="cmp-sitemap__item">
+<span class="cmp-sitemap__item-label">Company</span>
+<ul class="cmp-sitemap__item-list">
+<li class="cmp-sitemap__listitem">
+<a href="https://www.teamviewer.com/en/global/company/investors/" class="cmp-sitemap__listitem-link">Investors
+<svg class="cmp-sitemap__linkicon" viewBox="0 0 24 24" fill="none" xmlns="https://www.w3.org/2000/svg">
+<path d="M3.75 12H20.25" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M13.5 5.25L20.25 12L13.5 18.75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
+</a>
+</li>
+<li class="cmp-sitemap__listitem">
+<a href="https://www.teamviewer.com/en/global/company/press/" class="cmp-sitemap__listitem-link">Press
+<svg class="cmp-sitemap__linkicon" viewBox="0 0 24 24" fill="none" xmlns="https://www.w3.org/2000/svg">
+<path d="M3.75 12H20.25" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M13.5 5.25L20.25 12L13.5 18.75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
+</a>
+</li>
+<li class="cmp-sitemap__listitem">
+<a href="https://www.teamviewer.com/en/global/company/careers/" class="cmp-sitemap__listitem-link">Careers
+<svg class="cmp-sitemap__linkicon" viewBox="0 0 24 24" fill="none" xmlns="https://www.w3.org/2000/svg">
+<path d="M3.75 12H20.25" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M13.5 5.25L20.25 12L13.5 18.75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
+</a>
+</li>
+<li class="cmp-sitemap__listitem">
+<a href="https://www.teamviewer.com/en/global/company/leadership/" class="cmp-sitemap__listitem-link">Leadership
+<svg class="cmp-sitemap__linkicon" viewBox="0 0 24 24" fill="none" xmlns="https://www.w3.org/2000/svg">
+<path d="M3.75 12H20.25" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M13.5 5.25L20.25 12L13.5 18.75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
+</a>
+</li>
+<li class="cmp-sitemap__listitem">
+<a href="https://www.teamviewer.com/en/global/company/about-teamviewer/" class="cmp-sitemap__listitem-link">About TeamViewer
+<svg class="cmp-sitemap__linkicon" viewBox="0 0 24 24" fill="none" xmlns="https://www.w3.org/2000/svg">
+<path d="M3.75 12H20.25" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M13.5 5.25L20.25 12L13.5 18.75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
+</a>
+</li>
+<li class="cmp-sitemap__listitem">
+<a href="https://www.teamviewer.com/en/global/company/sponsorship/" class="cmp-sitemap__listitem-link">Sport Sponsorship
+<svg class="cmp-sitemap__linkicon" viewBox="0 0 24 24" fill="none" xmlns="https://www.w3.org/2000/svg">
+<path d="M3.75 12H20.25" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M13.5 5.25L20.25 12L13.5 18.75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
+</a>
+</li>
+<li class="cmp-sitemap__listitem">
+<a href="https://www.teamviewer.com/en/global/company/sustainability-and-csr/" class="cmp-sitemap__listitem-link">Sustainability and CSR
+<svg class="cmp-sitemap__linkicon" viewBox="0 0 24 24" fill="none" xmlns="https://www.w3.org/2000/svg">
+<path d="M3.75 12H20.25" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M13.5 5.25L20.25 12L13.5 18.75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
+</a>
+</li>
+<li class="cmp-sitemap__listitem">
+<a href="https://www.teamviewer.com/en/global/company/research-projects/" class="cmp-sitemap__listitem-link">Research Projects
+<svg class="cmp-sitemap__linkicon" viewBox="0 0 24 24" fill="none" xmlns="https://www.w3.org/2000/svg">
+<path d="M3.75 12H20.25" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M13.5 5.25L20.25 12L13.5 18.75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
+</a>
+</li>
+<li class="cmp-sitemap__listitem">
+<a href="https://www.teamviewer.com/en/resources/teamviewer-user-focus-program/" class="cmp-sitemap__listitem-link">TeamViewer User Focus Program
+<svg class="cmp-sitemap__linkicon" viewBox="0 0 24 24" fill="none" xmlns="https://www.w3.org/2000/svg">
+<path d="M3.75 12H20.25" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M13.5 5.25L20.25 12L13.5 18.75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
+</a>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="utils-unset-gridGutter xf-footer-general__social-content">
+<div id="container-7cadfa4cb7" class="cmp-container cmp-container--fullwidth">
+<div class="basic-image cmp-basic-image utils-gridGutter xf-footer-general__social-icon">
+<div data-cmp-is="image" data-cmp-lazythreshold="0" data-cmp-src="https://s7g10.scene7.com/is/content/teamviewergmbh/logo-facebook-white?dpr=off" data-cmp-dmimage data-asset="https://www.teamviewer.com/content/dam/teamviewer/central-image-hub/logos/miscellaneous/logo-facebook-white.svg" data-title="Facebook" id="image-cdccd6bf02" data-cmp-data-layer="{&#34;image-cdccd6bf02&#34;:{&#34;@type&#34;:&#34;core/wcm/components/image/v2/image&#34;,&#34;repo:modifyDate&#34;:&#34;2022-11-28T10:19:08Z&#34;,&#34;dc:title&#34;:&#34;Facebook&#34;,&#34;xdm:linkURL&#34;:&#34;https://www.facebook.com/teamviewer/&#34;,&#34;image&#34;:{&#34;repo:id&#34;:&#34;37bd8163-dbcd-4b2f-851a-d55c3759f93e&#34;,&#34;repo:modifyDate&#34;:&#34;2022-11-28T09:32:25Z&#34;,&#34;@type&#34;:&#34;image/svg+xml&#34;,&#34;repo:path&#34;:&#34;https://www.teamviewer.com/content/dam/teamviewer/central-image-hub/logos/miscellaneous/logo-facebook-white.svg&#34;}}}" class="cmp-image" itemscope itemtype="https://schema.org/ImageObject">
+<a class="cmp-image__link" href="https://www.facebook.com/teamviewer/" data-cmp-clickable data-cmp-hook-image="link">
+<img src="https://s7g10.scene7.com/is/content/teamviewergmbh/logo-facebook-white?dpr=off" class="cmp-image__image" itemprop="contentUrl" data-cmp-hook-image="image" alt="Facebook Logo" title="Facebook" />
+</a>
+<meta itemprop="caption" content="Facebook" />
+</div>
+</div>
+<div class="basic-image cmp-basic-image utils-gridGutter xf-footer-general__social-icon">
+<div data-cmp-is="image" data-cmp-lazythreshold="0" data-cmp-src="https://s7g10.scene7.com/is/content/teamviewergmbh/logo-linkedin-white?dpr=off" data-cmp-dmimage data-asset="https://www.teamviewer.com/content/dam/teamviewer/central-image-hub/logos/miscellaneous/logo-linkedin-white.svg" data-title="LinkedIn" id="image-2374e91871" data-cmp-data-layer="{&#34;image-2374e91871&#34;:{&#34;@type&#34;:&#34;core/wcm/components/image/v2/image&#34;,&#34;repo:modifyDate&#34;:&#34;2022-11-28T10:19:31Z&#34;,&#34;dc:title&#34;:&#34;LinkedIn&#34;,&#34;xdm:linkURL&#34;:&#34;https://www.linkedin.com/company/teamviewer/&#34;,&#34;image&#34;:{&#34;repo:id&#34;:&#34;a0d76554-3d6a-417b-a9f9-d336300b28e4&#34;,&#34;repo:modifyDate&#34;:&#34;2022-07-11T12:52:50Z&#34;,&#34;@type&#34;:&#34;image/svg+xml&#34;,&#34;repo:path&#34;:&#34;https://www.teamviewer.com/content/dam/teamviewer/central-image-hub/logos/miscellaneous/logo-linkedin-white.svg&#34;}}}" class="cmp-image" itemscope itemtype="https://schema.org/ImageObject">
+<a class="cmp-image__link" href="https://www.linkedin.com/company/teamviewer/" data-cmp-clickable data-cmp-hook-image="link">
+<img src="https://s7g10.scene7.com/is/content/teamviewergmbh/logo-linkedin-white?dpr=off" class="cmp-image__image" itemprop="contentUrl" data-cmp-hook-image="image" alt="LinkedIn" title="LinkedIn" />
+</a>
+<meta itemprop="caption" content="LinkedIn" />
+</div>
+</div>
+<div class="basic-image cmp-basic-image utils-gridGutter xf-footer-general__social-icon">
+<div data-cmp-is="image" data-cmp-lazythreshold="0" data-cmp-src="https://s7g10.scene7.com/is/content/teamviewergmbh/logo-twitter-white?dpr=off" data-cmp-dmimage data-asset="https://www.teamviewer.com/content/dam/teamviewer/central-image-hub/logos/miscellaneous/logo-twitter-white.svg" data-title="Twitter" id="image-dcd6c157f6" data-cmp-data-layer="{&#34;image-dcd6c157f6&#34;:{&#34;@type&#34;:&#34;core/wcm/components/image/v2/image&#34;,&#34;repo:modifyDate&#34;:&#34;2022-11-28T10:19:54Z&#34;,&#34;dc:title&#34;:&#34;Twitter&#34;,&#34;xdm:linkURL&#34;:&#34;https://twitter.com/teamviewer&#34;,&#34;image&#34;:{&#34;repo:id&#34;:&#34;d47f00be-46e7-49f7-aed3-df49b11eba46&#34;,&#34;repo:modifyDate&#34;:&#34;2022-07-11T12:52:22Z&#34;,&#34;@type&#34;:&#34;image/svg+xml&#34;,&#34;repo:path&#34;:&#34;https://www.teamviewer.com/content/dam/teamviewer/central-image-hub/logos/miscellaneous/logo-twitter-white.svg&#34;}}}" class="cmp-image" itemscope itemtype="https://schema.org/ImageObject">
+<a class="cmp-image__link" href="https://twitter.com/teamviewer" data-cmp-clickable data-cmp-hook-image="link">
+<img src="https://s7g10.scene7.com/is/content/teamviewergmbh/logo-twitter-white?dpr=off" class="cmp-image__image" itemprop="contentUrl" data-cmp-hook-image="image" alt="Twitter" title="Twitter" />
+</a>
+<meta itemprop="caption" content="Twitter" />
+</div>
+</div>
+<div class="basic-image cmp-basic-image utils-gridGutter xf-footer-general__social-icon">
+<div data-cmp-is="image" data-cmp-lazythreshold="0" data-cmp-src="https://s7g10.scene7.com/is/content/teamviewergmbh/logo-youtube-white?dpr=off" data-cmp-dmimage data-asset="https://www.teamviewer.com/content/dam/teamviewer/central-image-hub/logos/miscellaneous/logo-youtube-white.svg" data-title="YouTube" id="image-5069b75734" data-cmp-data-layer="{&#34;image-5069b75734&#34;:{&#34;@type&#34;:&#34;core/wcm/components/image/v2/image&#34;,&#34;repo:modifyDate&#34;:&#34;2022-11-28T10:20:17Z&#34;,&#34;dc:title&#34;:&#34;YouTube&#34;,&#34;xdm:linkURL&#34;:&#34;https://www.youtube.com/user/TeamViewer&#34;,&#34;image&#34;:{&#34;repo:id&#34;:&#34;9d8c9d1c-17e0-4064-ab6f-d26e75f8b044&#34;,&#34;repo:modifyDate&#34;:&#34;2022-07-11T12:51:19Z&#34;,&#34;@type&#34;:&#34;image/svg+xml&#34;,&#34;repo:path&#34;:&#34;https://www.teamviewer.com/content/dam/teamviewer/central-image-hub/logos/miscellaneous/logo-youtube-white.svg&#34;}}}" class="cmp-image" itemscope itemtype="https://schema.org/ImageObject">
+<a class="cmp-image__link" href="https://www.youtube.com/user/TeamViewer" data-cmp-clickable data-cmp-hook-image="link">
+<img src="https://s7g10.scene7.com/is/content/teamviewergmbh/logo-youtube-white?dpr=off" class="cmp-image__image" itemprop="contentUrl" data-cmp-hook-image="image" alt="YouTube" title="YouTube" />
+</a>
+<meta itemprop="caption" content="YouTube" />
+</div>
+</div>
+</div>
+</div>
+<div class="utils-unset-gridGutter xf-footer-general__legal-content">
+<div id="container-c19af33e21" class="cmp-container cmp-container--fullwidth">
+<div class="footernavigation navigation xf-footer-general__legal-navigation">
+<nav id="footernavigation-40ef3dc5e3" class="cmp-navigation" itemscope itemtype="https://schema.org/SiteNavigationElement" data-cmp-data-layer="{&#34;footernavigation-40ef3dc5e3&#34;:{&#34;@type&#34;:&#34;teamviewer/components/tenants/website/footernavigation&#34;,&#34;repo:modifyDate&#34;:&#34;2022-07-15T13:50:51Z&#34;}}">
+<ul class="cmp-navigation__group">
+<li class="cmp-navigation__item cmp-navigation__item--level-0" data-cmp-data-layer="{&#34;footernavigation-40ef3dc5e3-item-b056e733cb&#34;:{&#34;@type&#34;:&#34;teamviewer/components/tenants/website/footernavigation/item&#34;,&#34;repo:modifyDate&#34;:&#34;2022-11-23T21:05:40Z&#34;,&#34;dc:title&#34;:&#34;Privacy &amp; Cookies&#34;,&#34;xdm:linkURL&#34;:&#34;https://www.teamviewer.com/en/footer-pages/privacy-and-cookies/&#34;}}">
+<a data-cmp-clickable class="cmp-navigation__item-link" href="https://www.teamviewer.com/en/footer-pages/privacy-and-cookies/">Privacy &amp; Cookies</a>
+</li>
+<li class="cmp-navigation__item cmp-navigation__item--level-0" data-cmp-data-layer="{&#34;footernavigation-40ef3dc5e3-item-9e8d1e4839&#34;:{&#34;@type&#34;:&#34;teamviewer/components/tenants/website/footernavigation/item&#34;,&#34;repo:modifyDate&#34;:&#34;2022-11-23T21:05:39Z&#34;,&#34;dc:title&#34;:&#34;Contact&#34;,&#34;xdm:linkURL&#34;:&#34;https://www.teamviewer.com/en/footer-pages/contact/&#34;}}">
+<a data-cmp-clickable class="cmp-navigation__item-link" href="https://www.teamviewer.com/en/footer-pages/contact/">Contact</a>
+</li>
+<li class="cmp-navigation__item cmp-navigation__item--level-0" data-cmp-data-layer="{&#34;footernavigation-40ef3dc5e3-item-12a1eeb4b3&#34;:{&#34;@type&#34;:&#34;teamviewer/components/tenants/website/footernavigation/item&#34;,&#34;repo:modifyDate&#34;:&#34;2022-11-23T21:05:39Z&#34;,&#34;dc:title&#34;:&#34;EULA / DPA&#34;,&#34;xdm:linkURL&#34;:&#34;https://www.teamviewer.com/en/footer-pages/eula-and-dpa/&#34;}}">
+<a data-cmp-clickable class="cmp-navigation__item-link" href="https://www.teamviewer.com/en/footer-pages/eula-and-dpa/">EULA / DPA</a>
+</li>
+<li class="cmp-navigation__item cmp-navigation__item--level-0" data-cmp-data-layer="{&#34;footernavigation-40ef3dc5e3-item-b310fe2825&#34;:{&#34;@type&#34;:&#34;teamviewer/components/tenants/website/footernavigation/item&#34;,&#34;repo:modifyDate&#34;:&#34;2022-11-23T21:05:39Z&#34;,&#34;dc:title&#34;:&#34;Product Description&#34;,&#34;xdm:linkURL&#34;:&#34;https://www.teamviewer.com/en/footer-pages/product-description/&#34;}}">
+<a data-cmp-clickable class="cmp-navigation__item-link" href="https://www.teamviewer.com/en/footer-pages/product-description/">Product Description</a>
+</li>
+<li class="cmp-navigation__item cmp-navigation__item--level-0" data-cmp-data-layer="{&#34;footernavigation-40ef3dc5e3-item-46991399e2&#34;:{&#34;@type&#34;:&#34;teamviewer/components/tenants/website/footernavigation/item&#34;,&#34;repo:modifyDate&#34;:&#34;2022-11-23T21:05:39Z&#34;,&#34;dc:title&#34;:&#34;Imprint&#34;,&#34;xdm:linkURL&#34;:&#34;https://www.teamviewer.com/en/footer-pages/imprint/&#34;}}">
+<a data-cmp-clickable class="cmp-navigation__item-link" href="https://www.teamviewer.com/en/footer-pages/imprint/">Imprint</a>
+</li>
+</ul>
+</nav>
+<a class="ot-sdk-show-settings cmp-navigation__cookiesetting" title="Cookie Settings" href="#">
+Cookie Settings
+</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script src="https://www.teamviewer.com/etc.clientlibs/teamviewer/clientlibs/tenants/website/clientlib-standalone/externalfooter.min.js?ver=1671441694.9078"></script>
+<script type="text/html" id="wpb-modifications"></script><link rel='stylesheet' id='ultimate-vc-addons-background-style-css' href='https://www.teamviewer.com/wp-content/plugins/Ultimate_VC_Addons/assets/min-css/background-style.min.css' type='text/css' media='all' />
+<link rel='preload' as='style' data-wpacu-preload-it-async='1' onload="this.onload=null;this.rel='stylesheet'" id='wpacu-preload-tv-theme-default-css' href='https://www.teamviewer.com/wp-content/themes/tv-wordpress-theme/dist/css/tvdefault.min.css?ver=4.0.31' type='text/css' media='all' />
+<link rel='preload' as='style' data-wpacu-preload-it-async='1' onload="this.onload=null;this.rel='stylesheet'" id='wpacu-preload-wp-block-library-css' href='https://www.teamviewer.com/wp-includes/css/dist/block-library/style.min.css' type='text/css' media='all' />
+<script type='text/javascript' src='https://www.teamviewer.com/wp-content/themes/tv-wordpress-theme/dist/js/global.min.js?ver=4.0.31' id='tv-theme-global-js-js'></script>
+<script type='text/javascript' src='https://www.teamviewer.com/wp-content/themes/tv-wordpress-theme/dist/js/tvdefault.min.js?ver=4.0.31' id='tv-theme-default-js-js'></script>
+<script type='text/javascript' src='https://www.teamviewer.com/wp-content/plugins/Ultimate_VC_Addons/assets/min-js/content-box.min.js' id='ultimate-vc-addons_content_box_js-js'></script>
+<script type='text/javascript' src='https://www.teamviewer.com/wp-content/plugins/Ultimate_VC_Addons/assets/min-js/info-box.min.js' id='ultimate-vc-addons-info_box_js-js'></script>
+<script type='text/javascript' src='https://www.teamviewer.com/wp-content/plugins/js_composer/assets/js/dist/js_composer_front.min.js' id='wpb_composer_front_js-js'></script>
+<script type='text/javascript' src='https://www.teamviewer.com/wp-content/plugins/Ultimate_VC_Addons/assets/min-js/ultimate_bg.min.js' id='ultimate-vc-addons-row-bg-js'></script>
+<noscript><link rel="stylesheet" href="https://www.teamviewer.com/wp-content/themes/tv-wordpress-theme/dist/css/tvdefault.min.css?ver=4.0.31" media="all" /></noscript>
+<noscript><link rel="stylesheet" href="https://www.teamviewer.com/wp-includes/css/dist/block-library/style.min.css" media="all" /></noscript>
+</div>
+</body>
+</html>

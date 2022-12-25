@@ -1,0 +1,1874 @@
+<!DOCTYPE HTML>
+<html dir="ltr"><head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="Kleenscan" content="Kleenscan">
+
+    <meta property="og:title" content="Kleenscan.com">
+    <meta property="og:site_name" content="Kleenscan">
+    <meta property="og:description" content="Analyze files to detect malware. Analyze URLs, domains, and IPs to detect malware and blacklist status.">
+    <meta property="og:image" content="https://kleenscan.com/images/logo-mini.png">
+    <meta property="og:url" content="https://kleenscan.com/index">
+
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="shortcut icon" type="image/x-icon" href="https://kleenscan.com/images/favicon.png">
+
+    <title>Kleenscan</title>
+    <meta name="description" content="Analyze files to detect malware. Analyze URLs, domains, and IPs to detect malware and blacklist status.">
+    <meta name="keywords" content="KleenScan, virus scan, antivirus, antimalware, trojan scan, malware detection">
+
+    <!--CSRF TOKEN-->
+    <meta name="csrf_token" content="Rvb3DWnI2R1F2JZ0mWyWrL3htNsGfAomYfkRJE2S" />
+
+    <!-- Stylesheets
+    ============================================= -->
+    <!-- Boostrap-->
+    <link rel="stylesheet" href="https://kleenscan.com/css/bootstrap.min.css" type="text/css">
+        <!--Font Awesome-->
+    <link rel="stylesheet" href="https://kleenscan.com/css/font-awesome.min.css">
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="https://kleenscan.com/css/kleenscan-style.css" type="text/css">
+    <link rel="stylesheet" href="https://kleenscan.com/css/kleenscan-responsive.css" type="text/css">
+
+    <!-- jQuery 3 -->
+    <script src="https://kleenscan.com/js/jquery.min.js"></script>
+    <!-- Bootstrap -->
+    <script src="https://kleenscan.com/js/bootstrap.js"></script>
+        <!-- KSTables-->
+    <script>
+
+       "use strict";
+
+       function _instanceof(left, right) { if (right != null && typeof Symbol !== "undefined" && right[Symbol.hasInstance]) { return right[Symbol.hasInstance](left); } else { return left instanceof right; } }
+       function _classCallCheck(instance, Constructor) { if (!_instanceof(instance, Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+       function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+       function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+       var PREVIOUS_PAGE = -2147483647;
+       var NULL_PAGE = "...";
+       var NEXT_PAGE = 2147483647;
+       var NULL_PAGE_REQUIREMENT = 7;
+       var NULL_PAGE_RANGE = 4;
+
+       var ksTable =
+           /*#__PURE__*/
+           function () {
+               function ksTable() {
+                   var tableId = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+                   var pageSize = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+                   var tableName = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+
+                   _classCallCheck(this, ksTable);
+
+                   this.currentPage = 1; //Currently selected page (footer)
+                   this.maxPages = null; //Maximum number of pages (footer)
+                   this.listElements = null; // A list of all <li> elements ignoring the <spans> in the footer
+                   this.previousButton = null; //<span>Previous</span>
+                   this.nextButton = null; //<span>Next</span>
+                   this.firstNullPage = null; // First span with "..."
+                   this.lastNullPage = null; // Second span with "..."
+                   this.paginationContainer = null; //Footer
+                   this.pageSize = pageSize;
+                   this.table = document.getElementById(tableId);
+                   this.tableName = tableName;
+                   this.tableId = tableId;
+                   this.maxPages = this.calculateMaxNumberOfPages(this.table.rows.length - 1, pageSize);
+                   this.createPaginationHeader(this.table);
+                   this.createPaginationContainer(this.table);
+                   this.createTablePagination(tableId, pageSize);
+               } //Setup the pagination itself (footer)
+
+
+               _createClass(ksTable, [{
+                   key: "createTablePagination",
+                   value: function createTablePagination(tableId, pageSize) {
+                       this.showInitialRows(pageSize);
+                       this.createPaginationFooter();
+                       this.createPageList();
+                   } //Maximum number of pages based on pageSize variable e.g. totalTableRows / pageSize
+
+               }, {
+                   key: "calculateMaxNumberOfPages",
+                   value: function calculateMaxNumberOfPages(rows, pageSize) {
+                       if (rows < pageSize) {
+                           return 1;
+                       } else {
+                           //return Math.ceil(rows / pageSize);
+                           if ((rows / pageSize | 0) === rows / pageSize) {
+                               return rows / pageSize;
+                           } else return (rows / pageSize | 0) + 1;
+                       }
+                   } //All rows are initially hidden, show the relevant ones
+
+               }, {
+                   key: "showInitialRows",
+                   value: function showInitialRows(pageSize) {
+                       //Hide all the children
+                       for (var i = 1; i <= pageSize; i++) {
+                           if (this.table.rows[i] === undefined) {
+                               return 0;
+                           }
+
+                           this.table.rows[i].classList.remove('hidden');
+                       }
+                   } //Creates a header for the table (Showing "5/10/25/50/100" entries)
+
+               }, {
+                   key: "createPaginationHeader",
+                   value: function createPaginationHeader(table) {
+                       var headerContainer = document.createElement("div");
+                       var _this = this.tableName;
+                       headerContainer.classList.add("col-xs-12");
+                       headerContainer.innerHTML = "Showing" + ' <select onchange="' + _this + '.changePageSize()" id="pagination_header_' + table.id + '" class="ks-pagination-header">' + '                    <option value="5">5</option>' + '                    <option value="10">10</option>' + '                    <option value="25">25</option>' + '                    <option value="50">50</option>' + '                    <option value="100">100</option></select> ' + "entries per page";
+                       table.parentNode.insertBefore(headerContainer, table);
+                   } //Creates a footer for the table
+
+               }, {
+                   key: "createPaginationContainer",
+                   value: function createPaginationContainer(table) {
+                       var paginationContainer = document.createElement("div");
+                       paginationContainer.classList.add("row");
+                       paginationContainer.classList.add("ks-pagination-bottom-container");
+                       paginationContainer.id = "pagination_container_" + this.tableId;
+                       table.parentNode.insertBefore(paginationContainer, table.nextSibling);
+                       this.paginationContainer = paginationContainer;
+                   } //Hides the previously 'non-hidden' table rows
+
+               }, {
+                   key: "hideElementsOnPreviousPage",
+                   value: function hideElementsOnPreviousPage(prevPage) {
+                       var table = this.table;
+
+                       for (var i = prevPage * this.pageSize + 1; i <= this.currentPage * this.pageSize; i++) {
+                           if (table.rows[i] !== undefined) table.rows[i].classList.add("hidden");
+                       }
+                   } //Removes the hidden class on a newly requested page
+
+               }, {
+                   key: "showElementsOnNewPage",
+                   value: function showElementsOnNewPage(newPage) {
+                       var table = this.table;
+
+                       for (var j = (newPage - 1) * this.pageSize + 1; j <= newPage * this.pageSize; j++) {
+                           if (table.rows[j] !== undefined) table.rows[j].classList.remove('hidden');
+                       }
+                   } //Reconfigure both header and footer based on "Showing 5/10/25/50/100" (onchange)
+
+               }, {
+                   key: "changePageSize",
+                   value: function changePageSize() {
+                       var table = this.table;
+                       var tableId = this.tableId;
+                       var paginationHeader = document.getElementById("pagination_header_" + tableId); //Hide the elements on the current page
+
+                       this.hideElementsOnPreviousPage(this.currentPage - 1); //Set new pageSize value
+
+                       this.pageSize = paginationHeader.value; //Recalculate maximum number of pages
+
+                       this.maxPages = this.calculateMaxNumberOfPages(table.rows.length - 1, this.pageSize); //Recreate Initial Page
+
+                       this.createPaginationFooter(); //Reset the current page
+
+                       this.currentPage = 1; //Recreate the list of items
+
+                       this.createPageList(); //Switch to the first Page
+
+                       this.switchToThisPage(1);
+                   } //Fill up the footer with default data
+
+               }, {
+                   key: "createPaginationFooter",
+                   value: function createPaginationFooter() {
+                       var tableId = this.tableId;
+                       var maxPages = this.maxPages;
+                       var _this = this.tableName;
+                       var listId = "list_" + tableId;
+                       var content = '<ul class="ks-pagination" id="' + listId + '">' + '<span class="pagination-non-clickable" onclick="' + _this + '.switchToThisPage(' + PREVIOUS_PAGE + ')">' + "Previous" + '</span>'; //Create the pagination list
+
+                       for (var i = 1; i <= maxPages; i++) {
+                           //In case there's more than 7 pages create a '...' gap area
+                           if (maxPages > NULL_PAGE_REQUIREMENT && i >= NULL_PAGE_REQUIREMENT - 1) {
+                               //In case this is the last page
+                               if (i === maxPages) {
+                                   content += '<span>' + NULL_PAGE + '</span>';
+                                   content += '<li onclick="' + _this + '.switchToThisPage(' + i + ')">' + i + '</li>';
+                               } //Otherwise populate the list normally
+                               else {
+                                   content += '<li class="hidden" onclick="' + _this + '.switchToThisPage(' + i + ')">' + i + '</li>';
+                               }
+                           } //Otherwise populate the list normally
+                           else {
+                               if (i === 1) {
+                                   content += '<li class="selected_page" onclick="' + _this + '.switchToThisPage(' + i + ')">' + i + '</li>';
+                                   content += '<span class="hidden">' + NULL_PAGE + '</span>';
+                               } else {
+                                   content += '<li onclick="' + _this + '.switchToThisPage(' + i + ')">' + i + '</li>';
+                               }
+                           }
+                       }
+
+                       if (maxPages === 1) {
+                           content += '<span class="pagination-non-clickable" onclick="' + _this + '.switchToThisPage(' + NEXT_PAGE + ')">' + "Next" + '</span></ul>';
+                       } else {
+                           content += '<span onclick="' + _this + '.switchToThisPage(' + NEXT_PAGE + ')">' + "Next" + '</span></ul>';
+                       }
+
+                       this.paginationContainer.innerHTML = '<div class="col-xs-12">' + content + '</div>';
+                   } //Creates a list consisting only of <li> elements ignoring the <span> inside the <ul>
+
+               }, {
+                   key: "createPageList",
+                   value: function createPageList() {
+                       //Create pagination list
+                       var listId = "list_" + this.tableId;
+                       this.listElements = document.querySelectorAll("#" + listId + " li");
+                       this.previousButton = document.getElementById(listId).children[0];
+                       this.nextButton = document.getElementById(listId).children[document.getElementById(listId).children.length - 1]; //Assign values to first and last NULL PAGE
+
+                       if (this.maxPages > NULL_PAGE_REQUIREMENT) {
+                           this.firstNullPage = document.getElementById(listId).children[2];
+                           this.lastNullPage = document.getElementById(listId).children[document.getElementById(listId).children.length - 3];
+                       }
+                   } //Change the current page and update the UI
+
+               }, {
+                   key: "switchToThisPage",
+                   value: function switchToThisPage(listElementValue) {
+                       var maxPages = this.maxPages;
+                       var table = this.table;
+                       var tableId = this.tableId;
+                       var pageSize = this.pageSize; //Convert Next and Previous to page numbers
+
+                       if (listElementValue === PREVIOUS_PAGE) {
+                           listElementValue = this.currentPage - 1;
+                       } else if (listElementValue === NEXT_PAGE) {
+                           listElementValue = this.currentPage + 1;
+                       } //In case we are out of bounds, do nothing
+
+
+                       if (listElementValue < 1 || listElementValue > maxPages) {
+                           return 0;
+                       } //Hide those elements which were previously shown and show new elements
+
+
+                       var prevPage = this.currentPage - 1;
+                       this.hideElementsOnPreviousPage(prevPage);
+                       this.showElementsOnNewPage(listElementValue);
+                       this.listElements[this.currentPage - 1].classList.remove("selected_page");
+                       this.listElements[listElementValue - 1].classList.add("selected_page"); //Update the visual Next/Previous Hover
+
+                       this.previousButton.classList.remove("pagination-non-clickable");
+                       this.nextButton.classList.remove("pagination-non-clickable");
+                       this.currentPage = listElementValue;
+
+                       if (this.currentPage === 1) {
+                           this.previousButton.classList.add("pagination-non-clickable");
+
+                           if (maxPages === 1) {
+                               this.nextButton.classList.add("pagination-non-clickable");
+                           }
+                       } else if (this.currentPage === maxPages) {
+                           this.previousButton.classList.remove("pagination-non-clickable");
+                           this.nextButton.classList.add("pagination-non-clickable");
+                       }
+
+                       var newPage = listElementValue - 1; //Show/Hide NULL PAGES ("..." spans) TODO: TO BE OPTIMIZED LATER !!!
+
+                       if (maxPages > NULL_PAGE_REQUIREMENT) {
+                           if (newPage >= 0 && newPage < NULL_PAGE_RANGE) {
+                               for (var i = 0; i < this.listElements.length - 1; i++) {
+                                   //Show the first 5, hide the others
+                                   if (i <= NULL_PAGE_RANGE) {
+                                       this.listElements[i].classList.remove("hidden");
+                                   } else {
+                                       this.listElements[i].classList.add("hidden");
+                                   }
+                               } //Hide/Show spans in case they were activated/deactivated
+
+
+                               this.firstNullPage.classList.add("hidden");
+                               this.lastNullPage.classList.remove('hidden');
+                           } else if (newPage >= NULL_PAGE_RANGE && newPage <= maxPages - 1 - NULL_PAGE_RANGE) {
+                               //Setup the starting pages
+                               for (var _i = 1; _i < NULL_PAGE_RANGE; _i++) {
+                                   this.listElements[_i].classList.add("hidden");
+                               }
+
+                               this.firstNullPage.classList.remove("hidden");
+                               this.listElements[newPage + 1].classList.remove("hidden");
+                               this.listElements[newPage - 1].classList.remove("hidden");
+                               this.listElements[newPage + 2].classList.add("hidden");
+                               this.listElements[newPage - 2].classList.add("hidden"); //Setup the ending pages
+
+                               for (var _i2 = maxPages - NULL_PAGE_RANGE + 1; _i2 < maxPages - 1; _i2++) {
+                                   this.listElements[_i2].classList.add("hidden");
+                               }
+
+                               this.lastNullPage.classList.remove("hidden");
+                           } else {
+                               for (var _i3 = 1; _i3 < this.listElements.length - 1; _i3++) {
+                                   //Show the last 5, hide the others
+                                   if (_i3 >= maxPages - 1 - NULL_PAGE_RANGE) {
+                                       this.listElements[_i3].classList.remove("hidden");
+                                   } else {
+                                       this.listElements[_i3].classList.add("hidden");
+                                   }
+                               } //Hide/Show spans in case they were activated/deactivated
+
+
+                               this.firstNullPage.classList.remove("hidden");
+                               this.lastNullPage.classList.add('hidden');
+                           }
+                       } //Update the "Showing x to x1 out of xn entries"
+
+
+                       var paginationAreaLeftSide = document.getElementById("left_area_" + tableId);
+                       /*let firstValue = pageSize*(listElementValue-1);
+                       let secondValue = pageSize*(listElementValue);
+                       if(secondValue > (table.rows.length - 1)){
+                           secondValue = table.rows.length - 1;
+                       }
+                       paginationAreaLeftSide.innerText = 'Showing '+ firstValue +' to ' + secondValue + ' of ' + (table.rows.length - 1) + ' scans';
+                       */
+                   }
+               }]);
+
+               return ksTable;
+           }();
+
+   </script>
+
+</head>
+<body>
+<header  id="header">
+    <div id="header-wrapper">
+        <div id="hamburger_icon">
+            <div class="top-line"></div>
+            <div class="mid-line"></div>
+            <div class="bot-line"></div>
+        </div>
+        <div id="header-logo" class="">
+            <a href="https://kleenscan.com/index">
+                <img id="logo" src="https://kleenscan.com/images/logo.svg">
+            </a>
+        </div>
+        <nav class="header-list">
+            <ul class="row pull-right">
+                                <li id="header_latest_news" class="padding-sides"><a href="https://kleenscan.com/latest_news">News<i></i></a></li>
+                <li class="padding-sides"><a href="https://kleenscan.com/api_management">API</a></li>
+                <li class="padding-sides"><a href="https://kleenscan.com/pricing">Pricing</a></li>
+                                <li class="padding-sides"><a href="https://kleenscan.com/login">Login</a></li>
+                <li class="padding-sides"><a href="https://kleenscan.com/register">Sign up</a></li>
+                <li>
+                    <div class="dropdown header-menu-container">
+                        <button class="btn dropdown-toggle" type="button" data-toggle="dropdown"> Language
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu negate-calc language-selection-ul header-menu-list">
+                            <li><a href="https://kleenscan.com/change_default_language/0"><img src="https://kleenscan.com/images/USA.png"> English </a></li>
+                            <li><a href="https://kleenscan.com/change_default_language/1"><img src="https://kleenscan.com/images/Russia.png"> Русский </a></li>
+                        </ul>
+                    </div>
+                </li>
+                            </ul>
+        </nav>
+        <nav id="hamburger_menu" class="hidden">
+            <ul class="row">
+                                <li><a href="https://kleenscan.com/latest_news"><div>News</div></a></li>
+                <li><a href="https://kleenscan.com/api_management">API</a></li>
+                <li><a href="https://kleenscan.com/pricing">Pricing</a></li>
+                                    <li><a href="https://kleenscan.com/login"><div>Login</div></a></li>
+                    <li><a href="https://kleenscan.com/register"><div>Sign up</div></a></li>
+                            </ul>
+        </nav>
+    </div>
+    <script>
+        //News Notifications
+        var currentPostId = document.cookie.match("ks_latest_news=");
+        var latestPostId = "49";
+        var headerLatestNews = document.getElementById("header_latest_news");
+
+        
+        if(currentPostId == null){
+            if(latestPostId !== "" && latestPostId != null){
+                //Set a new cookie
+                setCookie("ks_latest_news", latestPostId, 3650);
+            }
+        }else{
+            //Get the value of current cookie
+            currentPostId = getCookie("ks_latest_news");
+            //Check if there are new posts
+            if(currentPostId < latestPostId){
+                var newsNotificationArea =  headerLatestNews.children[0].children[0]; // <a>
+                newsNotificationArea.classList.add("fa", "fa-exclamation", "notification-icon");
+            }
+        }
+
+        //Tickets Notifications
+        var ticketHasNewReply = '';
+        var headerSupport = document.getElementById("header_support");
+        if(ticketHasNewReply){
+            var ticketNotificationArea = headerSupport.children[0].children[0];
+            ticketNotificationArea.classList.add("fa", "fa-exclamation", "notification-icon");
+        }
+
+        function setCookie(name, value, days) {
+            var expires = "";
+            if (days) {
+                var date = new Date();
+                date.setTime(date.getTime() + (days*24*60*60*1000));
+                expires = "; expires=" + date.toUTCString();
+            }
+            document.cookie = name + "=" + (value || "")  + expires + "; path=/";
+        }
+        function getCookie(name) {
+            var nameEQ = name + "=";
+            var ca = document.cookie.split(';');
+            for(var i=0;i < ca.length;i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') c = c.substring(1,c.length);
+                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+            }
+            return null;
+        }
+    </script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-8H0YW98J30"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-8H0YW98J30');
+    </script>
+</header>
+<div id="screen_freeze">
+    <img id="loading_gif" src="https://kleenscan.com/images/preloader.gif" alt="loading..">
+</div>
+<div class="main-content-container">
+    <div class="background-image"></div>
+        <!-- Horizontal Banner -->
+<div class="horizontal-banner">
+        <a href="https://nativecrypter.com/" target="_blank">
+        <img alt="horizontal banner"  src="https://kleenscan.com/storage/images/banners/Dictator - Fully Undetectable.gif">
+    </a>
+    </div>
+<!-- Vertical Large Banner -->
+<div class="main-content-central-section-wrapper">
+    <div class="col-lg-3 col-md-12 col-xs-6 no-padding">
+        <div class="banner-container-left">
+                        <a href="http://nova2utq4fbstlzcinxpxbotkgk7ol6iltvpxazt7bxh3u57mr4hflqd.onion/" target="_blank">
+                <img alt="vertical banner"  src="https://kleenscan.com/storage/images/banners/vpn.gif">
+            </a>
+                    </div>
+    </div>        <div class="col-lg-6 col-md-8 col-xs-12">
+            <div class="main-content-middle-section-container">
+                <h3 class="index-main-header text-center">Analyze files to detect malware. Analyze URLs, domains, and IPs to detect malware and blacklist status.</h3>
+                <div class="index-main-content-container">
+                    <div class="index-main-content-wrapper">
+                        <!-- Scan Type Selection Container -->
+                        <div class="index-scan-type-selection-container">
+                                                            <div>Would you like to have insight into all the scans you've performed? Scan files on a regular basis?</div>
+                                <div>Create a <b><span class='text-green'>Kleen</span>Scan</b> account today and experience it to the fullest!</div>
+                                                        <ul class="file-url-selection-container">
+                                <li><button id="file_button" class="button-green-filled"><i class="icon-file font-size-m"></i>File</button></li>
+                                <li><button id="url_button" class="button-green-outline"><i class="icon-world font-size-m"></i>URL</button></li>
+                                <li><button id="runtime_button" class="button-green-outline"><i class="icon-clock font-size-m"></i>Runtime <b>beta</b></button></li>
+                            </ul>
+                        </div>
+                        <!-- Form container Area -->
+                        <div class="index-form-container">
+                            <form id="scan_form" method="POST" action="https://kleenscan.com/scan_request" enctype="multipart/form-data">
+                                <div id="browse" class="row center margin-between">
+                                    <input type="hidden" name="_token" value="Rvb3DWnI2R1F2JZ0mWyWrL3htNsGfAomYfkRJE2S">                                    <input id="upload_file" type="file" onchange="getInput();" name="path" autocomplete="off">
+                                    <input disabled id="browse_content_area" class="col-xs-9 chrome-focus" autocomplete="off">
+                                    <label for="upload_file" id="browse_button" class="col-xs-3 font-size-m"><i id="browse_icon" class="fa fa-folder-open"></i> Browse ... </label>
+                                    <label for="upload_file" id="search_url" class="col-xs-3 font-size-m hidden" style="padding: 9px 5px;"><i id="search_icon" class="fa fa-search"></i> URL</label>
+                                    <div class="col-xs-12 tiny-text">Max file size - 32MB</div>
+                                </div>
+                                <input type="hidden" id="avList" value="false" name="avList">
+                                <div id="scan_container" class="row center">
+                                    <div id="scan_button" class="font-size-l">Scan</div>
+                                </div>
+                            </form>
+                        </div>
+                        <!-- Select Antivirus Programs -->
+                        <div>
+                            <div id="select_antivirus_program" class="font-size-s">Select Antivirus Programs</div>
+                            <div class="col-xs-12 tiny-text no-padding no-margin text-red b">No Distribution</div>
+                        </div>
+                        <!-- List of Antivirus Software -->
+                        <br>
+                        <div id="show_hide_antivirus_software" class="row">
+                            <p>Select Antivirus programs from the list below in order to scan your files</p>
+                            <div id="file_scanners_container">
+                                <div class="col-xs-12">
+                                    <div class="selected-scanners-container">
+                                        <span>Selected Scanners:</span>
+                                        <span id="selected_file_scanners_count">0</span>
+                                        <span>/</span>
+                                        <span id="total_number_of_file_scanners">0</span>
+                                    </div>
+                                </div>
+                                <div class="scanner-control-container col-xs-12">
+                                    <!-- Select/Deselect All -->
+                                    <div class="select-deselect-all-container">
+                                        <div class="align-scanner">
+                                            <label class="switch switch-main margin-between main-slider">
+                                                <input class="scanner-toggle scanner-type-file scanner-toggle-all" type="checkbox" checked>
+                                                <div class="slider round slider-size"></div>
+                                            </label>
+                                            <label class="pull-left margin-between slider-label">Select/Deselect All</label>
+                                        </div>
+                                        <div class="align-scanner">
+                                            <label class="switch switch-main margin-between main-slider">
+                                                <input class="scanner-toggle scanner-type-file scanner-toggle-fastest" type="checkbox">
+                                                <div class="slider round slider-size"></div>
+                                            </label>
+                                            <label class="pull-left margin-between slider-label">Fastest</label>
+                                        </div>
+                                        <div class="align-scanner">
+                                            <label class="switch switch-main margin-between main-slider">
+                                                <input class="scanner-toggle scanner-type-file scanner-toggle-popular" type="checkbox">
+                                                <div class="slider round slider-size"></div>
+                                            </label>
+                                            <label class="pull-left margin-between slider-label">Most Popular</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row" style="margin: 0 auto;">
+                                    <div class="slider-offset">
+                                                                                    <div class="align-scanner">
+                                                <label class="switch switch-main">
+                                                    <input type="checkbox" class="file-antivirus-name" checked value="adaware">
+                                                    <div class="slider round slider-size"></div>
+                                                </label>
+                                                <div class="pull-left slider-label">AdAware</div>
+                                            </div>
+                                                                                    <div class="align-scanner">
+                                                <label class="switch switch-main">
+                                                    <input type="checkbox" class="file-antivirus-name" checked value="amiti">
+                                                    <div class="slider round slider-size"></div>
+                                                </label>
+                                                <div class="pull-left slider-label">Amiti</div>
+                                            </div>
+                                                                                    <div class="align-scanner">
+                                                <label class="switch switch-main">
+                                                    <input type="checkbox" class="file-antivirus-name" checked value="arcabit">
+                                                    <div class="slider round slider-size"></div>
+                                                </label>
+                                                <div class="pull-left slider-label">Arcabit</div>
+                                            </div>
+                                                                                    <div class="align-scanner">
+                                                <label class="switch switch-main">
+                                                    <input type="checkbox" class="file-antivirus-name" checked value="avast">
+                                                    <div class="slider round slider-size"></div>
+                                                </label>
+                                                <div class="pull-left slider-label">Avast</div>
+                                            </div>
+                                                                                    <div class="align-scanner">
+                                                <label class="switch switch-main">
+                                                    <input type="checkbox" class="file-antivirus-name" checked value="avg">
+                                                    <div class="slider round slider-size"></div>
+                                                </label>
+                                                <div class="pull-left slider-label">AVG</div>
+                                            </div>
+                                                                                    <div class="align-scanner">
+                                                <label class="switch switch-main">
+                                                    <input type="checkbox" class="file-antivirus-name" checked value="avira">
+                                                    <div class="slider round slider-size"></div>
+                                                </label>
+                                                <div class="pull-left slider-label">Avira</div>
+                                            </div>
+                                                                                    <div class="align-scanner">
+                                                <label class="switch switch-main">
+                                                    <input type="checkbox" class="file-antivirus-name" checked value="bitdefender">
+                                                    <div class="slider round slider-size"></div>
+                                                </label>
+                                                <div class="pull-left slider-label">Bitdefender</div>
+                                            </div>
+                                                                                    <div class="align-scanner">
+                                                <label class="switch switch-main">
+                                                    <input type="checkbox" class="file-antivirus-name" checked value="bullguard">
+                                                    <div class="slider round slider-size"></div>
+                                                </label>
+                                                <div class="pull-left slider-label">Bullguard</div>
+                                            </div>
+                                                                                    <div class="align-scanner">
+                                                <label class="switch switch-main">
+                                                    <input type="checkbox" class="file-antivirus-name" checked value="clamav">
+                                                    <div class="slider round slider-size"></div>
+                                                </label>
+                                                <div class="pull-left slider-label">ClamAV</div>
+                                            </div>
+                                                                                    <div class="align-scanner">
+                                                <label class="switch switch-main">
+                                                    <input type="checkbox" class="file-antivirus-name" checked value="comodo">
+                                                    <div class="slider round slider-size"></div>
+                                                </label>
+                                                <div class="pull-left slider-label">Comodo</div>
+                                            </div>
+                                                                                    <div class="align-scanner">
+                                                <label class="switch switch-main">
+                                                    <input type="checkbox" class="file-antivirus-name" checked value="comodolinux">
+                                                    <div class="slider round slider-size"></div>
+                                                </label>
+                                                <div class="pull-left slider-label">Comodo Linux</div>
+                                            </div>
+                                                                                    <div class="align-scanner">
+                                                <label class="switch switch-main">
+                                                    <input type="checkbox" class="file-antivirus-name" checked value="drweb">
+                                                    <div class="slider round slider-size"></div>
+                                                </label>
+                                                <div class="pull-left slider-label">DrWeb</div>
+                                            </div>
+                                                                                    <div class="align-scanner">
+                                                <label class="switch switch-main">
+                                                    <input type="checkbox" class="file-antivirus-name" checked value="emsisoft">
+                                                    <div class="slider round slider-size"></div>
+                                                </label>
+                                                <div class="pull-left slider-label">Emsisoft</div>
+                                            </div>
+                                                                                    <div class="align-scanner">
+                                                <label class="switch switch-main">
+                                                    <input type="checkbox" class="file-antivirus-name" checked value="escan">
+                                                    <div class="slider round slider-size"></div>
+                                                </label>
+                                                <div class="pull-left slider-label">eScan</div>
+                                            </div>
+                                                                                    <div class="align-scanner">
+                                                <label class="switch switch-main">
+                                                    <input type="checkbox" class="file-antivirus-name" checked value="fprot">
+                                                    <div class="slider round slider-size"></div>
+                                                </label>
+                                                <div class="pull-left slider-label">F-Prot</div>
+                                            </div>
+                                                                                    <div class="align-scanner">
+                                                <label class="switch switch-main">
+                                                    <input type="checkbox" class="file-antivirus-name" checked value="fsecure">
+                                                    <div class="slider round slider-size"></div>
+                                                </label>
+                                                <div class="pull-left slider-label">F-Secure</div>
+                                            </div>
+                                                                                    <div class="align-scanner">
+                                                <label class="switch switch-main">
+                                                    <input type="checkbox" class="file-antivirus-name" checked value="gdata">
+                                                    <div class="slider round slider-size"></div>
+                                                </label>
+                                                <div class="pull-left slider-label">G Data</div>
+                                            </div>
+                                                                                    <div class="align-scanner">
+                                                <label class="switch switch-main">
+                                                    <input type="checkbox" class="file-antivirus-name" checked value="ikarus">
+                                                    <div class="slider round slider-size"></div>
+                                                </label>
+                                                <div class="pull-left slider-label">IKARUS</div>
+                                            </div>
+                                                                                    <div class="align-scanner">
+                                                <label class="switch switch-main">
+                                                    <input type="checkbox" class="file-antivirus-name" checked value="immunet">
+                                                    <div class="slider round slider-size"></div>
+                                                </label>
+                                                <div class="pull-left slider-label">Immunet</div>
+                                            </div>
+                                                                                    <div class="align-scanner">
+                                                <label class="switch switch-main">
+                                                    <input type="checkbox" class="file-antivirus-name" checked value="kaspersky">
+                                                    <div class="slider round slider-size"></div>
+                                                </label>
+                                                <div class="pull-left slider-label">Kaspersky</div>
+                                            </div>
+                                                                                    <div class="align-scanner">
+                                                <label class="switch switch-main">
+                                                    <input type="checkbox" class="file-antivirus-name" checked value="maxsecure">
+                                                    <div class="slider round slider-size"></div>
+                                                </label>
+                                                <div class="pull-left slider-label">Max Secure</div>
+                                            </div>
+                                                                                    <div class="align-scanner">
+                                                <label class="switch switch-main">
+                                                    <input type="checkbox" class="file-antivirus-name" checked value="mcafee">
+                                                    <div class="slider round slider-size"></div>
+                                                </label>
+                                                <div class="pull-left slider-label">McAfee</div>
+                                            </div>
+                                                                                    <div class="align-scanner">
+                                                <label class="switch switch-main">
+                                                    <input type="checkbox" class="file-antivirus-name" checked value="microsoftdefender">
+                                                    <div class="slider round slider-size"></div>
+                                                </label>
+                                                <div class="pull-left slider-label">Microsoft Defender</div>
+                                            </div>
+                                                                                    <div class="align-scanner">
+                                                <label class="switch switch-main">
+                                                    <input type="checkbox" class="file-antivirus-name" checked value="nano">
+                                                    <div class="slider round slider-size"></div>
+                                                </label>
+                                                <div class="pull-left slider-label">NANO</div>
+                                            </div>
+                                                                                    <div class="align-scanner">
+                                                <label class="switch switch-main">
+                                                    <input type="checkbox" class="file-antivirus-name" checked value="nod32">
+                                                    <div class="slider round slider-size"></div>
+                                                </label>
+                                                <div class="pull-left slider-label">NOD32</div>
+                                            </div>
+                                                                                    <div class="align-scanner">
+                                                <label class="switch switch-main">
+                                                    <input type="checkbox" class="file-antivirus-name" checked value="norman">
+                                                    <div class="slider round slider-size"></div>
+                                                </label>
+                                                <div class="pull-left slider-label">Norman</div>
+                                            </div>
+                                                                                    <div class="align-scanner">
+                                                <label class="switch switch-main">
+                                                    <input type="checkbox" class="file-antivirus-name" checked value="preventon">
+                                                    <div class="slider round slider-size"></div>
+                                                </label>
+                                                <div class="pull-left slider-label">Preventon</div>
+                                            </div>
+                                                                                    <div class="align-scanner">
+                                                <label class="switch switch-main">
+                                                    <input type="checkbox" class="file-antivirus-name" checked value="quickheal">
+                                                    <div class="slider round slider-size"></div>
+                                                </label>
+                                                <div class="pull-left slider-label">Quick Heal</div>
+                                            </div>
+                                                                                    <div class="align-scanner">
+                                                <label class="switch switch-main">
+                                                    <input type="checkbox" class="file-antivirus-name" checked value="secureageapex">
+                                                    <div class="slider round slider-size"></div>
+                                                </label>
+                                                <div class="pull-left slider-label">SecureAge APEX</div>
+                                            </div>
+                                                                                    <div class="align-scanner">
+                                                <label class="switch switch-main">
+                                                    <input type="checkbox" class="file-antivirus-name" checked value="seqrite">
+                                                    <div class="slider round slider-size"></div>
+                                                </label>
+                                                <div class="pull-left slider-label">Seqrite</div>
+                                            </div>
+                                                                                    <div class="align-scanner">
+                                                <label class="switch switch-main">
+                                                    <input type="checkbox" class="file-antivirus-name" checked value="sophos">
+                                                    <div class="slider round slider-size"></div>
+                                                </label>
+                                                <div class="pull-left slider-label">Sophos</div>
+                                            </div>
+                                                                                    <div class="align-scanner">
+                                                <label class="switch switch-main">
+                                                    <input type="checkbox" class="file-antivirus-name" checked value="symantec">
+                                                    <div class="slider round slider-size"></div>
+                                                </label>
+                                                <div class="pull-left slider-label">Symantec</div>
+                                            </div>
+                                                                                    <div class="align-scanner">
+                                                <label class="switch switch-main">
+                                                    <input type="checkbox" class="file-antivirus-name" checked value="trendmicro">
+                                                    <div class="slider round slider-size"></div>
+                                                </label>
+                                                <div class="pull-left slider-label">TrendMicro</div>
+                                            </div>
+                                                                                    <div class="align-scanner">
+                                                <label class="switch switch-main">
+                                                    <input type="checkbox" class="file-antivirus-name" checked value="vba32">
+                                                    <div class="slider round slider-size"></div>
+                                                </label>
+                                                <div class="pull-left slider-label">Vba32</div>
+                                            </div>
+                                                                                    <div class="align-scanner">
+                                                <label class="switch switch-main">
+                                                    <input type="checkbox" class="file-antivirus-name" checked value="viritexplorer">
+                                                    <div class="slider round slider-size"></div>
+                                                </label>
+                                                <div class="pull-left slider-label">VirITExplorer</div>
+                                            </div>
+                                                                                    <div class="align-scanner">
+                                                <label class="switch switch-main">
+                                                    <input type="checkbox" class="file-antivirus-name" checked value="virusfighter">
+                                                    <div class="slider round slider-size"></div>
+                                                </label>
+                                                <div class="pull-left slider-label">VirusFighter</div>
+                                            </div>
+                                                                                    <div class="align-scanner">
+                                                <label class="switch switch-main">
+                                                    <input type="checkbox" class="file-antivirus-name" checked value="xvirus">
+                                                    <div class="slider round slider-size"></div>
+                                                </label>
+                                                <div class="pull-left slider-label">Xvirus</div>
+                                            </div>
+                                                                                    <div class="align-scanner">
+                                                <label class="switch switch-main">
+                                                    <input type="checkbox" class="file-antivirus-name" checked value="zillya">
+                                                    <div class="slider round slider-size"></div>
+                                                </label>
+                                                <div class="pull-left slider-label">Zillya</div>
+                                            </div>
+                                                                                    <div class="align-scanner">
+                                                <label class="switch switch-main">
+                                                    <input type="checkbox" class="file-antivirus-name" checked value="zonealarm">
+                                                    <div class="slider round slider-size"></div>
+                                                </label>
+                                                <div class="pull-left slider-label">ZoneAlarm</div>
+                                            </div>
+                                                                                    <div class="align-scanner">
+                                                <label class="switch switch-main">
+                                                    <input type="checkbox" class="file-antivirus-name" checked value="zoner">
+                                                    <div class="slider round slider-size"></div>
+                                                </label>
+                                                <div class="pull-left slider-label">Zoner</div>
+                                            </div>
+                                                                            </div>
+                                    <div class="col-xs-12 blank-row"></div>
+                                </div>
+                            </div>
+                            <div id="url_scanners_container" class="hidden">
+                                <div class="col-xs-12">
+                                    <div class="selected-scanners-container">
+                                        <span>Selected Scanners:</span>
+                                        <span id="selected_url_scanners_count">0</span>
+                                        <span>/</span>
+                                        <span id="total_number_of_url_scanners">0</span>
+                                    </div>
+                                </div>
+                                <div class="scanner-control-container col-xs-12">
+                                    <!-- Select/Deselect All -->
+                                    <div class="select-deselect-all-container">
+                                        <div class="align-scanner">
+                                            <label class="switch switch-main margin-between main-slider">
+                                                <input class="scanner-toggle scanner-type-url scanner-toggle-all" type="checkbox" checked>
+                                                <div class="slider round slider-size"></div>
+                                            </label>
+                                            <label class="pull-left margin-between slider-label">Select/Deselect All</label>
+                                        </div>
+                                        <div class="align-scanner">
+                                            <label class="switch switch-main margin-between main-slider">
+                                                <input class="scanner-toggle scanner-type-url scanner-toggle-fastest" type="checkbox">
+                                                <div class="slider round slider-size"></div>
+                                            </label>
+                                            <label class="pull-left margin-between slider-label">Fastest</label>
+                                        </div>
+                                        <div class="align-scanner">
+                                            <label class="switch switch-main margin-between main-slider">
+                                                <input class="scanner-toggle scanner-type-url scanner-toggle-popular" type="checkbox">
+                                                <div class="slider round slider-size"></div>
+                                            </label>
+                                            <label class="pull-left margin-between slider-label">Most Popular</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row" style="margin: 0 auto;">
+                                    <div class="slider-offset">
+                                                                                    <div class="align-scanner">
+                                                <label class="switch switch-main">
+                                                    <input type="checkbox" class="url-antivirus-name" checked value="adaware">
+                                                    <div class="slider round slider-size"></div>
+                                                </label>
+                                                <div class="pull-left slider-label">AdAware</div>
+                                            </div>
+                                                                                    <div class="align-scanner">
+                                                <label class="switch switch-main">
+                                                    <input type="checkbox" class="url-antivirus-name" checked value="amiti">
+                                                    <div class="slider round slider-size"></div>
+                                                </label>
+                                                <div class="pull-left slider-label">Amiti</div>
+                                            </div>
+                                                                                    <div class="align-scanner">
+                                                <label class="switch switch-main">
+                                                    <input type="checkbox" class="url-antivirus-name" checked value="arcabit">
+                                                    <div class="slider round slider-size"></div>
+                                                </label>
+                                                <div class="pull-left slider-label">Arcabit</div>
+                                            </div>
+                                                                                    <div class="align-scanner">
+                                                <label class="switch switch-main">
+                                                    <input type="checkbox" class="url-antivirus-name" checked value="avast">
+                                                    <div class="slider round slider-size"></div>
+                                                </label>
+                                                <div class="pull-left slider-label">Avast</div>
+                                            </div>
+                                                                                    <div class="align-scanner">
+                                                <label class="switch switch-main">
+                                                    <input type="checkbox" class="url-antivirus-name" checked value="avg">
+                                                    <div class="slider round slider-size"></div>
+                                                </label>
+                                                <div class="pull-left slider-label">AVG</div>
+                                            </div>
+                                                                                    <div class="align-scanner">
+                                                <label class="switch switch-main">
+                                                    <input type="checkbox" class="url-antivirus-name" checked value="avira">
+                                                    <div class="slider round slider-size"></div>
+                                                </label>
+                                                <div class="pull-left slider-label">Avira</div>
+                                            </div>
+                                                                                    <div class="align-scanner">
+                                                <label class="switch switch-main">
+                                                    <input type="checkbox" class="url-antivirus-name" checked value="bitdefender">
+                                                    <div class="slider round slider-size"></div>
+                                                </label>
+                                                <div class="pull-left slider-label">Bitdefender</div>
+                                            </div>
+                                                                                    <div class="align-scanner">
+                                                <label class="switch switch-main">
+                                                    <input type="checkbox" class="url-antivirus-name" checked value="bullguard">
+                                                    <div class="slider round slider-size"></div>
+                                                </label>
+                                                <div class="pull-left slider-label">Bullguard</div>
+                                            </div>
+                                                                                    <div class="align-scanner">
+                                                <label class="switch switch-main">
+                                                    <input type="checkbox" class="url-antivirus-name" checked value="clamav">
+                                                    <div class="slider round slider-size"></div>
+                                                </label>
+                                                <div class="pull-left slider-label">ClamAV</div>
+                                            </div>
+                                                                                    <div class="align-scanner">
+                                                <label class="switch switch-main">
+                                                    <input type="checkbox" class="url-antivirus-name" checked value="comodo">
+                                                    <div class="slider round slider-size"></div>
+                                                </label>
+                                                <div class="pull-left slider-label">Comodo</div>
+                                            </div>
+                                                                                    <div class="align-scanner">
+                                                <label class="switch switch-main">
+                                                    <input type="checkbox" class="url-antivirus-name" checked value="drweb">
+                                                    <div class="slider round slider-size"></div>
+                                                </label>
+                                                <div class="pull-left slider-label">DrWeb</div>
+                                            </div>
+                                                                                    <div class="align-scanner">
+                                                <label class="switch switch-main">
+                                                    <input type="checkbox" class="url-antivirus-name" checked value="emsisoft">
+                                                    <div class="slider round slider-size"></div>
+                                                </label>
+                                                <div class="pull-left slider-label">Emsisoft</div>
+                                            </div>
+                                                                                    <div class="align-scanner">
+                                                <label class="switch switch-main">
+                                                    <input type="checkbox" class="url-antivirus-name" checked value="escan">
+                                                    <div class="slider round slider-size"></div>
+                                                </label>
+                                                <div class="pull-left slider-label">eScan</div>
+                                            </div>
+                                                                                    <div class="align-scanner">
+                                                <label class="switch switch-main">
+                                                    <input type="checkbox" class="url-antivirus-name" checked value="fprot">
+                                                    <div class="slider round slider-size"></div>
+                                                </label>
+                                                <div class="pull-left slider-label">F-Prot</div>
+                                            </div>
+                                                                                    <div class="align-scanner">
+                                                <label class="switch switch-main">
+                                                    <input type="checkbox" class="url-antivirus-name" checked value="fsecure">
+                                                    <div class="slider round slider-size"></div>
+                                                </label>
+                                                <div class="pull-left slider-label">F-Secure</div>
+                                            </div>
+                                                                                    <div class="align-scanner">
+                                                <label class="switch switch-main">
+                                                    <input type="checkbox" class="url-antivirus-name" checked value="gdata">
+                                                    <div class="slider round slider-size"></div>
+                                                </label>
+                                                <div class="pull-left slider-label">G Data</div>
+                                            </div>
+                                                                                    <div class="align-scanner">
+                                                <label class="switch switch-main">
+                                                    <input type="checkbox" class="url-antivirus-name" checked value="ikarus">
+                                                    <div class="slider round slider-size"></div>
+                                                </label>
+                                                <div class="pull-left slider-label">IKARUS</div>
+                                            </div>
+                                                                                    <div class="align-scanner">
+                                                <label class="switch switch-main">
+                                                    <input type="checkbox" class="url-antivirus-name" checked value="immunet">
+                                                    <div class="slider round slider-size"></div>
+                                                </label>
+                                                <div class="pull-left slider-label">Immunet</div>
+                                            </div>
+                                                                                    <div class="align-scanner">
+                                                <label class="switch switch-main">
+                                                    <input type="checkbox" class="url-antivirus-name" checked value="kaspersky">
+                                                    <div class="slider round slider-size"></div>
+                                                </label>
+                                                <div class="pull-left slider-label">Kaspersky</div>
+                                            </div>
+                                                                                    <div class="align-scanner">
+                                                <label class="switch switch-main">
+                                                    <input type="checkbox" class="url-antivirus-name" checked value="maxsecure">
+                                                    <div class="slider round slider-size"></div>
+                                                </label>
+                                                <div class="pull-left slider-label">Max Secure</div>
+                                            </div>
+                                                                                    <div class="align-scanner">
+                                                <label class="switch switch-main">
+                                                    <input type="checkbox" class="url-antivirus-name" checked value="mcafee">
+                                                    <div class="slider round slider-size"></div>
+                                                </label>
+                                                <div class="pull-left slider-label">McAfee</div>
+                                            </div>
+                                                                                    <div class="align-scanner">
+                                                <label class="switch switch-main">
+                                                    <input type="checkbox" class="url-antivirus-name" checked value="microsoftdefender">
+                                                    <div class="slider round slider-size"></div>
+                                                </label>
+                                                <div class="pull-left slider-label">Microsoft Defender</div>
+                                            </div>
+                                                                                    <div class="align-scanner">
+                                                <label class="switch switch-main">
+                                                    <input type="checkbox" class="url-antivirus-name" checked value="nano">
+                                                    <div class="slider round slider-size"></div>
+                                                </label>
+                                                <div class="pull-left slider-label">NANO</div>
+                                            </div>
+                                                                                    <div class="align-scanner">
+                                                <label class="switch switch-main">
+                                                    <input type="checkbox" class="url-antivirus-name" checked value="nod32">
+                                                    <div class="slider round slider-size"></div>
+                                                </label>
+                                                <div class="pull-left slider-label">NOD32</div>
+                                            </div>
+                                                                                    <div class="align-scanner">
+                                                <label class="switch switch-main">
+                                                    <input type="checkbox" class="url-antivirus-name" checked value="norman">
+                                                    <div class="slider round slider-size"></div>
+                                                </label>
+                                                <div class="pull-left slider-label">Norman</div>
+                                            </div>
+                                                                                    <div class="align-scanner">
+                                                <label class="switch switch-main">
+                                                    <input type="checkbox" class="url-antivirus-name" checked value="preventon">
+                                                    <div class="slider round slider-size"></div>
+                                                </label>
+                                                <div class="pull-left slider-label">Preventon</div>
+                                            </div>
+                                                                                    <div class="align-scanner">
+                                                <label class="switch switch-main">
+                                                    <input type="checkbox" class="url-antivirus-name" checked value="quickheal">
+                                                    <div class="slider round slider-size"></div>
+                                                </label>
+                                                <div class="pull-left slider-label">Quick Heal</div>
+                                            </div>
+                                                                                    <div class="align-scanner">
+                                                <label class="switch switch-main">
+                                                    <input type="checkbox" class="url-antivirus-name" checked value="seqrite">
+                                                    <div class="slider round slider-size"></div>
+                                                </label>
+                                                <div class="pull-left slider-label">Seqrite</div>
+                                            </div>
+                                                                                    <div class="align-scanner">
+                                                <label class="switch switch-main">
+                                                    <input type="checkbox" class="url-antivirus-name" checked value="sophos">
+                                                    <div class="slider round slider-size"></div>
+                                                </label>
+                                                <div class="pull-left slider-label">Sophos</div>
+                                            </div>
+                                                                                    <div class="align-scanner">
+                                                <label class="switch switch-main">
+                                                    <input type="checkbox" class="url-antivirus-name" checked value="symantec">
+                                                    <div class="slider round slider-size"></div>
+                                                </label>
+                                                <div class="pull-left slider-label">Symantec</div>
+                                            </div>
+                                                                                    <div class="align-scanner">
+                                                <label class="switch switch-main">
+                                                    <input type="checkbox" class="url-antivirus-name" checked value="trendmicro">
+                                                    <div class="slider round slider-size"></div>
+                                                </label>
+                                                <div class="pull-left slider-label">TrendMicro</div>
+                                            </div>
+                                                                                    <div class="align-scanner">
+                                                <label class="switch switch-main">
+                                                    <input type="checkbox" class="url-antivirus-name" checked value="vba32">
+                                                    <div class="slider round slider-size"></div>
+                                                </label>
+                                                <div class="pull-left slider-label">Vba32</div>
+                                            </div>
+                                                                                    <div class="align-scanner">
+                                                <label class="switch switch-main">
+                                                    <input type="checkbox" class="url-antivirus-name" checked value="virusfighter">
+                                                    <div class="slider round slider-size"></div>
+                                                </label>
+                                                <div class="pull-left slider-label">VirusFighter</div>
+                                            </div>
+                                                                                    <div class="align-scanner">
+                                                <label class="switch switch-main">
+                                                    <input type="checkbox" class="url-antivirus-name" checked value="zillya">
+                                                    <div class="slider round slider-size"></div>
+                                                </label>
+                                                <div class="pull-left slider-label">Zillya</div>
+                                            </div>
+                                                                                    <div class="align-scanner">
+                                                <label class="switch switch-main">
+                                                    <input type="checkbox" class="url-antivirus-name" checked value="zonealarm">
+                                                    <div class="slider round slider-size"></div>
+                                                </label>
+                                                <div class="pull-left slider-label">ZoneAlarm</div>
+                                            </div>
+                                                                            </div>
+                                    <div class="col-xs-12 blank-row"></div>
+                                </div>
+                            </div>
+                            <div id="runtime_scanners_container" class="hidden">
+                                <div class="col-xs-12">
+                                    <div class="selected-scanners-container">
+                                        <span>Selected Scanners:</span>
+                                        <span id="selected_runtime_scanners_count">0</span>
+                                        <span>/</span>
+                                        <span id="total_number_of_runtime_scanners">0</span>
+                                    </div>
+                                </div>
+                                                                <div class="scanner-control-container col-xs-12">
+                                    <!-- Select/Deselect All -->
+                                    <div class="select-deselect-all-container">
+                                        <div class="align-scanner">
+                                            <label class="switch switch-main margin-between main-slider">
+                                                <input class="scanner-toggle scanner-type-runtime scanner-toggle-all" type="checkbox" checked>
+                                                <div class="slider round slider-size"></div>
+                                            </label>
+                                            <label class="pull-left margin-between slider-label">Select/Deselect All</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row" style="margin: 0 auto;">
+                                    <div class="slider-offset">
+                                                                                    <div class="align-scanner">
+                                                <label class="switch switch-main">
+                                                    <input type="checkbox" class="runtime-antivirus-name" checked value="amiti">
+                                                    <div class="slider round slider-size"></div>
+                                                </label>
+                                                <div class="pull-left slider-label">Amiti</div>
+                                            </div>
+                                                                                    <div class="align-scanner">
+                                                <label class="switch switch-main">
+                                                    <input type="checkbox" class="runtime-antivirus-name" checked value="arcabit">
+                                                    <div class="slider round slider-size"></div>
+                                                </label>
+                                                <div class="pull-left slider-label">Arcabit</div>
+                                            </div>
+                                                                                    <div class="align-scanner">
+                                                <label class="switch switch-main">
+                                                    <input type="checkbox" class="runtime-antivirus-name" checked value="avast">
+                                                    <div class="slider round slider-size"></div>
+                                                </label>
+                                                <div class="pull-left slider-label">Avast</div>
+                                            </div>
+                                                                                    <div class="align-scanner">
+                                                <label class="switch switch-main">
+                                                    <input type="checkbox" class="runtime-antivirus-name" checked value="avg">
+                                                    <div class="slider round slider-size"></div>
+                                                </label>
+                                                <div class="pull-left slider-label">AVG</div>
+                                            </div>
+                                                                                    <div class="align-scanner">
+                                                <label class="switch switch-main">
+                                                    <input type="checkbox" class="runtime-antivirus-name" checked value="bullguard">
+                                                    <div class="slider round slider-size"></div>
+                                                </label>
+                                                <div class="pull-left slider-label">Bullguard</div>
+                                            </div>
+                                                                                    <div class="align-scanner">
+                                                <label class="switch switch-main">
+                                                    <input type="checkbox" class="runtime-antivirus-name" checked value="fsecure">
+                                                    <div class="slider round slider-size"></div>
+                                                </label>
+                                                <div class="pull-left slider-label">F-Secure</div>
+                                            </div>
+                                                                                    <div class="align-scanner">
+                                                <label class="switch switch-main">
+                                                    <input type="checkbox" class="runtime-antivirus-name" checked value="gdata">
+                                                    <div class="slider round slider-size"></div>
+                                                </label>
+                                                <div class="pull-left slider-label">G Data</div>
+                                            </div>
+                                                                                    <div class="align-scanner">
+                                                <label class="switch switch-main">
+                                                    <input type="checkbox" class="runtime-antivirus-name" checked value="ikarus">
+                                                    <div class="slider round slider-size"></div>
+                                                </label>
+                                                <div class="pull-left slider-label">IKARUS</div>
+                                            </div>
+                                                                                    <div class="align-scanner">
+                                                <label class="switch switch-main">
+                                                    <input type="checkbox" class="runtime-antivirus-name" checked value="kaspersky">
+                                                    <div class="slider round slider-size"></div>
+                                                </label>
+                                                <div class="pull-left slider-label">Kaspersky</div>
+                                            </div>
+                                                                                    <div class="align-scanner">
+                                                <label class="switch switch-main">
+                                                    <input type="checkbox" class="runtime-antivirus-name" checked value="microsoftdefender">
+                                                    <div class="slider round slider-size"></div>
+                                                </label>
+                                                <div class="pull-left slider-label">Microsoft Defender</div>
+                                            </div>
+                                                                                    <div class="align-scanner">
+                                                <label class="switch switch-main">
+                                                    <input type="checkbox" class="runtime-antivirus-name" checked value="nod32">
+                                                    <div class="slider round slider-size"></div>
+                                                </label>
+                                                <div class="pull-left slider-label">Nod32</div>
+                                            </div>
+                                                                            </div>
+                                    <div class="col-xs-12 blank-row"></div>
+                                </div>
+                                                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <!-- Vertical Small Banners -->
+    <div class="col-lg-3 col-md-4 col-xs-6 no-padding">
+        <div class="banner-container-right">
+                        <a href="https://t.me/GhostBustersTEAM_bot" target="_blank">
+                <img alt="vertical banner" src="https://kleenscan.com/storage/images/banners/Ghost.gif">
+            </a>
+                                    <a href="https://vectorstealer.com/" target="_blank">
+                <img alt="vertical banner" src="https://kleenscan.com/storage/images/banners/VectorStealer.gif">
+            </a>
+                    </div>
+    </div>
+</div>
+<!-- Horizontal Banner -->
+<div class="horizontal-banner">
+        <a href="https://venomcontrol.com/" target="_blank">
+        <img alt="horizontal banner" src="https://kleenscan.com/storage/images/banners/Venom.gif">
+    </a>
+    </div><!-- Alert Modal -->
+    <div class="modal fade in" id="alert_modal" role="dialog" style="padding-right: 17px;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header" style="border-bottom: none;">
+                    <button type="button" class="close" data-dismiss="modal">×</button>
+                    <img src="https://kleenscan.com/images/logo.svg" alt="KleenScan Logo" style="width: 180px;">
+                </div>
+                <!-- Alert start -->
+                <div class="modal-body">
+                    <p id="alert_message" class="clear-margin text-center" style="font-size: 1.2em;"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<footer id="index-bottom-wrapper">
+    <div class="footer-container">
+        <div class="box text-center">
+        <div class="text-center bottom-wrapper-upper">KleenScan</div>
+            <div class="text-center bottom-wrapper-lower">
+                <a class=""><a href="https://kleenscan.com/latest_news"><div>News</div></a></a>
+                <a href="/cdn-cgi/l/email-protection#bccfc9ccccd3cec8fcd7d0d9d9d2cfdfddd292dfd3d1">Contact us</a>
+                <a href="https://kleenscan.com/frequently_asked_questions">FAQ </a>
+                <a href="https://kleenscan.com/send_feedback">Send Feedback</a>
+                <a href="https://kleenscan.com/terms_of_service">Terms of Service</a>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <small>Copyrights © 2022 KleenScan, All Rights Reserved. </small>
+    </div>
+</footer>
+
+<!-- Hamburger Menu -->
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+    var hambIcon = document.getElementById('hamburger_icon');
+    var hambMenu = document.getElementById('hamburger_menu');
+    hambIcon.addEventListener('click', showHideMenu);
+
+    function showHideMenu(){
+        hambIcon.classList.toggle('animate');
+        hambMenu.classList.toggle('hidden');
+    }
+</script>
+<!-- Common functions -->
+<script>
+    /*### Close Error Box ###*/
+    var closeButtons = document.getElementsByClassName("fa-close");
+    for(var i=0; i<closeButtons.length; i++)
+        closeButtons[i].addEventListener("click", closeWindow);
+
+    function closeWindow(){
+        this.parentElement.classList.add("hidden");
+    }
+</script>
+        <script>
+        var index = 0;
+        var bannerContainer = document.getElementsByClassName("horizontal-banner")[0];
+        var bannerLink = bannerContainer.children[0];
+        var bannerImg = bannerLink.children[0];
+        var bannerLocation = 'https://kleenscan.com/storage/images/banners';
+
+        var repeatXhr = window.setInterval(function(){
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function () {
+                if(xhr.readyState === 4 && xhr.status === 200){
+                    var response = xhr.responseText;
+                    response = JSON.parse(response);
+
+                    if(response.success === true){
+                        bannerLink.href = response.data.url;
+                        bannerImg.src = bannerLocation + "/" + response.data.name;
+                        index = response.data.key;
+                    }
+                }
+            };
+            xhr.open("GET", '/get_next_banner/' + index, true);
+            xhr.send();
+        }, 10000);
+    </script>
+        <script>
+        /*### Fix vertical banner position ###*/
+        var horizontalBannerContainerLeft = document.getElementsByClassName("banner-container-left")[0];
+        var horizontalBannerContainerRight = document.getElementsByClassName("banner-container-right")[0];
+
+        function alignBanners(){
+            var image = null;
+            if(window.innerWidth > 992 && window.innerWidth <= 1200){
+                if(horizontalBannerContainerLeft.childElementCount !== 0){
+                    image = horizontalBannerContainerLeft.children[0];
+                    horizontalBannerContainerLeft.removeChild(image);
+                    horizontalBannerContainerRight.appendChild(image);
+                }
+            }else{
+                var count = horizontalBannerContainerRight.childElementCount;
+                if(count === 3){
+                    image = horizontalBannerContainerRight.children[2];
+                    horizontalBannerContainerRight.removeChild(image);
+                    horizontalBannerContainerLeft.appendChild(image);
+                }
+            }
+        }
+
+        window.onresize = alignBanners;
+    </script>
+    <script>
+            /****************** Toggle File / URL ************************/
+            var fileSection = document.getElementById("file_scanners_container");
+            var fileButton = document.getElementById('file_button');
+            fileButton.addEventListener('click', toggleScanType);
+
+            var urlSection = document.getElementById("url_scanners_container");
+            var urlButton = document.getElementById('url_button');
+            urlButton.addEventListener('click', toggleScanType);
+
+            var browseContentArea = document.getElementById('browse_content_area');
+            var browseButton = document.getElementById('browse_button');
+            var searchButton = document.getElementById('search_url');
+
+            var runtimeSection = document.getElementById("runtime_scanners_container");
+            var runtimeButton = document.getElementById('runtime_button');
+            runtimeButton.addEventListener('click', toggleScanType);
+
+            browseContentArea.addEventListener('click', fixContentArea);
+            browseContentArea.addEventListener('change', equalizeInputs);
+            browseButton.addEventListener('click', fixContentArea);
+
+            function toggleScanType(){
+                fakeInput.classList.remove('chrome-danger');
+
+                if(this.id === 'url_button'){
+                    //Show url avs
+                    urlSection.classList.remove("hidden");
+                    fileSection.classList.add("hidden");
+                    runtimeSection.classList.add("hidden");
+
+                    fileButton.classList.remove('button-green-filled');
+                    runtimeButton.classList.remove('button-green-filled');
+                    urlButton.classList.remove('button-green-outline');
+
+                    fileButton.classList.add('button-green-outline');
+                    runtimeButton.classList.add('button-green-outline');
+                    urlButton.classList.add('button-green-filled');
+
+                    browseButton.classList.add('hidden');
+                    searchButton.classList.remove('hidden');
+
+                    /*Change field value*/
+                    fakeInput.value = "Select URL..";
+                    browseContentArea.disabled = false;
+
+                    /*Change the input type*/
+                    realInput.type = "text";
+
+                    /*Clear the file path*/
+                    realInput.value = "";
+
+                    //Change form submission route
+                    document.getElementById("scan_form").action = '/url_initiate_pre_scan_request';
+                }else if(this.id === 'file_button'){
+                    //Show file avs
+                    urlSection.classList.add("hidden");
+                    runtimeSection.classList.add("hidden");
+                    fileSection.classList.remove("hidden");
+
+                    fileButton.classList.remove('button-green-outline');
+                    urlButton.classList.remove('button-green-filled');
+                    runtimeButton.classList.remove('button-green-filled');
+
+                    fileButton.classList.add('button-green-filled');
+                    urlButton.classList.add('button-green-outline');
+                    runtimeButton.classList.add('button-green-outline');
+
+                    browseButton.classList.remove('hidden');
+                    searchButton.classList.add('hidden');
+
+                    /*Change field value*/
+                    fakeInput.value =  "Choose a file..";
+                    browseContentArea.disabled = true;
+                    realInput.value = "";
+
+                    /*Change the input type*/
+                    realInput.type = "file";
+
+                    //Change form submission route
+                    document.getElementById("scan_form").action = '/scan_request';
+                }else if(this.id === 'runtime_button'){
+                    //Show runtime avs
+                    urlSection.classList.add("hidden");
+                    fileSection.classList.add("hidden");
+                    runtimeSection.classList.remove("hidden");
+
+                    runtimeButton.classList.remove('button-green-outline');
+                    urlButton.classList.remove('button-green-filled');
+                    fileButton.classList.remove('button-green-filled');
+
+                    runtimeButton.classList.add('button-green-filled');
+                    urlButton.classList.add('button-green-outline');
+                    fileButton.classList.add('button-green-outline');
+
+                    browseButton.classList.remove('hidden');
+                    searchButton.classList.add('hidden');
+
+                    /*Change field value*/
+                    fakeInput.value =  "Choose a file..";
+                    browseContentArea.disabled = true;
+                    realInput.value = "";
+
+                    /*Change the input type*/
+                    realInput.type = "file";
+
+                    //Change form submission route
+                    document.getElementById("scan_form").action = '/runtime/queue';
+                }
+            }
+
+            /**
+             ** INPUT / FILENAME
+             **/
+            var realInput = document.getElementById('upload_file');
+            var fakeInput = document.getElementById('browse_content_area');
+            fakeInput.value = "Choose a file..";
+
+            function getInput(){
+                //In case a file has been selected (in case cancel button wasn't pressed)
+                if(realInput.files.length > 0){
+                    if((realInput.files[0].size / 1024 / 1024) > '32'){
+                        alertMessage.innerText = 'File size cannot exceed 32MB';
+                        $('#alert_modal').modal({
+                            show: 'true',
+                        });
+                        fakeInput.value = "Choose a file..";
+                        realInput.value = "";
+                    }else{
+                        var str = realInput.value;
+                        fakeInput.value = str.substr(str.lastIndexOf('\\') + 1, str.length - str.lastIndexOf('\\'))
+                    }
+                }else{
+                    fakeInput.value = "Choose a file..";
+                }
+            }
+
+            //var browseButton = document.getElementById("browse_button");
+            browseButton.addEventListener("click", clearFileInput);
+
+            function clearFileInput(){
+                realInput.value = "";
+                fakeInput.value = "Choose a file..";
+            }
+
+            /****************** SHOW/HIDE ANTIVIRUS LIST ******************/
+            var toggleAvInfo = document.getElementById('select_antivirus_program');
+            var hiddenSection = document.getElementById('show_hide_antivirus_software');
+            toggleAvInfo.addEventListener('click', showAvInfo);
+
+            function showAvInfo(){
+                hiddenSection.classList.toggle('hidden');
+            }
+
+            /****************** TOGGLE ALL ANTI VIRUS SOFTWARE ****************/
+
+            var scannerGroups = {
+                "files":{
+                    "all": [],
+                    "popular": ["avast","avg","drweb","microsoftdefender","mcafee","nod32","kaspersky","bitdefender"],
+                    "fastest": ["adaware","amiti","arcabit","avira","avg","bitdefender","clamav","comodolinux","drweb","fprot","fsecure","gdata","immunet","kaspersky","microsoftdefender","nano","norman","preventon","quickheal","seqrite","trendmicro","vba32","zillya","zoner"],
+                    "none": []
+                },
+                "urls":{
+                    "all": [],
+                    "popular": ["avast","avg","drweb","microsoftdefender","mcafee","nod32","kaspersky","bitdefender","sophos"],
+                    "fastest": ["adaware","amiti","arcabit","avira","avg","bitdefender","clamav","drweb","fprot","fsecure","gdata","immunet","kaspersky","microsoftdefender","nano","norman","preventon","quickheal","seqrite","trendmicro","vba32","zillya"],
+                    "none": []
+                },
+                "runtime":{
+                    "all": [],
+                    "none": []
+                }
+            };
+            var selectedScannerGroup = {
+                "files": "all",
+                "urls": "all",
+                "runtime": "all"
+            };
+            //Get all scanner group triggers
+            var allScannerGroupTriggers = document.getElementsByClassName("scanner-toggle");
+            for(var i=0; i<allScannerGroupTriggers.length; i++){
+                allScannerGroupTriggers[i].addEventListener("click", toggleScannerGroups);
+            }
+            var allFileSliders    = document.getElementsByClassName("file-antivirus-name");
+            var allUrlSliders     = document.getElementsByClassName("url-antivirus-name");
+            var allRuntimeSliders = document.getElementsByClassName("runtime-antivirus-name");
+
+            var selectedScannerCount = {
+                "files": allFileSliders.length,
+                "urls": allUrlSliders.length,
+                "runtime": allRuntimeSliders.length
+            };
+
+            function toggleScannerGroups(){
+                //Clear both parent and children selectors
+                clearSliderSelection(this);
+                //Files
+                if(this.classList.contains("scanner-type-file")){
+                    updateScannerGroupSliders(this, "files", allFileSliders);
+                }else if(this.classList.contains("scanner-type-url")) {
+                    updateScannerGroupSliders(this, "urls", allUrlSliders);
+                }else if(this.classList.contains("scanner-type-runtime")){
+                    updateScannerGroupSliders(this, "runtime", allRuntimeSliders);
+                }else{
+                    console.log("Unknown scanner group type for " + this.classList);
+                }
+            }
+
+            function updateScannerGroupSliders(sliderGroup, sliderType, allSliders){
+
+                //Previous state is the same as current state? Default to NONE
+                if(sliderGroup.classList.contains("scanner-toggle-" + selectedScannerGroup[sliderType])){
+                    selectedScannerGroup[sliderType] = "none";
+                    selectedScannerCount[sliderType] = 0;
+                }//Otherwise update the state
+                else{
+                    sliderGroup.checked = true;
+                    if(sliderGroup.classList.contains("scanner-toggle-all")){
+                        for(var i=0; i<allSliders.length; i++){
+                            allSliders[i].checked = true;
+                        }
+                        selectedScannerGroup[sliderType] = "all";
+                        selectedScannerCount[sliderType] = allSliders.length;
+                    }else if(sliderGroup.classList.contains("scanner-toggle-fastest")){
+                        for(var i=0; i<allSliders.length; i++){
+                            if(scannerGroups[sliderType]['fastest'].includes(allSliders[i].value)){
+                                allSliders[i].checked = true;
+                            }
+                            selectedScannerGroup[sliderType] = "fastest";
+                            selectedScannerCount[sliderType] = scannerGroups[sliderType]['fastest'].length;
+                        }
+                    }else if(sliderGroup.classList.contains("scanner-toggle-popular")){
+                        for(var i=0; i<allSliders.length; i++){
+                            if(scannerGroups[sliderType]['popular'].includes(allSliders[i].value)){
+                                allSliders[i].checked = true;
+                            }
+                            selectedScannerGroup[sliderType] = "popular";
+                            selectedScannerCount[sliderType] = scannerGroups[sliderType]['popular'].length;
+                        }
+                    }else{
+                        console.log("Failed to apply " + sliderType + " slider group, required toggle class is missing!");
+                    }
+                }
+                //Update the counter
+                switch(sliderType){
+                    case "files":
+                        selectedFileScannersElement.innerText = selectedScannerCount.files;
+                        break;
+                    case "urls":
+                        selectedUrlScannersElement.innerText = selectedScannerCount.urls;
+                        break;
+                    case "runtime":
+                        selectedRuntimeScannersElement.innerText = selectedScannerCount.runtime;
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            function clearSliderSelection(mainSlider){
+
+                if(mainSlider.classList.contains("scanner-type-file")){
+                    if(selectedScannerGroup.files !== "none"){
+                        //Clear previous parent selection
+                        document.querySelector(".scanner-type-file.scanner-toggle-" + selectedScannerGroup.files).checked = false;
+                        //Clear children selection
+                        for(var i=0; i<allFileSliders.length; i++){
+                            allFileSliders[i].checked = false;
+                        }
+                    }
+                }else if(mainSlider.classList.contains("scanner-type-url")){
+                    if(selectedScannerGroup.urls !== "none"){
+                        document.querySelector(".scanner-type-url.scanner-toggle-" + selectedScannerGroup.urls).checked = false;
+                        for(var i=0; i<allUrlSliders.length; i++){
+                            allUrlSliders[i].checked = false;
+                        }
+                    }
+                }else if(mainSlider.classList.contains("scanner-type-runtime")){
+                    if(selectedScannerGroup.urls !== "none"){
+                        document.querySelector(".scanner-type-runtime.scanner-toggle-" + selectedScannerGroup.urls).checked = false;
+                        for(var i=0; i<allRuntimeSliders.length; i++){
+                            allRuntimeSliders[i].checked = false;
+                        }
+                    }
+                }else{
+                    console.log("Invalid slider type provided, expected file, url or runtime");
+                }
+            }
+
+            //File
+            var selectedFileScannersElement = document.getElementById("selected_file_scanners_count");
+            var totalFileScannersCountElement = document.getElementById("total_number_of_file_scanners");
+            totalFileScannersCountElement.innerText = allFileSliders.length.toString();
+            selectedFileScannersElement.innerText = 0;
+
+            //Url
+            var selectedUrlScannersElement   = document.getElementById("selected_url_scanners_count");
+            var totalUrlScannersCountElement = document.getElementById("total_number_of_url_scanners");
+            totalUrlScannersCountElement.innerText = allUrlSliders.length.toString();
+            selectedUrlScannersElement.innerText = 0;
+
+            //Runtime
+            var selectedRuntimeScannersElement = document.getElementById("selected_runtime_scanners_count");
+            var totalRuntimeScannersCountElement = document.getElementById("total_number_of_runtime_scanners");
+            totalRuntimeScannersCountElement.innerText = allRuntimeSliders.length.toString();
+            selectedRuntimeScannersElement.innerText = 0;
+
+            window.onload = function() {
+                for (var i = 0; i < allFileSliders.length; i++) {
+                    allFileSliders[i].addEventListener("click", toggleSingleSlider);
+                    if(allFileSliders[i].checked === true){
+                        selectedFileScannersElement.innerText = (parseInt((selectedFileScannersElement.innerText)) + 1).toString();
+                    }
+                }
+
+                for(var i=0; i<allUrlSliders.length; i++){
+                    allUrlSliders[i].addEventListener("click", toggleSingleSlider);
+                    if(allUrlSliders[i].checked === true){
+                        selectedUrlScannersElement.innerText = (parseInt((selectedUrlScannersElement.innerText)) + 1).toString();
+                    }
+                }
+
+                for(var i=0; i<allRuntimeSliders.length; i++){
+                    allRuntimeSliders[i].addEventListener("click", toggleSingleSlider);
+                    if(allRuntimeSliders[i].checked === true){
+                        selectedRuntimeScannersElement.innerText = (parseInt((selectedRuntimeScannersElement.innerText)) + 1).toString();
+                    }
+                }
+            };
+
+            //On toggle update Selected Scanners count
+            function toggleSingleSlider(){
+                var currentCount = 0;
+                if(this.classList.contains("file-antivirus-name")){
+                    currentCount = parseInt(selectedFileScannersElement.innerText);
+                    this.checked === true ? selectedFileScannersElement.innerText = (++currentCount).toString() : selectedFileScannersElement.innerText = (--currentCount).toString();
+                }else if(this.classList.contains("url-antivirus-name")){
+                    currentCount = parseInt(selectedUrlScannersElement.innerText);
+                    this.checked === true ? selectedUrlScannersElement.innerText = (++currentCount).toString() : selectedUrlScannersElement.innerText = (--currentCount).toString();
+                }else if(this.classList.contains("runtime-antivirus-name")){
+                    currentCount = parseInt(selectedRuntimeScannersElement.innerText);
+                    this.checked === true ? selectedRuntimeScannersElement.innerText = (++currentCount).toString() : selectedRuntimeScannersElement.innerText = (--currentCount).toString();
+                }else{
+                    console.log("Unknown slider type detected, could not toggle slider.");
+                }
+            }
+
+            /***************** SCAN CHECK SELECTED ***************************/
+            var scanButton = document.getElementById('scan_button');
+            var searchURL  = document.getElementById('search_url');
+            var alertMessage = document.getElementById('alert_message');
+
+            scanButton.addEventListener('click', checkSelectedAntivirus);
+            searchURL.addEventListener('click', checkSelectedAntivirus);
+
+            /*Check if any antivirus has been selected*/
+            function checkSelectedAntivirus(){
+
+                var checked = false;
+                var allAntiviruses = null;
+                var avList = document.getElementById("avList");
+
+                //Check if file, url or runtime window is in focus
+                if(fileButton.classList.contains("button-green-filled")){
+                    //File
+                    for(var i=0; i<allFileSliders.length; i++){
+                        if(allFileSliders[i].checked === true){
+                            checked = true;
+                            break;
+                        }
+                    }
+
+                    if(checked === true){
+                        if(realInput.value !== ""){
+                            allAntiviruses = document.getElementsByClassName("file-antivirus-name");
+                            avList = document.getElementById("avList");
+                            avList.value = "";
+
+                            for(var i=0; i<allAntiviruses.length; i++){
+                                if(allAntiviruses[i].checked === true){
+                                    avList.value += allAntiviruses[i].value + ",";
+                                }
+                            }
+                            /*Scan the file*/
+                            screenFreeze();
+                            document.getElementById("scan_form").submit();
+                        }else{
+                            fakeInput.value = "Please select a file";
+                            fakeInput.classList.add('chrome-danger');
+                        }
+                    }else{
+                        if(hiddenSection.classList.contains('hidden')){
+                            hiddenSection.classList.remove('hidden');
+                        }
+                        else{
+                            alertMessage.innerText = "Please select at least one antivirus program in order to perform a scan";
+                            $('#alert_modal').modal({
+                                show: 'true',
+                            });
+                        }
+                    }
+                }else if(urlButton.classList.contains("button-green-filled")){
+                    //Url
+                    for(var i=0; i<allUrlSliders.length; i++){
+                        if(allUrlSliders[i].checked === true){
+                            checked = true;
+                            break;
+                        }
+                    }
+
+                    if(checked === true){
+                        if(realInput.value !== ""){
+                            /*Check if the URL is valid*/
+                            var URL = (realInput.value).trim();
+
+                            if(!URL.startsWith('http')) {
+                                URL = 'http://'.concat(URL);
+                            }
+                            var contains = URL.includes(".");
+                            if(contains){
+
+                                allAntiviruses = document.getElementsByClassName("url-antivirus-name");
+                                avList.value = "";
+
+                                for(var i=0; i<allAntiviruses.length; i++){
+                                    if(allAntiviruses[i].checked === true){
+                                        avList.value += allAntiviruses[i].value + ",";
+                                    }
+                                }
+
+                                /*Scan the url*/
+                                document.getElementById("upload_file").value = URL;
+                                screenFreeze();
+                                document.getElementById("scan_form").submit();
+                            }else{
+                                /*Add warning!*/
+                                realInput.value = "";
+                                fakeInput.value = "Invalid URL";
+                                fakeInput.classList.add('chrome-danger');
+                            }
+                        }else{
+                            fakeInput.value = "Please provide a URL";
+                            fakeInput.classList.add('chrome-danger');
+                        }
+                    }else{
+                        if(hiddenSection.classList.contains('hidden')){
+                            hiddenSection.classList.remove('hidden');
+                        }
+                        else{
+                            alertMessage.innerText = "Please select at least one antivirus program in order to perform a scan";
+                            $('#alert_modal').modal({
+                                show: 'true',
+                            });
+                        }
+                    }
+                }else if(runtimeButton.classList.contains("button-green-filled")){
+                    //File
+                    for(var i=0; i<allRuntimeSliders.length; i++){
+                        if(allRuntimeSliders[i].checked === true){
+                            checked = true;
+                            break;
+                        }
+                    }
+
+                    if(checked === true){
+                        if(realInput.value !== ""){
+                            allAntiviruses = document.getElementsByClassName("runtime-antivirus-name");
+                            avList = document.getElementById("avList");
+                            avList.value = "";
+
+                            for(var i=0; i<allAntiviruses.length; i++){
+                                if(allAntiviruses[i].checked === true){
+                                    avList.value += allAntiviruses[i].value + ",";
+                                }
+                            }
+                            /*Scan the file*/
+                            screenFreeze();
+                            document.getElementById("scan_form").submit();
+                        }else{
+                            fakeInput.value = "Please select a file";
+                            fakeInput.classList.add('chrome-danger');
+                        }
+                    }else{
+                        if(hiddenSection.classList.contains('hidden')){
+                            hiddenSection.classList.remove('hidden');
+                        }
+                        else{
+                            alertMessage.innerText = "Please select at least one antivirus program in order to perform a scan";
+                            $('#alert_modal').modal({
+                                show: 'true',
+                            });
+                        }
+                    }
+                }
+            }
+
+            /***************************RECOLOR CONTENT AREA*******************************/
+            function fixContentArea(){
+                fakeInput.classList.remove('chrome-danger');
+                //Remove the default input on click
+                if(fakeInput.value === "Select URL.."
+                    || fakeInput.value === "pages/index.please_provide_a_url"
+                    || fakeInput.value === "Invalid URL"){
+                    fakeInput.value = "";
+                }
+            }
+
+            /***************************realInput = fakeInput*******************************/
+            function equalizeInputs(){
+                realInput.value = fakeInput.value;
+            }
+
+            /****************************Freeze the screen on upload*******************************/
+            function screenFreeze(){
+                var freezeDiv = document.getElementById("screen_freeze");
+                freezeDiv.style.display = "block";
+                var body = document.getElementsByTagName("body");
+                body[0].style.overflowY = "hidden";
+            }
+        </script>
+
+
+</body>
+</html>
